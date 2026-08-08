@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人成长系统 · 主线：积累研发点</title>
+<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#0f0f1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="成长系统">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div class="app">
+<div class="header"><h1>🎯 个人成长系统</h1>
+<div class="stats">
+<div class="stat-card"><div class="val" id="totalPoints">0</div><div class="lbl">累计研发点</div></div>
+<div class="stat-card"><div class="val" id="currentLevel">Lv.1</div><div class="lbl">当前等级</div></div>
+<div class="stat-card"><div class="val" id="nextLevelPts">10</div><div class="lbl">升级还需</div></div>
+<div class="stat-card"><div class="val" id="balance">0</div><div class="lbl">研发点余额 <button class="btn btn-sm btn-outline" style="padding:1px 6px;font-size:0.6em;margin-left:4px" onclick="editBalance()">✏</button></div></div>
+<div class="stat-card" style="display:flex;flex-direction:column;gap:4px;justify-content:center;padding:8px 12px"><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="exportData()">📥 导出备份</button><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入恢复</button><input type="file" id="importFile" accept=".json" onchange="importData(event)"></div>
+</div></div>
+<div class="tabs">
+<button class="tab active" onclick="switchTab('daily')">🕒 时间</button>
+<button class="tab" onclick="switchTab('main')">🎯 主线</button>
+<button class="tab" onclick="switchTab('rewards')">🏆 等级</button>
+<button class="tab" onclick="switchTab('roulette')">🎰 转盘</button>
+</div>
+<div class="page active" id="page-daily"><div class="card">
+<h3>➕ 记录时间段</h3>
+<div class="form-row"><label>日期</label><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div>
+<div class="time-strip">
+  <div class="time-gap" id="dailyDuration">0分钟</div>
+  <div class="time-row">
+    <div class="time-block"><div class="time-label">开始</div><input class="time-start-input" type="time" id="dailyStartTime" value="00:00" data-manual="0" onchange="this.dataset.manual='1';updateDailyDraftTimes()"></div>
+    <div class="time-arrow">→</div>
+    <div class="time-block"><div class="time-label">结束</div><input class="time-end-input" type="time" id="dailyEndTime" value="00:00" data-manual="0"></div>
+  </div>
+  <div class="time-next" id="dailyNextHint">距下一点还差 50 分钟</div>
+</div>
+<div class="form-row"><label>做了什么</label><textarea id="dailyActions" placeholder="只写内容，不用写时间..."></textarea></div>
+<div class="record-actions"><button class="record-btn daily" onclick="addDailyEntry('daily')">🟢 日常记录</button><button class="record-btn main" onclick="addDailyEntry('main')">🟠 主线记录</button></div>
+<div class="record-hint">主线每 50 分钟 +1 点；日常每 1200 分钟 +1 点</div>
+<button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="mergeToLastEntry()">↩ 合并到上一次记录</button>
+</div>
+<div class="card">
+<h3>&#x1f4dd; 今日待办</h3>
+<div style="display:flex;gap:8px;margin-bottom:10px">
+  <input type="text" id="newTodoInput" placeholder="输入要做的事..." style="flex:1" onkeydown="if(event.key==='Enter')addDailyTodo()">
+  <button class="btn btn-sm" onclick="addDailyTodo()">添加</button>
+</div>
+<div id="dailyTodoList"></div>
+</div>
+<div class="card">
+<h3>📋 时间线 <span style="font-weight:normal;font-size:0.75em;color:#888">（按具体时间顺序记录）</span></h3>
+<div style="margin-bottom:10px;padding:10px;background:#0f0f1a;border-radius:8px;border:1px solid #2a2a4a">
+  <div style="font-size:0.8em;color:#888;margin-bottom:6px">📤 导出时间线</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+    <input type="date" id="exportDateFrom" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
+    <span style="color:#888;font-size:0.8em">至</span>
+    <input type="date" id="exportDateTo" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
+    <button class="btn btn-sm" style="padding:6px 12px;font-size:0.8em" onclick="exportTimelineRange()">导出</button>
+  </div>
+  <div style="margin-top:6px;display:flex;gap:6px">
+    <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineToday()">导出今天</button>
+    <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineAll()">导出全部</button>
+  </div>
+</div>
+<div id="dailyList"></div>
+</div></div>
+<div class="page" id="page-main"><div class="card">
+<h3>🗺️ 主线任务</h3>
+<p style="color:#888;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
+<div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#0f0f1a;border-radius:10px;margin-bottom:14px">
+  <input type="text" id="questCategoryInput" placeholder="分类" style="flex:0 0 auto;width:80px;font-size:0.8em;padding:6px 8px">
+  <input type="text" id="questTitleInput" placeholder="任务内容" style="flex:1;min-width:120px;font-size:0.8em;padding:6px 8px">
+  <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点" style="flex:0 0 auto;width:55px;font-size:0.8em;padding:6px 4px;text-align:center">
+  <input type="hidden" id="editingQuestId" value="">
+  <button class="btn btn-sm" onclick="saveQuestFromForm()" style="padding:6px 12px;font-size:0.8em">➕ 保存</button>
+  <button class="btn btn-sm btn-outline" onclick="resetQuestForm()" style="padding:6px 10px;font-size:0.8em">清空</button>
+</div>
+<div id="questList"></div>
+</div></div>
+<div class="page" id="page-rewards"><div class="card">
+<h3>📊 升级进度</h3>
+<div style="display:flex;justify-content:space-between;font-size:0.85em;margin-bottom:4px">
+<span id="lvProgressLabel">Lv.1 → Lv.2</span><span id="lvProgressPts">0 / 10</span>
+</div>
+<div class="level-bar"><div class="level-bar-fill" id="levelBar" style="width:0%"></div></div>
+</div><div class="card">
+<h3>🎁 等级奖励一览</h3>
+<div class="level-grid" id="levelGrid"></div>
+</div></div>
+<div class="page" id="page-roulette"><div class="card">
+<h3>🎰 抽奖兑换</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+<button class="btn btn-outline" onclick="spinRandomCategoryAndSpin()">🎲 随机类目抽一次</button>
+</div>
+<div class="roulette-tabs" id="rouletteTabs"></div>
+<div class="spin-area">
+<div style="color:#888;font-size:0.85em">每次抽奖消耗 <span id="spinCost">3</span> 研发点</div>
+<div class="spin-result" id="spinResult">🎯 点击下方按钮开始抽奖</div>
+<button class="btn" id="spinBtn" onclick="spinRoulette()">🎲 开始抽奖</button>
+<div style="margin-top:4px;font-size:0.8em;color:#4fc3f7" id="spinRemaining"></div>
+<button class="btn btn-sm btn-outline" style="margin-top:6px" onclick="restoreFivePoints()">💧 恢复5点研发点</button>
+</div>
+<div class="roulette-items" id="rouletteItems"></div>
+</div></div>
+</div>
+<div id="toastContainer"></div>
+
+<script src="app.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").then(function(){console.log("SW registered")}).catch(function(e){console.log("SW failed:",e)})}</script>
+</body>
+</html>
+
