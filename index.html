@@ -3,13 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f0f1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="成长系统">
-<link rel="apple-touch-icon" href="icons/icon-192x192.png">
-<link rel="manifest" href="manifest.json">
 <title>个人成长系统 · 主线：积累研发点</title>
+<link rel="stylesheet" href="style.css">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -368,7 +363,7 @@ function renderDailyList() {
     var kind=(d.kind==="main")?"main":"daily";
     var kindLabel=kind==="main"?"主线记录":"日常记录";
     var html='<div class="timeline-row">';
-    html+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+kind+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" onclick="deleteDaily('+idx+')">🗑</button></div>';
+    html+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+kind+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" style="color:#4fc3f7" onclick="editDailyEntry('+idx+')">✏</button><button class="btn btn-sm btn-outline" onclick="deleteDaily('+idx+')">🗑</button></div>';
     if(d.actions) html+='<div class="timeline-note">'+escapeHtml(d.actions)+'</div>';
     html+='</div>';
     return html;
@@ -377,7 +372,6 @@ function renderDailyList() {
 function addDailyEntry(kind) {
   var date=document.getElementById("dailyDate").value||getLocalDateString();
   var actions=document.getElementById("dailyActions").value.trim();
-  if(!actions){showToast("请先写做了什么");return}
   var startInput=document.getElementById("dailyStartTime");
   var endInput=document.getElementById("dailyEndTime");
   var startText=startInput.value.trim();
@@ -429,6 +423,7 @@ function mergeToLastEntry(){
   showToast("已合并 "+formatDurationLabel(duration)+" 到上一次"+(last.kind==="main"?"主线":"日常")+"记录"+(dp>0?"，+"+dp+" 研发点":""));
 }
 
+function editDailyEntry(idx){var d=data.dailyLog[idx];if(!d)return;var nt=prompt("编辑记录内容：",d.actions||"");if(nt!==null){d.actions=nt.trim();saveData();renderDailyList();showToast("已更新")}}
 function deleteDaily(i){if(confirm("确定删除？")){var item=data.dailyLog[i];if(item){var oldMM=data.mainMinutesTotal||0,oldDM=data.dailyMinutesTotal||0;data.dailyLog.splice(i,1);if(item.kind==="main"){recalcMainMinutesTotal();var dp=Math.floor((data.mainMinutesTotal||0)/50)-Math.floor(oldMM/50);if(dp!==0)data.balance=(data.balance||0)+dp}else{recalcDailyMinutesTotal();var dp=Math.floor((data.dailyMinutesTotal||0)/1200)-Math.floor(oldDM/1200);if(dp!==0)data.balance=(data.balance||0)+dp}}else{data.dailyLog.splice(i,1)}saveData();renderDailyList();updateStats();updateDailyDraftTimes();showToast("已删除")}}
 
 // Quests
@@ -451,13 +446,7 @@ function renderQuests() {
   var ac={},arc={};
   data.mainQuests.forEach(function(q){var t=q.done?arc:ac;if(!t[q.category])t[q.category]=[];t[q.category].push(q)});
   var ah=Object.entries(ac).map(function(e){return'<div class="quest-category"><h4>📌 '+e[0]+' ('+e[1].length+') <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+e[0]+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+e[0]+'\')">🗑</button></h4>'+e[1].map(renderQuestItem).join("")+'</div>'}).join("");
-  var arh="";
-  if(Object.keys(arc).length>0){
-    arh='<div style="margin-top:20px;padding-top:16px;border-top:1px dashed #444"><h3 style="color:#888;margin-bottom:10px">📦 归档（已完成）</h3>';
-    arh+=Object.entries(arc).map(function(e){return'<div class="quest-category" style="opacity:0.6"><h4 style="color:#666">📌 '+e[0]+' <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+e[0]+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+e[0]+'\')">🗑</button></h4>'+e[1].map(function(q){return'<div class="quest-item done"><div class="quest-row-top"><span class="name">'+q.title+'</span><span class="pts">+'+q.points+'点</span></div><div class="quest-row-bot"><button class="btn btn-xs btn-outline" onclick="toggleQuest(\''+q.id+'\')">↩ 撤回</button><button class="btn btn-xs btn-outline" onclick="removeQuest(\''+q.id+'\')">🗑</button></div>'}).join("")+'</div>'}).join("");
-    arh+='</div>';
-  }
-  populateChallengeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>')+arh;
+  populateChallengeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>');
 }
 function toggleQuest(id){
   var q=data.mainQuests.find(function(x){return x.id===id});
@@ -526,11 +515,12 @@ function deleteLevelReward(lv){if(!confirm("确定删除 Lv."+lv+" 奖励？"))r
 var currentRouletteType="放松转盘",isSpinning=false;
 function renderRouletteTabs(){
   document.getElementById("rouletteTabs").innerHTML=Object.keys(data.roulettes).map(function(t){
-    return'<button class="r-tab '+(t===currentRouletteType?'active':'')+'" onclick="selectRoulette(\''+t+'\')">'+t+'</button>'
+    return'<div style="display:flex;align-items:center;gap:2px"><button class="r-tab '+(t===currentRouletteType?'active':'')+'" onclick="selectRoulette(\''+t+'\')">'+t+'</button><button class="btn btn-sm btn-outline" style="padding:1px 4px;font-size:0.55em;opacity:0.6" onclick="event.stopPropagation();renameRoulette(\''+t+'\')">✏</button></div>'
   }).join("");updateSpinRemaining();
 }
 function spinRandomCategoryAndSpin(){if(isSpinning)return;var types=Object.keys(data.roulettes);selectRoulette(types[Math.floor(Math.random()*types.length)]);showToast("随机到："+currentRouletteType)}
 function selectRoulette(type){currentRouletteType=type;document.getElementById("spinCost").textContent=data.roulettes[type].cost;document.getElementById("spinResult").textContent="🎯 点击下方按钮开始抽奖";renderRouletteTabs();renderRouletteItems();document.querySelectorAll(".roulette-item").forEach(function(el){el.classList.remove("highlight")});updateSpinRemaining()}
+function renameRoulette(oldName){var nn=prompt("重命名转盘：",oldName);if(!nn||nn.trim()===""||nn.trim()===oldName)return;nn=nn.trim();if(data.roulettes[nn]){showToast("名称已存在");return}data.roulettes[nn]=data.roulettes[oldName];delete data.roulettes[oldName];if(currentRouletteType===oldName)currentRouletteType=nn;saveData();renderRouletteTabs();renderRouletteItems();showToast("已重命名")}
 function renderRouletteItems(){
   var items=data.roulettes[currentRouletteType].items,html='';
   for(var i=0;i<items.length;i++){html+='<div class="roulette-item" id="ritem-'+i+'"><span style="flex:1">'+(i+1)+'. '+items[i]+'</span><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editRouletteItem('+i+')">✏</button><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteRouletteItem('+i+')">🗑</button></div>'}
@@ -677,7 +667,7 @@ function startChallenge(){
   var bet=parseInt(document.getElementById("challengeBet").value)||0;
   if(bet<1){showToast("\u8d4c\u6ce8\u81f3\u5c11 1 \u70b9");return;}
   if(bet>(data.balance||0)){showToast("\u7814\u53d1\u70b9\u4f59\u989d\u4e0d\u8db3\uff01\u5f53\u524d\u4f59\u989d "+data.balance);return;}
-  var dur=parseInt(document.getElementById('challengeDuration').value)||60;data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),duration:dur*60*1000,active:true};
+  var dur=parseInt(document.getElementById("challengeDuration").value)||60;data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),duration:dur*60*1000,active:true};
   data.balance=(data.balance||0)-bet;
   saveData();updateStats();renderChallengeUI();populateChallengeSelect();
   showToast("\u26a1 \u6311\u6218\u5f00\u59cb\uff01"+dur+"\u5206\u949f\u5012\u8ba1\u65f6");
@@ -733,7 +723,5 @@ function init(){loadData();renderDailyTodos();document.getElementById("dailyDate
 init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);
 
 </script>
-
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").then(function(){console.log("SW registered")}).catch(function(e){console.log("SW failed:",e)})}</script>
 </body>
 </html>
