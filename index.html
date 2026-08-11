@@ -73,6 +73,33 @@
 <div class="page" id="page-main"><div class="card">
 <h3>🗺️ 主线任务</h3>
 <p style="color:#888;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
+<div class="challenge-card" id="challengeCard">
+  <h3>⚔️ 限时挑战（60分钟）</h3>
+  <div id="challengeSetup">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <select id="challengeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#0f0f1a;border:1px solid #2a2a4a;border-radius:8px;color:#e0e0e0">
+        <option value="">-- 选择主线任务 --</option>
+      </select>
+      <input type="number" id="challengeBet" min="1" value="3" placeholder="赌注" style="flex:0 0 auto;width:60px;font-size:0.85em;padding:8px 4px;text-align:center">
+      <span style="color:#888;font-size:0.75em">研发点</span>
+      <button class="btn btn-sm" onclick="startChallenge()" style="padding:8px 16px">⚡ 开始挑战</button>
+    </div>
+    <p style="color:#888;font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
+  </div>
+  <div id="challengeActive" style="display:none">
+    <div class="challenge-timer">⏱ <span id="challengeTimer">60:00</span></div>
+    <div class="challenge-bar"><div class="challenge-bar-fill" id="challengeBarFill"></div></div>
+    <div class="challenge-info">
+      <div>任务：<strong id="challengeTaskName"></strong></div>
+      <div>赌注：<strong id="challengeStakeDisplay" style="color:#f9d423"></strong> 研发点</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#0f0f1a">✅ 完成挑战</button>
+      <button class="btn btn-sm btn-outline" onclick="abandonChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">❌ 放弃</button>
+    </div>
+  </div>
+</div>
+
 <div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#0f0f1a;border-radius:10px;margin-bottom:14px">
   <input type="text" id="questCategoryInput" placeholder="分类" style="flex:0 0 auto;width:80px;font-size:0.8em;padding:6px 8px">
   <input type="text" id="questTitleInput" placeholder="任务内容" style="flex:1;min-width:120px;font-size:0.8em;padding:6px 8px">

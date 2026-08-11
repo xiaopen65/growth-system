@@ -37,7 +37,8 @@ textarea{resize:vertical;min-height:60px}
 .quest-item.done .name{text-decoration:line-through;color:#666}
 .quest-check{width:20px;height:20px;border-radius:50%;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0}
 .quest-check.checked{background:#4fc3f7;color:#0f0f1a}
-.level-bar{background:#0f0f1a;border-radius:8px;height:12px;margin:8px 0;overflow:hidden}
+
+.challenge-card{background:linear-gradient(135deg,#1a1a3e,#1a2a3e);border:1px solid #3a3a5a;border-radius:12px;padding:16px;margin-bottom:14px}.challenge-card h3{color:#ff9f2f!important;margin-bottom:12px!important}.challenge-timer{text-align:center;font-size:2.2em;font-weight:bold;color:#f9d423;font-family:monospace;margin:8px 0;text-shadow:0 0 20px rgba(249,212,35,0.3)}.challenge-bar{background:#0f0f1a;border-radius:8px;height:10px;margin:8px 0;overflow:hidden}.challenge-bar-fill{background:linear-gradient(90deg,#ff9f2f,#f9d423);height:100%;border-radius:8px;transition:width 1s linear;width:100%}.challenge-info{font-size:0.85em;color:#ccc;line-height:1.8}.level-bar{background:#0f0f1a;border-radius:8px;height:12px;margin:8px 0;overflow:hidden}
 .level-bar-fill{background:linear-gradient(90deg,#f9d423,#ff4e50);height:100%;border-radius:8px;transition:width .5s}
 .level-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
 .level-item{background:#0f0f1a;border-radius:8px;padding:10px;text-align:center;border:1px solid #2a2a4a}

@@ -221,7 +221,7 @@ function renderQuests() {
     arh+=Object.entries(arc).map(function(e){return'<div class="quest-category" style="opacity:0.6"><h4 style="color:#666">📌 '+e[0]+' <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+e[0]+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+e[0]+'\')">🗑</button></h4>'+e[1].map(function(q){return'<div class="quest-item done"><div class="quest-row-top"><span class="name">'+q.title+'</span><span class="pts">+'+q.points+'点</span></div><div class="quest-row-bot"><button class="btn btn-xs btn-outline" onclick="toggleQuest(\''+q.id+'\')">↩ 撤回</button><button class="btn btn-xs btn-outline" onclick="removeQuest(\''+q.id+'\')">🗑</button></div>'}).join("")+'</div>'}).join("");
     arh+='</div>';
   }
-  container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>')+arh;
+  populateChallengeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>')+arh;
 }
 function toggleQuest(id){
   var q=data.mainQuests.find(function(x){return x.id===id});
@@ -417,5 +417,78 @@ function toggleDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;
 function deleteDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();showToast('已删除')}
 
 
-function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes()}
-init();setInterval(updateDailyDraftTimes,1000);
+
+// === CHALLENGE SYSTEM ===
+function populateChallengeSelect(){
+  var sel=document.getElementById("challengeQuestSelect");
+  if(!sel)return;
+  var def=sel.value;
+  sel.innerHTML='<option value="">-- 选择主线任务 --</option>';
+  data.mainQuests.forEach(function(q){
+    if(!q.done) sel.innerHTML+='<option value="'+q.id+'">'+q.title+' (+'+q.points+'\u70b9)</option>';
+  });
+  if(def)sel.value=def;
+}
+function startChallenge(){
+  var sel=document.getElementById("challengeQuestSelect");
+  var questId=sel.value;
+  if(!questId){showToast("\u8bf7\u5148\u9009\u62e9\u4e00\u4e2a\u4e3b\u7ebf\u4efb\u52a1");return;}
+  var quest=data.mainQuests.find(function(q){return q.id===questId});
+  if(!quest){showToast("\u4efb\u52a1\u4e0d\u5b58\u5728");return;}
+  var bet=parseInt(document.getElementById("challengeBet").value)||0;
+  if(bet<1){showToast("\u8d4c\u6ce8\u81f3\u5c11 1 \u70b9");return;}
+  if(bet>(data.balance||0)){showToast("\u7814\u53d1\u70b9\u4f59\u989d\u4e0d\u8db3\uff01\u5f53\u524d\u4f59\u989d "+data.balance);return;}
+  data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),duration:60*60*1000,active:true};
+  data.balance=(data.balance||0)-bet;
+  saveData();updateStats();renderChallengeUI();populateChallengeSelect();
+  showToast("\u26a1 \u6311\u6218\u5f00\u59cb\uff0160\u5206\u949f\u5012\u8ba1\u65f6");
+}
+function renderChallengeUI(){
+  var ch=data.challenge;
+  var setup=document.getElementById("challengeSetup");
+  var active=document.getElementById("challengeActive");
+  if(!ch||!ch.active){
+    if(setup)setup.style.display="block";
+    if(active)active.style.display="none";
+    return;
+  }
+  if(setup)setup.style.display="none";
+  if(active)active.style.display="block";
+  document.getElementById("challengeTaskName").textContent=ch.questTitle;
+  document.getElementById("challengeStakeDisplay").textContent=ch.bet;
+}
+function tickChallenge(){
+  var ch=data.challenge;
+  if(!ch||!ch.active)return;
+  var elapsed=Date.now()-ch.startTime;
+  var remaining=Math.max(0,ch.duration-elapsed);
+  var totalSec=Math.floor(remaining/1000);
+  var min=Math.floor(totalSec/60);
+  var sec=totalSec%60;
+  var timerEl=document.getElementById("challengeTimer");
+  if(timerEl)timerEl.textContent=min+":"+(sec<10?"0":"")+sec;
+  var barEl=document.getElementById("challengeBarFill");
+  if(barEl)barEl.style.width=(remaining/ch.duration*100)+"%";
+  if(totalSec<600&&timerEl)timerEl.style.color="#ff4e50";
+  if(remaining<=0)endChallenge(false);
+}
+function completeChallenge(){endChallenge(true)}
+function abandonChallenge(){
+  var ch=data.challenge;
+  if(!ch||!ch.active)return;
+  if(confirm("\u786e\u5b9a\u653e\u5f03\u6311\u6218\uff1f\u5c06\u6263\u9664\u8d4c\u6ce8 "+ch.bet+" \u7814\u53d1\u70b9"))endChallenge(false);
+}
+function endChallenge(success){
+  var ch=data.challenge;
+  if(!ch||!ch.active)return;
+  ch.active=false;
+  var bet=ch.bet;
+  if(success){data.balance=(data.balance||0)+bet*2;showToast("🎉 挑战成功！+"+bet+" 研发点")}
+  else{showToast("💔 挑战失败，扣除 "+bet+" 研发点")}
+  saveData();updateStats();renderChallengeUI();populateChallengeSelect();
+  var timerEl=document.getElementById("challengeTimer");
+  if(timerEl)timerEl.style.color="#f9d423";
+}
+
+function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI()}
+init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);
