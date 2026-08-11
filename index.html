@@ -730,7 +730,7 @@ function endChallenge(success){
   if(timerEl)timerEl.style.color="#f9d423";
 }
 
-function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI()}
+function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");var startInput=document.getElementById("dailyStartTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()});if(endInput.dataset.manual!=="1")endInput.value=getLocalTimeString()}if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()});if(startInput.dataset.manual!=="1"){var lm=getLastEndMinutes(getLocalDateString());startInput.value=formatMinutesToTime(lm>0?lm:(new Date()).getHours()*60+(new Date()).getMinutes())}}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI()}
 init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);
 
 </script>
