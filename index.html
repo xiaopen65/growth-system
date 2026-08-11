@@ -726,6 +726,33 @@ init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);
 </script>
 
 
-
+<script id="sw-update-check">
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js').then(function(reg) {
+    // Listen for update-ready message from SW
+    navigator.serviceWorker.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'update-ready') {
+        var banner = document.getElementById('update-banner');
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.id = 'update-banner';
+          banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#4fc3f7;color:#000;text-align:center;padding:8px;z-index:9999;cursor:pointer;font-size:14px;font-weight:bold';
+          banner.textContent = '\u2728 \u53D1\u73B0\u65B0\u7248\u672C\uFF0C\u70B9\u51FB\u5237\u65B0';
+          banner.onclick = function() {
+            banner.remove();
+            window.location.reload();
+          };
+          document.body.prepend(banner);
+        }
+      }
+    });
+    // Auto-refresh on controller change
+    var refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      if (!refreshing) { refreshing = true; window.location.reload(); }
+    });
+  });
+}
+</script>
 </body>
 </html>
