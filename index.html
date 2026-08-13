@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -8,95 +8,95 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f0f1a;color:#e0e0e0;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f6f8;color:#1f2937;min-height:100vh}
 .app{max-width:800px;margin:0 auto;padding:16px}
 .header{text-align:center;padding:20px 0}
-.header h1{font-size:1.8em;background:linear-gradient(135deg,#f9d423,#ff4e50);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header h1{font-size:1.8em;background:linear-gradient(135deg,#f59e0b,#ff4e50);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .header .stats{display:flex;justify-content:center;gap:24px;margin-top:12px;flex-wrap:wrap}
-.stat-card{background:#1a1a2e;border-radius:12px;padding:12px 20px;text-align:center;min-width:100px;border:1px solid #2a2a4a}
-.stat-card .val{font-size:1.8em;font-weight:bold;color:#f9d423}
-.stat-card .lbl{font-size:.75em;color:#888;margin-top:2px}
-.tabs{display:flex;gap:4px;margin:20px 0;background:#1a1a2e;border-radius:12px;padding:4px}
-.tab{flex:1;text-align:center;padding:10px;border-radius:10px;cursor:pointer;font-size:.9em;color:#888;transition:all .2s;border:none;background:none}
-.tab.active{background:#2a2a5a;color:#f9d423;font-weight:bold}
-.tab:hover:not(.active){color:#ccc}
+.stat-card{background:#ffffff;border-radius:12px;padding:12px 20px;text-align:center;min-width:100px;border:1px solid #e5e7eb}
+.stat-card .val{font-size:1.8em;font-weight:bold;color:#f59e0b}
+.stat-card .lbl{font-size:.75em;color:#6b7280;margin-top:2px}
+.tabs{display:flex;gap:4px;margin:20px 0;background:#ffffff;border-radius:12px;padding:4px}
+.tab{flex:1;text-align:center;padding:10px;border-radius:10px;cursor:pointer;font-size:.9em;color:#6b7280;transition:all .2s;border:none;background:none}
+.tab.active{background:#fef3c7;color:#f59e0b;font-weight:bold}
+.tab:hover:not(.active){color:#374151}
 .page{display:none}
 .page.active{display:block}
-.card{background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid #2a2a4a}
-.card h3{color:#f9d423;margin-bottom:12px;font-size:1em;display:flex;align-items:center;gap:8px}
-input,textarea,select{background:#0f0f1a;border:1px solid #2a2a4a;border-radius:8px;padding:10px;color:#e0e0e0;font-size:.9em;width:100%;font-family:inherit}
-input:focus,textarea:focus,select:focus{outline:none;border-color:#f9d423}
+.card{background:#ffffff;border-radius:12px;padding:16px;margin-bottom:12px;border:1px solid #e5e7eb}
+.card h3{color:#6b7280;margin-bottom:12px;font-size:1em;display:flex;align-items:center;gap:8px}
+input,textarea,select{background:#f5f6f8;border:1px solid #e5e7eb;border-radius:8px;padding:10px;color:#1f2937;font-size:.9em;width:100%;font-family:inherit}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#f59e0b}
 textarea{resize:vertical;min-height:60px}
-.btn{background:linear-gradient(135deg,#f9d423,#ff4e50);color:#0f0f1a;border:none;border-radius:8px;padding:10px 20px;font-weight:bold;cursor:pointer;font-size:.9em;transition:opacity .2s}
+.btn{background:linear-gradient(135deg,#f59e0b,#ff4e50);color:#f5f6f8;border:none;border-radius:8px;padding:10px 20px;font-weight:bold;cursor:pointer;font-size:.9em;transition:opacity .2s}
 .btn:hover{opacity:.9}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-sm{padding:6px 12px;font-size:.8em}
-.btn-outline{background:transparent;border:1px solid #f9d423;color:#f9d423}
-.day-entry{background:#0f0f1a;border-radius:8px;padding:12px;margin-bottom:8px}
+.btn-outline{background:transparent;border:1px solid #9ca3af;color:#6b7280}
+.day-entry{background:#f5f6f8;border-radius:8px;padding:12px;margin-bottom:8px}
 .day-entry .day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.day-entry .day-date{color:#f9d423;font-weight:bold}
-.day-entry .day-clock{color:#4fc3f7}
-.day-entry .day-actions{color:#aaa;font-size:.85em;white-space:pre-line}
-.day-entry .day-event{background:#2a1a1a;border-left:3px solid #ff4e50;padding:6px 10px;margin-top:6px;border-radius:0 6px 6px 0;font-size:.8em;color:#ffaaaa}
+.day-entry .day-date{color:#f59e0b;font-weight:bold}
+.day-entry .day-clock{color:#0284c7}
+.day-entry .day-actions{color:#4b5563;font-size:.85em;white-space:pre-line}
+.day-entry .day-event{background:#fee2e2;border-left:3px solid #ff4e50;padding:6px 10px;margin-top:6px;border-radius:0 6px 6px 0;font-size:.8em;color:#b91c1c}
 .quest-category{margin-bottom:16px}
-.quest-category h4{color:#4fc3f7;margin-bottom:8px;font-size:.85em}
-.quest-item{display:flex;flex-direction:column;gap:6px;padding:10px 12px;background:#0f0f1a;border-radius:8px;margin-bottom:4px}.quest-row-top{display:flex;align-items:center;gap:8px}.quest-row-bot{display:flex;align-items:center;gap:4px;justify-content:flex-end}.btn-xs{padding:2px 6px;font-size:0.68em;border-radius:6px}
-.quest-item .pts{color:#f9d423;font-weight:bold;min-width:30px;text-align:right;margin-left:auto}
+.quest-category h4{color:#0284c7;margin-bottom:8px;font-size:.85em}
+.quest-item{display:flex;flex-direction:column;gap:6px;padding:10px 12px;background:#f5f6f8;border-radius:8px;margin-bottom:4px}.quest-row-top{display:flex;align-items:center;gap:8px}.quest-row-bot{display:flex;align-items:center;gap:4px;justify-content:flex-end}.btn-xs{padding:2px 6px;font-size:0.68em;border-radius:6px}
+.quest-item .pts{color:#f59e0b;font-weight:bold;min-width:30px;text-align:right;margin-left:auto}
 .quest-item .name{flex:1}
-.quest-item.done .name{text-decoration:line-through;color:#666}
+.quest-item.done .name{text-decoration:line-through;color:#9ca3af}
 .quest-check{width:20px;height:20px;border-radius:50%;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0}
-.quest-check.checked{background:#4fc3f7;color:#0f0f1a}
+.quest-check.checked{background:#4fc3f7;color:#f5f6f8}
 
-.challenge-card{background:linear-gradient(135deg,#1a1a3e,#1a2a3e);border:1px solid #3a3a5a;border-radius:12px;padding:16px;margin-bottom:14px}.challenge-card h3{color:#ff9f2f!important;margin-bottom:12px!important}.challenge-timer{text-align:center;font-size:2.2em;font-weight:bold;color:#f9d423;font-family:monospace;margin:8px 0;text-shadow:0 0 20px rgba(249,212,35,0.3)}.challenge-bar{background:#0f0f1a;border-radius:8px;height:10px;margin:8px 0;overflow:hidden}.challenge-bar-fill{background:linear-gradient(90deg,#ff9f2f,#f9d423);height:100%;border-radius:8px;transition:width 1s linear;width:100%}.challenge-info{font-size:0.85em;color:#ccc;line-height:1.8}.level-bar{background:#0f0f1a;border-radius:8px;height:12px;margin:8px 0;overflow:hidden}
-.level-bar-fill{background:linear-gradient(90deg,#f9d423,#ff4e50);height:100%;border-radius:8px;transition:width .5s}
+.challenge-card{background:linear-gradient(135deg,#fef3c7,#e0f2fe);border:1px solid #fbbf24;border-radius:12px;padding:16px;margin-bottom:14px}.challenge-card h3{color:#ff9f2f!important;margin-bottom:12px!important}.challenge-timer{text-align:center;font-size:2.2em;font-weight:bold;color:#f59e0b;font-family:monospace;margin:8px 0;text-shadow:0 0 20px rgba(249,212,35,0.3)}.challenge-bar{background:#f5f6f8;border-radius:8px;height:10px;margin:8px 0;overflow:hidden}.challenge-bar-fill{background:linear-gradient(90deg,#ff9f2f,#f59e0b);height:100%;border-radius:8px;transition:width 1s linear;width:100%}.challenge-info{font-size:0.85em;color:#374151;line-height:1.8}.level-bar{background:#f5f6f8;border-radius:8px;height:12px;margin:8px 0;overflow:hidden}
+.level-bar-fill{background:linear-gradient(90deg,#f59e0b,#ff4e50);height:100%;border-radius:8px;transition:width .5s}
 .level-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.level-item{background:#0f0f1a;border-radius:8px;padding:10px;text-align:center;border:1px solid #2a2a4a}
-.level-item.reached{border-color:#f9d423}
-.level-item.reached .lv-name{color:#f9d423}
+.level-item{background:#f5f6f8;border-radius:8px;padding:10px;text-align:center;border:1px solid #e5e7eb}
+.level-item.reached{border-color:#f59e0b}
+.level-item.reached .lv-name{color:#f59e0b}
 .level-item .lv-name{font-weight:bold;margin-bottom:4px}
-.level-item .lv-reward{font-size:.75em;color:#888}
+.level-item .lv-reward{font-size:.75em;color:#6b7280}
 .level-item .lv-btn{margin-top:6px}
 .roulette-tabs{display:flex;gap:4px;margin-bottom:12px}
-.r-tab{flex:1;text-align:center;padding:8px;border-radius:8px;cursor:pointer;font-size:.8em;background:#0f0f1a;border:1px solid #2a2a4a;color:#888;transition:all .2s}
-.r-tab.active{border-color:#f9d423;color:#f9d423;background:#1a1a2e}
-.r-tab:hover:not(.active){color:#ccc}
+.r-tab{flex:1;text-align:center;padding:8px;border-radius:8px;cursor:pointer;font-size:.8em;background:#f5f6f8;border:1px solid #e5e7eb;color:#6b7280;transition:all .2s}
+.r-tab.active{border-color:#f59e0b;color:#f59e0b;background:#ffffff}
+.r-tab:hover:not(.active){color:#374151}
 .roulette-items{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.roulette-item{background:#0f0f1a;border-radius:8px;padding:10px;font-size:.8em;border:1px solid #2a2a4a;transition:all .3s;display:flex;align-items:center;gap:4px}
-.roulette-item.highlight{border-color:#f9d423;background:#2a2a1a;animation:pulse .5s 3}
+.roulette-item{background:#f5f6f8;border-radius:8px;padding:10px;font-size:.8em;border:1px solid #e5e7eb;transition:all .3s;display:flex;align-items:center;gap:4px}
+.roulette-item.highlight{border-color:#f59e0b;background:#2a2a1a;animation:pulse .5s 3}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .spin-area{text-align:center;padding:16px}
-.spin-result{font-size:1.2em;color:#f9d423;margin:12px 0;min-height:2em}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#2a2a5a;color:#f9d423;padding:12px 24px;border-radius:8px;z-index:200;animation:fadeInOut 2s forwards}
+.spin-result{font-size:1.2em;color:#f59e0b;margin:12px 0;min-height:2em}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#fef3c7;color:#f59e0b;padding:12px 24px;border-radius:8px;z-index:200;animation:fadeInOut 2s forwards}
 @keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(-10px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}85%{opacity:1}100%{opacity:0}}
 .form-row{margin-bottom:12px}
-.form-row label{display:block;margin-bottom:4px;font-size:.85em;color:#aaa}
+.form-row label{display:block;margin-bottom:4px;font-size:.85em;color:#4b5563}
 @media(max-width:500px){.stat-card{min-width:70px;padding:8px 12px}.stat-card .val{font-size:1.3em}.roulette-items{grid-template-columns:1fr}.level-grid{grid-template-columns:1fr 1fr}}
-.data-backup{display:flex;justify-content:center;gap:8px;margin-top:8px}.data-backup .btn-export,.data-backup .btn-import{font-size:.7em;padding:4px 10px;border-radius:6px;cursor:pointer;background:transparent;color:#888;border:1px solid #444;transition:all .2s}.data-backup .btn-export:hover,.data-backup .btn-import:hover{color:#f9d423;border-color:#f9d423}#importFile{display:none}.time-strip{display:flex;flex-direction:column;gap:12px;margin:12px 0;padding:16px 12px;background:#0f0f1a;border:1px solid #2a2a4a;border-radius:12px}.time-row{display:flex;align-items:center;justify-content:center;gap:10px}.time-block{text-align:center}.time-label{font-size:.75em;color:#888;margin-bottom:4px}.time-arrow{color:#555;font-size:1.2em;padding-top:12px}.time-info{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding-top:2px}.time-value{font-size:1.8em;font-weight:700;color:#f9d423;line-height:1}.time-gap{background:#1a1a2e;color:#999;border-radius:999px;padding:6px 12px;font-weight:700;text-align:center;border:1px solid #2a2a4a;font-size:.85em}.record-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.record-btn{flex:1;min-width:160px;border:none;border-radius:12px;padding:14px 18px;font-size:1em;font-weight:700;cursor:pointer;color:#0f0f1a;transition:transform .15s,opacity .15s}.record-btn:hover{transform:translateY(-1px);opacity:.95}.record-btn.daily{background:linear-gradient(135deg,#59d36d,#2dbf5e)}.record-btn.main{background:linear-gradient(135deg,#ffd15b,#ff9f2f)}.record-hint{margin-top:8px;font-size:.75em;color:#8d8d8d;text-align:center}.time-next{font-size:.75em;color:#8d8d8d;text-align:center;line-height:1.5;padding:2px 0}.time-start-input,.time-end-input{width:100%;max-width:110px;text-align:center;font-size:1.5em;font-weight:700;color:#f9d423;background:transparent;border:1px solid transparent;padding:0 2px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#2a2a4a;background:#141424;border-radius:8px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#2a2a4a;background:#141424;border-radius:8px}.timeline-row{background:#0f0f1a;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #2a2a4a}.timeline-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.timeline-range{font-weight:700;color:#e0e0e0}.timeline-kind{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:999px}.timeline-kind.daily{background:#214c36;color:#7ef0a0}.timeline-kind.main{background:#4b3714;color:#ffd15b}.timeline-duration{color:#999}.timeline-note{margin-top:6px;color:#b9b9b9;white-space:pre-line}.timeline-legacy{color:#888}
+.data-backup{display:flex;justify-content:center;gap:8px;margin-top:8px}.data-backup .btn-export,.data-backup .btn-import{font-size:.7em;padding:4px 10px;border-radius:6px;cursor:pointer;background:transparent;color:#6b7280;border:1px solid #d1d5db;transition:all .2s}.data-backup .btn-export:hover,.data-backup .btn-import:hover{color:#f59e0b;border-color:#f59e0b}#importFile{display:none}.time-strip{display:flex;flex-direction:column;gap:12px;margin:12px 0;padding:16px 12px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:12px}.time-row{display:flex;align-items:center;justify-content:center;gap:10px}.time-block{text-align:center}.time-label{font-size:.75em;color:#6b7280;margin-bottom:4px}.time-arrow{color:#9ca3af;font-size:1.2em;padding-top:12px}.time-info{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding-top:2px}.time-value{font-size:1.8em;font-weight:700;color:#6b7280;line-height:1}.time-gap{background:#ffffff;color:#6b7280;border-radius:999px;padding:6px 12px;font-weight:700;text-align:center;border:1px solid #e5e7eb;font-size:.85em}.record-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.record-btn{flex:1;min-width:160px;border:none;border-radius:12px;padding:14px 18px;font-size:1em;font-weight:700;cursor:pointer;color:#f5f6f8;transition:transform .15s,opacity .15s}.record-btn:hover{transform:translateY(-1px);opacity:.95}.record-btn.daily{background:linear-gradient(135deg,#59d36d,#2dbf5e)}.record-btn.main{background:linear-gradient(135deg,#fbbf24,#ff9f2f)}.record-hint{margin-top:8px;font-size:.75em;color:#6b7280;text-align:center}.time-next{font-size:.75em;color:#6b7280;text-align:center;line-height:1.5;padding:2px 0}.time-start-input,.time-end-input{width:100%;max-width:110px;text-align:center;font-size:1.5em;font-weight:700;color:#6b7280;background:transparent;border:1px solid transparent;padding:0 2px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#e5e7eb;background:#f3f4f6;border-radius:8px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#e5e7eb;background:#f3f4f6;border-radius:8px}.timeline-row{background:#f5f6f8;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #e5e7eb}.timeline-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.timeline-range{font-weight:700;color:#1f2937}.timeline-kind{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:999px}.timeline-kind.daily{background:#dcfce7;color:#166534}.timeline-kind.main{background:#fef3c7;color:#92400e}.timeline-duration{color:#6b7280}.timeline-note{margin-top:6px;color:#4b5563;white-space:pre-line}.timeline-legacy{color:#6b7280}
 
 .levelup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn 0.3s}
-.levelup-modal{background:linear-gradient(145deg,#1a1a3e,#2a1a3e);border:2px solid #f9d423;border-radius:20px;padding:32px 28px;text-align:center;max-width:360px;width:90%;box-shadow:0 0 40px rgba(249,212,35,0.3);animation:popIn 0.4s ease-out}
-.levelup-modal h2{font-size:2em;color:#f9d423;margin:0 0 8px 0}
+.levelup-modal{background:linear-gradient(145deg,#ffffff,#fef3c7);border:2px solid #f59e0b;border-radius:20px;padding:32px 28px;text-align:center;max-width:360px;width:90%;box-shadow:0 0 40px rgba(249,212,35,0.3);animation:popIn 0.4s ease-out}
+.levelup-modal h2{font-size:2em;color:#f59e0b;margin:0 0 8px 0}
 .levelup-modal .lv-emoji{font-size:3em;display:block;margin-bottom:8px}
-.levelup-modal .lv-reward-text{color:#ccc;font-size:1em;margin:12px 0}
-.levelup-modal .lv-reward-name{color:#f9d423;font-weight:bold;font-size:1.1em}
+.levelup-modal .lv-reward-text{color:#374151;font-size:1em;margin:12px 0}
+.levelup-modal .lv-reward-name{color:#f59e0b;font-weight:bold;font-size:1.1em}
 .levelup-modal .lv-btn-block{margin-top:20px}
 .spin-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn 0.3s}
-.spin-modal{background:linear-gradient(145deg,#1a1a3e,#2a1a2e);border:2px solid #ff9f2f;border-radius:20px;padding:28px 24px;text-align:center;max-width:360px;width:90%;box-shadow:0 0 40px rgba(255,159,47,0.25);animation:popIn 0.4s ease-out}
+.spin-modal{background:linear-gradient(145deg,#ffffff,#fef3c7);border:2px solid #ff9f2f;border-radius:20px;padding:28px 24px;text-align:center;max-width:360px;width:90%;box-shadow:0 0 40px rgba(255,159,47,0.25);animation:popIn 0.4s ease-out}
 .spin-modal .spin-icon{font-size:3em;display:block;margin-bottom:4px}
 .spin-modal h2{font-size:1.4em;color:#ff9f2f;margin:0 0 6px 0}
-.spin-modal .spin-category{color:#888;font-size:0.85em;margin-bottom:12px}
-.spin-modal .spin-prize{background:#0f0f1a;border-radius:12px;padding:14px;margin:8px 0 16px 0;border:1px solid #2a2a4a}
-.spin-modal .spin-prize-text{color:#f9d423;font-size:1.1em;font-weight:bold}
-.spin-modal .spin-cost-info{color:#888;font-size:0.8em;margin-bottom:16px}
+.spin-modal .spin-category{color:#6b7280;font-size:0.85em;margin-bottom:12px}
+.spin-modal .spin-prize{background:#f5f6f8;border-radius:12px;padding:14px;margin:8px 0 16px 0;border:1px solid #e5e7eb}
+.spin-modal .spin-prize-text{color:#f59e0b;font-size:1.1em;font-weight:bold}
+.spin-modal .spin-cost-info{color:#6b7280;font-size:0.8em;margin-bottom:16px}
 .spin-modal .spin-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes popIn{0%{transform:scale(0.7);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
-.todo-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0f0f1a;border-radius:8px;margin-bottom:4px;transition:all .2s}.todo-check{width:20px;height:20px;border-radius:6px;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0;transition:all .2s}.todo-check.todo-checked{background:#4fc3f7;color:#0f0f1a}.todo-text{flex:1;font-size:.9em}.todo-done .todo-text{text-decoration:line-through;color:#555}
+.todo-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f6f8;border-radius:8px;margin-bottom:4px;transition:all .2s}.todo-check{width:20px;height:20px;border-radius:6px;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0;transition:all .2s}.todo-check.todo-checked{background:#4fc3f7;color:#f5f6f8}.todo-text{flex:1;font-size:.9em}.todo-done .todo-text{text-decoration:line-through;color:#9ca3af}
 
 </style>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f0f1a">
-  <meta name="app-version" content="1">
+  <meta name="theme-color" content="#f5f6f8">
+  <meta name="app-version" content="2">
 </head>
 <body>
 
@@ -133,12 +133,12 @@ textarea{resize:vertical;min-height:60px}
 <button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="mergeToLastEntry()">↩ 合并到上一次记录</button>
 </div>
 <div class="card">
-<h3>📋 时间线 <span style="font-weight:normal;font-size:0.75em;color:#888">（按具体时间顺序记录）</span></h3>
-<div style="margin-bottom:10px;padding:10px;background:#0f0f1a;border-radius:8px;border:1px solid #2a2a4a">
-  <div style="font-size:0.8em;color:#888;margin-bottom:6px">📤 导出时间线</div>
+<h3>📋 时间线 <span style="font-weight:normal;font-size:0.75em;color:#6b7280">（按具体时间顺序记录）</span></h3>
+<div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
+  <div style="font-size:0.8em;color:#6b7280;margin-bottom:6px">📤 导出时间线</div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
     <input type="date" id="exportDateFrom" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
-    <span style="color:#888;font-size:0.8em">至</span>
+    <span style="color:#6b7280;font-size:0.8em">至</span>
     <input type="date" id="exportDateTo" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
     <button class="btn btn-sm" style="padding:6px 12px;font-size:0.8em" onclick="exportTimelineRange()">导出</button>
   </div>
@@ -162,34 +162,34 @@ textarea{resize:vertical;min-height:60px}
   <h3>⚔️ 限时挑战</h3>
   <div id="challengeSetup">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <select id="challengeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#0f0f1a;border:1px solid #2a2a4a;border-radius:8px;color:#e0e0e0">
+      <select id="challengeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:8px;color:#1f2937">
         <option value="">-- 选择主线任务 --</option>
       </select>
       <input type="number" id="challengeDuration" min="1" max="480" value="60" placeholder="分钟" style="flex:0 0 auto;width:55px;font-size:0.85em;padding:8px 4px;text-align:center" title="挑战时长（分钟）">
-      <span style="color:#888;font-size:0.75em">分钟</span>
+      <span style="color:#6b7280;font-size:0.75em">分钟</span>
       <input type="number" id="challengeBet" min="1" value="3" placeholder="赌注" style="flex:0 0 auto;width:60px;font-size:0.85em;padding:8px 4px;text-align:center">
-      <span style="color:#888;font-size:0.75em">研发点</span>
+      <span style="color:#6b7280;font-size:0.75em">研发点</span>
       <button class="btn btn-sm" onclick="startChallenge()" style="padding:8px 16px">⚡ 开始挑战</button>
     </div>
-    <p style="color:#888;font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
+    <p style="color:#6b7280;font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
   </div>
   <div id="challengeActive" style="display:none">
     <div class="challenge-timer">⏱ <span id="challengeTimer">60:00</span></div>
     <div class="challenge-bar"><div class="challenge-bar-fill" id="challengeBarFill"></div></div>
     <div class="challenge-info">
       <div>任务：<strong id="challengeTaskName"></strong></div>
-      <div>赌注：<strong id="challengeStakeDisplay" style="color:#f9d423"></strong> 研发点</div>
+      <div>赌注：<strong id="challengeStakeDisplay" style="color:#f59e0b"></strong> 研发点</div>
     </div>
     <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#0f0f1a">✅ 完成挑战</button>
+      <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成挑战</button>
       <button class="btn btn-sm btn-outline" onclick="abandonChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">❌ 放弃</button>
     </div>
   </div>
 </div>
 <div class="card">
 <h3>🗺️ 主线任务</h3>
-<p style="color:#888;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
-<div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#0f0f1a;border-radius:10px;margin-bottom:14px">
+<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
+<div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#f5f6f8;border-radius:10px;margin-bottom:14px">
   <input type="text" id="questCategoryInput" placeholder="分类" style="flex:0 0 auto;width:80px;font-size:0.8em;padding:6px 8px">
   <input type="text" id="questTitleInput" placeholder="任务内容" style="flex:1;min-width:120px;font-size:0.8em;padding:6px 8px">
   <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点" style="flex:0 0 auto;width:55px;font-size:0.8em;padding:6px 4px;text-align:center">
@@ -219,10 +219,10 @@ textarea{resize:vertical;min-height:60px}
 </div>
 <div class="roulette-tabs" id="rouletteTabs"></div>
 <div class="spin-area">
-<div style="color:#888;font-size:0.85em">每次抽奖消耗 <span id="spinCost">3</span> 研发点</div>
+<div style="color:#6b7280;font-size:0.85em">每次抽奖消耗 <span id="spinCost">3</span> 研发点</div>
 <div class="spin-result" id="spinResult">🎯 点击下方按钮开始抽奖</div>
 <button class="btn" id="spinBtn" onclick="spinRoulette()">🎲 开始抽奖</button>
-<div style="margin-top:4px;font-size:0.8em;color:#4fc3f7" id="spinRemaining"></div>
+<div style="margin-top:4px;font-size:0.8em;color:#0284c7" id="spinRemaining"></div>
 <button class="btn btn-sm btn-outline" style="margin-top:6px" onclick="restoreFivePoints()">💧 恢复5点研发点</button>
 </div>
 <div class="roulette-items" id="rouletteItems"></div>
@@ -353,7 +353,7 @@ function formatDurationLabel(mins){mins=Math.max(0,mins||0);if(mins>=60){var h=M
 function escapeHtml(text){return String(text||"").replace(/[&<>"]/g,function(ch){var map={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"};return map[ch]})}
 function getDailyEntriesForDate(date){return data.dailyLog.filter(function(item){return item.date===date})}
 function getLastEndMinutes(date){var items=getDailyEntriesForDate(date).filter(function(item){return item.endTime});if(!items.length)return 0;return items.reduce(function(max,item){return Math.max(max,parseTimeToMinutes(item.endTime))},0)}
-function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");var remainder=(data.mainMinutesTotal||0);var nextRemain=50-(remainder%50);if(nextRemain===50)nextRemain=0;if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var mainRemain=50-((data.mainMinutesTotal||0)%50);if(mainRemain===50)mainRemain=0;var dailyRemain=1200-((data.dailyMinutesTotal||0)%1200);if(dailyRemain===1200)dailyRemain=0;var h="";if(mainRemain===0)h+="<div><strong style='color:#f9d423'>主线已满 50 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";if(dailyRemain===0)h+="<div><strong style='color:#f9d423'>日常已满 1200 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#7ec8e3'>再积累 <strong>"+dailyRemain+"</strong> 分钟日常时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
+function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");var remainder=(data.mainMinutesTotal||0);var nextRemain=50-(remainder%50);if(nextRemain===50)nextRemain=0;if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var mainRemain=50-((data.mainMinutesTotal||0)%50);if(mainRemain===50)mainRemain=0;var dailyRemain=1200-((data.dailyMinutesTotal||0)%1200);if(dailyRemain===1200)dailyRemain=0;var h="";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 50 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";if(dailyRemain===0)h+="<div><strong style='color:#f59e0b'>日常已满 1200 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#7ec8e3'>再积累 <strong>"+dailyRemain+"</strong> 分钟日常时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
 
 // Daily
 function renderDailyList() {
@@ -366,7 +366,7 @@ function renderDailyList() {
     var kind=(d.kind==="main")?"main":"daily";
     var kindLabel=kind==="main"?"主线记录":"日常记录";
     var html='<div class="timeline-row">';
-    html+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+kind+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" style="color:#4fc3f7" onclick="editDailyEntry('+idx+')">✏</button><button class="btn btn-sm btn-outline" onclick="deleteDaily('+idx+')">🗑</button></div>';
+    html+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+kind+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" style="color:#0284c7" onclick="editDailyEntry('+idx+')">✏</button><button class="btn btn-sm btn-outline" onclick="deleteDaily('+idx+')">🗑</button></div>';
     if(d.actions) html+='<div class="timeline-note">'+escapeHtml(d.actions)+'</div>';
     html+='</div>';
     return html;
@@ -491,8 +491,8 @@ function renderLevelGrid(){
   var t=calcTotalPoints(),cl=calcLevel(t)+1,c=document.getElementById("levelGrid");
   c.innerHTML=data.levelRewards.map(function(r){
     var reached=r.lv<=cl,cb='';
-    if(reached){cb=r.claimed?'<button class="btn btn-sm lv-btn" style="background:#4fc3f7;color:#0f0f1a" onclick="claimReward('+r.lv+')">✅ 已领取</button>':'<button class="btn btn-sm lv-btn" onclick="claimReward('+r.lv+')">🎁 领取</button>'}
-    return'<div class="level-item '+(reached?'reached':'')+'"><div class="lv-name">Lv.'+r.lv+' '+(r.lv===cl?'👈 当前':'')+' <button class="btn btn-sm btn-outline" style="padding:1px 4px;font-size:0.6em;color:#ff4e50" onclick="deleteLevelReward('+r.lv+')">🗑</button></div><div style="font-size:0.7em;color:#888">需累计 '+r.need+' 点</div><div class="lv-reward">'+r.reward+' <button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="editReward('+r.lv+')">✏</button></div>'+cb+'</div>';
+    if(reached){cb=r.claimed?'<button class="btn btn-sm lv-btn" style="background:#4fc3f7;color:#ffffff" onclick="claimReward('+r.lv+')">✅ 已领取</button>':'<button class="btn btn-sm lv-btn" onclick="claimReward('+r.lv+')">🎁 领取</button>'}
+    return'<div class="level-item '+(reached?'reached':'')+'"><div class="lv-name">Lv.'+r.lv+' '+(r.lv===cl?'👈 当前':'')+' <button class="btn btn-sm btn-outline" style="padding:1px 4px;font-size:0.6em;color:#ff4e50" onclick="deleteLevelReward('+r.lv+')">🗑</button></div><div style="font-size:0.7em;color:#6b7280">需累计 '+r.need+' 点</div><div class="lv-reward">'+r.reward+' <button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="editReward('+r.lv+')">✏</button></div>'+cb+'</div>';
   }).join("")+'<button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="addLevelReward()">+ 新增等级奖励</button>';
   var nl=cl,pt=calcLevelPoints(nl-1),nt=calcLevelPoints(nl),pg=Math.min(100,Math.max(0,((t-pt)/(nt-pt))*100));
   document.getElementById("levelBar").style.width=pg+"%";
@@ -633,14 +633,14 @@ function showLevelUpModal(lv){
   var reward=data.levelRewards.find(function(r){return r.lv===lv});
   var rewardText=reward?reward.reward:"暂无奖励";
   var overlay=document.createElement("div");overlay.className="levelup-overlay";overlay.id="levelupOverlay";
-  overlay.innerHTML='<div class="levelup-modal"><span class="lv-emoji">🎉</span><h2>恭喜升级！</h2><p style="color:#ccc;font-size:1.1em">你已达到 <strong style="color:#f9d423">Lv.'+lv+'</strong></p><p class="lv-reward-text">升级奖励</p><p class="lv-reward-name">'+rewardText+'</p><div class="lv-btn-block"><button class="btn" style="font-size:1.1em;padding:12px 32px" onclick="claimRewardFromModal('+lv+')">🎁 领取奖励</button></div><button style="background:none;border:none;color:#888;margin-top:16px;cursor:pointer;font-size:0.85em" onclick="closeLevelUpModal()">稍后再说</button></div>';
+  overlay.innerHTML='<div class="levelup-modal"><span class="lv-emoji">🎉</span><h2>恭喜升级！</h2><p style="color:#ccc;font-size:1.1em">你已达到 <strong style="color:#f59e0b">Lv.'+lv+'</strong></p><p class="lv-reward-text">升级奖励</p><p class="lv-reward-name">'+rewardText+'</p><div class="lv-btn-block"><button class="btn" style="font-size:1.1em;padding:12px 32px" onclick="claimRewardFromModal('+lv+')">🎁 领取奖励</button></div><button style="background:none;border:none;color:#6b7280;margin-top:16px;cursor:pointer;font-size:0.85em" onclick="closeLevelUpModal()">稍后再说</button></div>';
   document.body.appendChild(overlay);
   overlay.addEventListener("click",function(e){if(e.target===overlay)closeLevelUpModal()});
 }
 function closeLevelUpModal(){var el=document.getElementById("levelupOverlay");if(el)el.remove()}
 function claimRewardFromModal(lv){var r=data.levelRewards.find(function(x){return x.lv===lv});if(r&&!r.claimed){r.claimed=true;saveData();renderLevelGrid();showToast("🎉 已领取 Lv."+lv+" 奖励！")}closeLevelUpModal()}
 
-function renderDailyTodos(){var todos=data.dailyTodos||[];var html='';todos.forEach(function(todo,idx){html+='<div class="todo-item'+(todo.done?' todo-done':'')+'"><div class="todo-check'+(todo.done?' todo-checked':'')+'" onclick="toggleDailyTodo('+idx+')">'+(todo.done?'&#x2713;':'')+'</div><span class="todo-text">'+escapeHtml(todo.text)+'</span><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em;color:#f9d423" title="转移到主线任务" onclick="transferTodoToQuest('+idx+')">→主线</button><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="deleteDailyTodo('+idx+')">&#xd7;</button></div>'});document.getElementById('dailyTodoList').innerHTML=html||'<div style="color:#666;font-size:0.8em">还没有待办，添加一条吧</div>'}
+function renderDailyTodos(){var todos=data.dailyTodos||[];var html='';todos.forEach(function(todo,idx){html+='<div class="todo-item'+(todo.done?' todo-done':'')+'"><div class="todo-check'+(todo.done?' todo-checked':'')+'" onclick="toggleDailyTodo('+idx+')">'+(todo.done?'&#x2713;':'')+'</div><span class="todo-text">'+escapeHtml(todo.text)+'</span><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em;color:#f59e0b" title="转移到主线任务" onclick="transferTodoToQuest('+idx+')">→主线</button><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="deleteDailyTodo('+idx+')">&#xd7;</button></div>'});document.getElementById('dailyTodoList').innerHTML=html||'<div style="color:#666;font-size:0.8em">还没有待办，添加一条吧</div>'}
 function addDailyTodo(){var inp=document.getElementById('newTodoInput');var text=(inp.value||'').trim();if(!text){showToast('请先输入内容');return}if(!data.dailyTodos)data.dailyTodos=[];data.dailyTodos.push({text:text,done:false});saveData();inp.value='';renderDailyTodos();showToast('+ 已添加')}
 function toggleDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos[idx].done=!data.dailyTodos[idx].done;saveData();renderDailyTodos()}
 function deleteDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();showToast('已删除')}
@@ -701,7 +701,7 @@ function tickChallenge(){
   if(timerEl)timerEl.textContent=min+":"+(sec<10?"0":"")+sec;
   var barEl=document.getElementById("challengeBarFill");
   if(barEl)barEl.style.width=(remaining/ch.duration*100)+"%";
-  if(totalSec<600&&timerEl)timerEl.style.color="#ff4e50";
+  if(totalSec<600&&timerEl)timerEl.style.color="#ef4444";
   if(remaining<=0)endChallenge(false);
 }
 function completeChallenge(){endChallenge(true)}
@@ -719,7 +719,7 @@ function endChallenge(success){
   else{showToast("💔 挑战失败，扣除 "+bet+" 研发点")}
   saveData();updateStats();renderChallengeUI();populateChallengeSelect();
   var timerEl=document.getElementById("challengeTimer");
-  if(timerEl)timerEl.style.color="#f9d423";
+  if(timerEl)timerEl.style.color="#f59e0b";
 }
 
 function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI()}
