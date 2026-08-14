@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -16,7 +16,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .stat-card{background:#ffffff;border-radius:12px;padding:12px 20px;text-align:center;min-width:100px;border:1px solid #e5e7eb}
 .stat-card .val{font-size:1.8em;font-weight:bold;color:#f59e0b}
 .stat-card .lbl{font-size:.75em;color:#6b7280;margin-top:2px}
-.tabs{display:flex;gap:4px;margin:20px 0;background:#ffffff;border-radius:12px;padding:4px}
+.tabs{display:flex;gap:4px;margin:0 0 16px;background:#ffffff;border-radius:12px;padding:4px}
 .tab{flex:1;text-align:center;padding:10px;border-radius:10px;cursor:pointer;font-size:.9em;color:#6b7280;transition:all .2s;border:none;background:none}
 .tab.active{background:#fef3c7;color:#f59e0b;font-weight:bold}
 .tab:hover:not(.active){color:#374151}
@@ -62,8 +62,8 @@ textarea{resize:vertical;min-height:60px}
 .r-tab:hover:not(.active){color:#374151}
 .roulette-items{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
 .roulette-item{background:#f5f6f8;border-radius:8px;padding:10px;font-size:.8em;border:1px solid #e5e7eb;transition:all .3s;display:flex;align-items:center;gap:4px}
-.roulette-item.highlight{border-color:#f59e0b;background:#2a2a1a;animation:pulse .5s 3}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.roulette-item.highlight{border-color:#f59e0b;background:#000000;color:#ffffff;animation:pulse .5s 3}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}.pulse-btn{animation:pulseBtn 1.1s ease-in-out infinite}@keyframes pulseBtn{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 .spin-area{text-align:center;padding:16px}
 .spin-result{font-size:1.2em;color:#f59e0b;margin:12px 0;min-height:2em}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#fef3c7;color:#f59e0b;padding:12px 24px;border-radius:8px;z-index:200;animation:fadeInOut 2s forwards}
@@ -96,12 +96,17 @@ textarea{resize:vertical;min-height:60px}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="1">
+  <meta name="app-version" content="2">
 </head>
 <body>
 
-<div class="app">
-<div class="header"><h1>🎯 个人成长系统</h1>
+<div class="app"><div class="tabs">
+<button class="tab active" onclick="switchTab('daily')">🕒 时间</button>
+<button class="tab" onclick="switchTab('main')">🎯 主线</button>
+<button class="tab" onclick="switchTab('rewards')">🏆 等级</button>
+<button class="tab" onclick="switchTab('roulette')">🎰 转盘</button>
+</div>
+<div class="header" id="headerPanel" style="display:none"><h1>🎯 个人成长系统</h1>
 <div class="stats">
 <div class="stat-card"><div class="val" id="totalPoints">0</div><div class="lbl">累计研发点</div></div>
 <div class="stat-card"><div class="val" id="currentLevel">Lv.1</div><div class="lbl">当前等级</div></div>
@@ -109,12 +114,7 @@ textarea{resize:vertical;min-height:60px}
 <div class="stat-card"><div class="val" id="balance">0</div><div class="lbl">研发点余额 <button class="btn btn-sm btn-outline" style="padding:1px 6px;font-size:0.6em;margin-left:4px" onclick="editBalance()">✏</button></div></div>
 <div class="stat-card" style="display:flex;flex-direction:column;gap:4px;justify-content:center;padding:8px 12px"><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="exportData()">📥 导出备份</button><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入恢复</button><input type="file" id="importFile" accept=".json" onchange="importData(event)"></div>
 </div></div>
-<div class="tabs">
-<button class="tab active" onclick="switchTab('daily')">🕒 时间</button>
-<button class="tab" onclick="switchTab('main')">🎯 主线</button>
-<button class="tab" onclick="switchTab('rewards')">🏆 等级</button>
-<button class="tab" onclick="switchTab('roulette')">🎰 转盘</button>
-</div>
+
 <div class="page active" id="page-daily"><div class="card">
 <h3>➕ 记录时间段</h3>
 <div class="form-row"><label>日期</label><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div>
@@ -132,23 +132,7 @@ textarea{resize:vertical;min-height:60px}
 <div class="record-hint">主线每 50 分钟 +1 点；日常每 1200 分钟 +1 点</div>
 <button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="mergeToLastEntry()">↩ 合并到上一次记录</button>
 </div>
-<div class="card">
-<h3>📋 时间线 <span style="font-weight:normal;font-size:0.75em;color:#6b7280">（按具体时间顺序记录）</span></h3>
-<div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
-  <div style="font-size:0.8em;color:#6b7280;margin-bottom:6px">📤 导出时间线</div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-    <input type="date" id="exportDateFrom" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
-    <span style="color:#6b7280;font-size:0.8em">至</span>
-    <input type="date" id="exportDateTo" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
-    <button class="btn btn-sm" style="padding:6px 12px;font-size:0.8em" onclick="exportTimelineRange()">导出</button>
-  </div>
-  <div style="margin-top:6px;display:flex;gap:6px">
-    <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineToday()">导出今天</button>
-    <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineAll()">导出全部</button>
-  </div>
-</div>
-<div id="dailyList"></div>
-</div></div>
+<button class="btn btn-sm" style="margin-top:8px;width:100%" onclick="openTimeline()">📋 查看时间线</button></div>
 <div class="page" id="page-main">
 <div class="card">
 <h3>&#x1f4dd; 今日待办</h3>
@@ -165,7 +149,7 @@ textarea{resize:vertical;min-height:60px}
 <select id="foolTimeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:8px;color:#1f2937">
 <option value="">-- 选择主线任务 --</option>
 </select>
-<button class="btn btn-sm" onclick="startFoolTime()" style="padding:8px 16px">▶ 开始行动</button>
+<button class="btn btn-sm pulse-btn" onclick="startFoolTime()" style="padding:8px 16px;margin-left:6px">▶ 开始行动</button>
 </div>
 <p style="color:#6b7280;font-size:0.7em;margin-top:6px">选一个主线任务，无脑行动 10 分钟</p>
 </div>
@@ -252,7 +236,69 @@ textarea{resize:vertical;min-height:60px}
 <div id="toastContainer"></div>
 
 
-<script>
+<div id="timelineOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f6f8;z-index:200;overflow-y:auto">
+  <div style="max-width:800px;margin:0 auto;padding:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <button class="btn btn-sm btn-outline" onclick="closeTimeline()">← 返回</button>
+      <h3 style="margin:0;color:#6b7280">📋 时间线</h3>
+      <span style="width:50px"></span>
+    </div>
+    <div class="card">
+      <div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
+        <div style="font-size:0.8em;color:#6b7280;margin-bottom:6px">📤 导出时间线</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          <input type="date" id="exportDateFrom" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
+          <span style="color:#6b7280;font-size:0.8em">至</span>
+          <input type="date" id="exportDateTo" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
+          <button class="btn btn-sm" style="padding:6px 12px;font-size:0.8em" onclick="exportTimelineRange()">导出</button>
+        </div>
+        <div style="margin-top:6px;display:flex;gap:6px">
+          <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineToday()">导出今天</button>
+          <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineAll()">导出全部</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="todayAnalysisCard">
+      <h3>📊 今日分析</h3>
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-outline" onclick="toggleAIConfig()">⚙️ 配置</button>
+        <button class="btn btn-sm" onclick="analyzeToday()">🔍 分析今日</button>
+        <button class="btn btn-sm btn-outline" onclick="showReportHistory()">📜 查看报告记录</button>
+      </div>
+      <div id="aiConfigPanel" style="display:none;margin-bottom:10px">
+        <div class="form-row"><label>API 地址</label><input type="text" id="aiUrl" placeholder="https://api.deepseek.com/chat/completions"></div>
+        <div class="form-row"><label>API Key</label><input type="password" id="aiKey" placeholder="sk-..."></div>
+        <div class="form-row"><label>模型</label><input type="text" id="aiModel" placeholder="gpt-4o-mini"></div>
+        <div class="form-row"><label>分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="例如：请分析我今天的时间使用情况，找出效率问题和改进建议..."></textarea></div>
+        <button class="btn btn-sm" onclick="saveAIConfig()" style="margin-top:6px">💾 保存</button>
+      </div>
+      <div id="aiStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
+    </div>
+    <div class="card">
+      <div id="dailyList"></div>
+    </div>
+  </div>
+</div>
+<div id="analysisReportOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f6f8;z-index:210;overflow-y:auto">
+  <div style="max-width:800px;margin:0 auto;padding:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <button class="btn btn-sm btn-outline" onclick="closeAnalysisReport()">← 返回</button>
+      <h3 style="margin:0;color:#6b7280">📊 今日分析报告</h3>
+      <span style="width:50px"></span>
+    </div>
+    <div id="analysisReportContent" class="card" style="white-space:pre-wrap;line-height:1.7"></div>
+    <div style="margin-top:12px;display:flex;gap:8px"><button class="btn btn-sm" id="saveReportBtn" onclick="saveCurrentReport()">💾 保存报告</button></div>
+  </div>
+</div><div id="reportHistoryOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f6f8;z-index:220;overflow-y:auto">
+  <div style="max-width:800px;margin:0 auto;padding:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <button class="btn btn-sm btn-outline" onclick="closeReportHistory()">← 返回</button>
+      <h3 style="margin:0;color:#6b7280">📜 报告记录</h3>
+      <button class="btn btn-sm btn-outline" onclick="exportAllReports()">📤 全部导出</button>
+    </div>
+    <div id="reportHistoryList"></div>
+  </div>
+</div><script>
 var DEFAULT_DATA = {
   dailyLog: [],
   mainQuests: [
@@ -568,7 +614,7 @@ function spinRoulette(){
       var fe=document.getElementById("ritem-"+fi);if(fe)fe.classList.add("highlight");
       var result=items[fi];
       data.balance=(data.balance||0)-cost;data.spinHistory.push({type:currentRouletteType,result:result,date:new Date().toISOString().split("T")[0],cost:cost});
-      saveData();showSpinResultModal(currentRouletteType,result,cost);
+      saveData();showSpinResultModal(currentRouletteType,result,cost);document.getElementById("spinResult").textContent="🎯 点击下方按钮开始抽奖";
       document.getElementById("spinBtn").disabled=false;isSpinning=false;updateStats();updateSpinRemaining();
     }
   },100);
@@ -583,7 +629,7 @@ function switchTab(tab){
   document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});
   var map={daily:1,main:2,rewards:3,roulette:4};
   document.querySelector(".tab:nth-child("+map[tab]+")").classList.add("active");
-  document.getElementById("page-"+tab).classList.add("active");
+  document.getElementById("page-"+tab).classList.add("active");var headerPanel=document.getElementById("headerPanel");if(headerPanel)headerPanel.style.display=(tab==="rewards")?"block":"none";
   if(tab==="rewards")renderLevelGrid();
   if(tab==="roulette"){renderRouletteTabs();renderRouletteItems();updateSpinRemaining()}
   if(tab==="main"){renderQuests();renderDailyTodos();populateFoolTimeSelect();}if(tab==="daily"){renderDailyList();updateDailyDraftTimes();var today=getLocalDateString();var df=document.getElementById("exportDateFrom");var dt=document.getElementById("exportDateTo");if(df)df.value=today;if(dt)dt.value=today}
@@ -639,8 +685,8 @@ function doExportTimeline(from,to){
   showToast("📤 已导出 "+entries.length+" 条记录");
 }
 
-function exportData(){var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_system_backup_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 数据已导出！")}
-function importData(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){try{var j=JSON.parse(ev.target.result);data=Object.assign(JSON.parse(JSON.stringify(DEFAULT_DATA)),j);saveData();init();showToast("📤 数据已恢复！")}catch(err){showToast("❌ 文件格式错误")}};reader.readAsText(file);e.target.value=""}
+function exportData(){var exportCopy=JSON.parse(JSON.stringify(data));if(exportCopy.aiConfig){exportCopy.aiConfig.key="";}var blob=new Blob([JSON.stringify(exportCopy,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_system_backup_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 数据已导出（不含API Key）")}
+function importData(e){var file=e.target.files[0];if(!file)return;if(!confirm("导入会覆盖当前所有数据，确定继续吗？")){e.target.value="";return;}var reader=new FileReader();reader.onload=function(ev){try{var j=JSON.parse(ev.target.result);data=Object.assign(JSON.parse(JSON.stringify(DEFAULT_DATA)),j);saveData();init();showToast("📤 数据已恢复！")}catch(err){showToast("❌ 文件格式错误")}};reader.readAsText(file);e.target.value=""}
 function showSpinResultModal(type,result,cost){
   var overlay=document.createElement("div");overlay.className="spin-overlay";overlay.id="spinOverlay";
   var typeIcons={"放松转盘":"🧘","美食转盘":"🍜","好奇心转盘":"🔍","游戏转盘":"🎮"};
@@ -822,6 +868,178 @@ function endChallenge(success){
   if(timerEl)timerEl.style.color="#f59e0b";
 }
 
+function openTimeline(){
+  renderDailyList();
+  var ov=document.getElementById("timelineOverlay");
+  if(ov)ov.style.display="block";
+}
+function closeTimeline(){
+  var ov=document.getElementById("timelineOverlay");
+  if(ov)ov.style.display="none";
+}
+// === TODAY ANALYSIS (今日分析) ===
+function toggleAIConfig(){
+  var p=document.getElementById("aiConfigPanel");
+  if(p)p.style.display=(p.style.display==="none"?"block":"none");
+  if(p&&p.style.display==="block")loadAIConfig();
+}
+function loadAIConfig(){
+  var c=data.aiConfig||{};
+  var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt");
+  if(u)u.value=c.url||"";
+  if(k)k.value=c.key||"";
+  if(m)m.value=c.model||"";
+  if(pr)pr.value=c.prompt||"";
+}
+function saveAIConfig(){
+  try{
+    data.aiConfig={
+      url:(document.getElementById("aiUrl").value||"").trim(),
+      key:(document.getElementById("aiKey").value||"").trim(),
+      model:(document.getElementById("aiModel").value||"").trim(),
+      prompt:(document.getElementById("aiPrompt").value||"").trim()
+    };
+    saveData();
+    var statusEl=document.getElementById("aiStatus");
+    if(statusEl)statusEl.textContent="✅ 配置已保存（地址/模型/提示词已记录）";
+    showToast("AI配置已保存");
+  }catch(e){
+    showToast("保存失败："+e.message);
+  }
+}
+function analyzeToday(){
+  var cfg=data.aiConfig;
+  if(!cfg||!cfg.url||!cfg.key){showToast("请先配置API地址和Key");toggleAIConfig();return;}
+  var today=getLocalDateString();
+  var entries=(data.dailyLog||[]).filter(function(item){return item.date===today});
+  if(!entries.length){showToast("今日暂无记录");return;}
+  var text="今日时间记录：\n";
+  entries.forEach(function(item,idx){
+    text+=(idx+1)+". "+item.startTime+"~"+item.endTime+" ["+(item.kind==="main"?"主线":"日常")+"] "+(item.actions||"无描述")+"\n";
+  });
+  var prompt=(cfg.prompt||"请分析这些时间记录，给出改进建议");
+  var statusEl=document.getElementById("aiStatus");
+  if(statusEl)statusEl.textContent="⏳ 正在分析今日记录...";
+  var apiUrl=(cfg.url||"").trim();if(apiUrl&&!/\/chat\/completions$/i.test(apiUrl)){apiUrl=apiUrl.replace(/\/+$/,"")+"/chat/completions";}
+  fetch(apiUrl,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},
+    body:JSON.stringify({
+      model:cfg.model||"gpt-4o-mini",
+      messages:[
+        {role:"system",content:prompt},
+        {role:"user",content:text}
+      ]
+    })
+  }).then(function(r){
+    if(!r.ok){
+      return r.text().then(function(t){
+        throw new Error("HTTP "+r.status+" "+(t||r.statusText));
+      });
+    }
+    return r.text();
+  }).then(function(txt){
+    if(!txt||!txt.trim())throw new Error("接口返回了空内容");
+    var json;
+    try{json=JSON.parse(txt)}catch(e){throw new Error("接口返回不是JSON："+txt.slice(0,200))}
+    var report="";
+    if(json.choices&&json.choices[0]&&json.choices[0].message&&json.choices[0].message.content){
+      report=json.choices[0].message.content;
+    } else if(json.output_text){
+      report=json.output_text;
+    } else if(typeof json.content==="string"){
+      report=json.content;
+    } else if(json.data){
+      report=typeof json.data==="string"?json.data:JSON.stringify(json.data,null,2);
+    } else {
+      report=JSON.stringify(json,null,2);
+    }
+    if(statusEl)statusEl.textContent="";
+    showAnalysisReport(report);
+  }).catch(function(e){
+    var msg=e&&e.message?e.message:String(e);
+    if(statusEl)statusEl.textContent="❌ 分析失败："+msg;
+    showToast("分析失败，请检查API配置");
+  });
+}
+function showAnalysisReport(text){
+  var ov=document.getElementById("analysisReportOverlay");
+  var content=document.getElementById("analysisReportContent");
+  if(content)content.textContent=text;
+  var saveBtn=document.getElementById("saveReportBtn");
+  if(saveBtn)saveBtn.style.display="inline-block";
+  if(ov)ov.style.display="block";
+}
+function saveCurrentReport(){
+  var content=document.getElementById("analysisReportContent");
+  if(!content||!content.textContent||!content.textContent.trim()){showToast("没有可保存的报告");return;}
+  if(!data.aiReports)data.aiReports=[];
+  var now=new Date();
+  data.aiReports.unshift({id:"r"+Date.now(),date:getLocalDateString(now),time:pad2(now.getHours())+":"+pad2(now.getMinutes()),text:content.textContent});
+  saveData();
+  showToast("✅ 报告已保存");
+  var saveBtn=document.getElementById("saveReportBtn");
+  if(saveBtn)saveBtn.textContent="✅ 已保存";
+  setTimeout(function(){var b=document.getElementById("saveReportBtn");if(b)b.textContent="💾 保存报告";},1500);
+}
+function closeAnalysisReport(){
+  var ov=document.getElementById("analysisReportOverlay");
+  if(ov)ov.style.display="none";
+}
+function showReportHistory(){
+  var ov=document.getElementById("reportHistoryOverlay");
+  var list=document.getElementById("reportHistoryList");
+  var reports=data.aiReports||[];
+  if(!reports.length){
+    list.innerHTML='<p style="color:#6b7280;text-align:center;padding:20px">还没有报告记录</p>';
+  } else {
+    list.innerHTML=reports.map(function(r,i){
+      var preview=(r.text||"").slice(0,80);
+      return '<div class="card" style="cursor:pointer" onclick="viewReport('+i+')"><div style="display:flex;justify-content:space-between;align-items:center"><strong>'+r.date+' '+r.time+'</strong><button class="btn btn-sm btn-outline" style="font-size:0.7em;padding:2px 8px" onclick="event.stopPropagation();deleteReport('+i+')">🗑</button></div><div style="color:#6b7280;font-size:0.85em;margin-top:6px;white-space:pre-wrap">'+escapeHtml(preview)+'...</div></div>';
+    }).join("");
+  }
+  if(ov)ov.style.display="block";
+}
+function viewReport(idx){
+  var r=(data.aiReports||[])[idx];
+  if(!r)return;
+  var content=document.getElementById("analysisReportContent");
+  if(content)content.textContent=r.text;
+  var ov=document.getElementById("analysisReportOverlay");
+  if(ov)ov.style.display="block";
+  var saveBtn=document.getElementById("saveReportBtn");
+  if(saveBtn)saveBtn.style.display="none";
+  closeReportHistory();
+}
+function deleteReport(idx){
+  if(!confirm("确定删除这条报告？"))return;
+  (data.aiReports||[]).splice(idx,1);
+  saveData();
+  showReportHistory();
+}
+function exportAllReports(){
+  var reports=data.aiReports||[];
+  if(!reports.length){showToast("没有可导出的报告");return;}
+  var text="报告记录导出\n";
+  text+="导出时间："+new Date().toLocaleString()+"\n";
+  text+="报告数量："+reports.length+"\n";
+  text+="=".repeat(50)+"\n\n";
+  reports.forEach(function(r,i){
+    text+="【报告 "+(i+1)+"】 "+r.date+" "+r.time+"\n";
+    text+="-".repeat(30)+"\n";
+    text+=r.text+"\n\n";
+  });
+  var blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="ai_reports_"+new Date().toISOString().split("T")[0]+".txt";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast("📤 已导出 "+reports.length+" 份报告");
+}function closeReportHistory(){
+  var ov=document.getElementById("reportHistoryOverlay");
+  if(ov)ov.style.display="none";
+}
 function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI()}
 init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);setInterval(tickFoolTime,1000);
 
