@@ -96,7 +96,7 @@ textarea{resize:vertical;min-height:60px}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="2">
+  <meta name="app-version" content="1">
 </head>
 <body>
 
@@ -157,6 +157,27 @@ textarea{resize:vertical;min-height:60px}
   <button class="btn btn-sm" onclick="addDailyTodo()">添加</button>
 </div>
 <div id="dailyTodoList"></div>
+</div>
+<div class="card" id="foolTimeCard">
+<h3>⏰ 傻瓜时间</h3>
+<div id="foolTimeSetup">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<select id="foolTimeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:8px;color:#1f2937">
+<option value="">-- 选择主线任务 --</option>
+</select>
+<button class="btn btn-sm" onclick="startFoolTime()" style="padding:8px 16px">▶ 开始行动</button>
+</div>
+<p style="color:#6b7280;font-size:0.7em;margin-top:6px">选一个主线任务，无脑行动 10 分钟</p>
+</div>
+<div id="foolTimeActive" style="display:none">
+<div class="challenge-timer">⏱ <span id="foolTimeTimer">10:00</span></div>
+<div class="challenge-bar"><div class="challenge-bar-fill" id="foolTimeBarFill"></div></div>
+<div class="challenge-info"><div>任务：<strong id="foolTimeTaskName"></strong></div></div>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="btn btn-sm" onclick="completeFoolTime()">✅ 完成</button>
+<button class="btn btn-sm btn-outline" onclick="abandonFoolTime()">放弃</button>
+</div>
+</div>
 </div>
 <div class="challenge-card" id="challengeCard">
   <h3>⚔️ 限时挑战</h3>
@@ -449,7 +470,7 @@ function renderQuests() {
   var ac={},arc={};
   data.mainQuests.forEach(function(q){var t=q.done?arc:ac;if(!t[q.category])t[q.category]=[];t[q.category].push(q)});
   var ah=Object.entries(ac).map(function(e){return'<div class="quest-category"><h4>📌 '+e[0]+' ('+e[1].length+') <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+e[0]+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+e[0]+'\')">🗑</button></h4>'+e[1].map(renderQuestItem).join("")+'</div>'}).join("");
-  populateChallengeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>');
+  populateChallengeSelect();populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>');
 }
 function toggleQuest(id){
   var q=data.mainQuests.find(function(x){return x.id===id});
@@ -565,7 +586,7 @@ function switchTab(tab){
   document.getElementById("page-"+tab).classList.add("active");
   if(tab==="rewards")renderLevelGrid();
   if(tab==="roulette"){renderRouletteTabs();renderRouletteItems();updateSpinRemaining()}
-  if(tab==="main"){renderQuests();renderDailyTodos();}if(tab==="daily"){renderDailyList();updateDailyDraftTimes();var today=getLocalDateString();var df=document.getElementById("exportDateFrom");var dt=document.getElementById("exportDateTo");if(df)df.value=today;if(dt)dt.value=today}
+  if(tab==="main"){renderQuests();renderDailyTodos();populateFoolTimeSelect();}if(tab==="daily"){renderDailyList();updateDailyDraftTimes();var today=getLocalDateString();var df=document.getElementById("exportDateFrom");var dt=document.getElementById("exportDateTo");if(df)df.value=today;if(dt)dt.value=today}
 }
 
 // Toast
@@ -661,6 +682,85 @@ function populateChallengeSelect(){
   });
   if(def)sel.value=def;
 }
+// === FOOL TIME (傻瓜时间) ===
+function populateFoolTimeSelect(){
+  var sel=document.getElementById("foolTimeQuestSelect");
+  if(!sel)return;
+  var def=sel.value;
+  sel.innerHTML='<option value="">-- 选择主线任务 --</option>';
+  data.mainQuests.forEach(function(q){
+    if(!q.done) sel.innerHTML+='<option value="'+q.id+'">'+q.title+'</option>';
+  });
+  if(def)sel.value=def;
+}
+function startFoolTime(){
+  var sel=document.getElementById("foolTimeQuestSelect");
+  var questId=sel.value;
+  if(!questId){showToast("请先选择一个主线任务");return;}
+  var quest=data.mainQuests.find(function(q){return q.id===questId});
+  if(!quest){showToast("任务不存在");return;}
+  data.foolTime={questId:questId,questTitle:quest.title,startTime:Date.now(),duration:10*60*1000,active:true};
+  saveData();
+  renderFoolTimeUI();
+  showToast("✅ 开始行动，10分钟倒计时");
+}
+function renderFoolTimeUI(){
+  var ft=data.foolTime;
+  var setup=document.getElementById("foolTimeSetup");
+  var active=document.getElementById("foolTimeActive");
+  if(!ft||!ft.active){
+    if(setup)setup.style.display="block";
+    if(active)active.style.display="none";
+    return;
+  }
+  if(setup)setup.style.display="none";
+  if(active)active.style.display="block";
+  var nameEl=document.getElementById("foolTimeTaskName");
+  if(nameEl)nameEl.textContent=ft.questTitle;
+}
+function tickFoolTime(){
+  var ft=data.foolTime;
+  if(!ft||!ft.active)return;
+  var elapsed=Date.now()-ft.startTime;
+  var remaining=Math.max(0,ft.duration-elapsed);
+  var totalSec=Math.floor(remaining/1000);
+  var min=Math.floor(totalSec/60);
+  var sec=totalSec%60;
+  var timerEl=document.getElementById("foolTimeTimer");
+  if(timerEl)timerEl.textContent=min+":"+(sec<10?"0":"")+sec;
+  var barEl=document.getElementById("foolTimeBarFill");
+  if(barEl)barEl.style.width=(remaining/ft.duration*100)+"%";
+  if(totalSec<60&&timerEl)timerEl.style.color="#ef4444";
+  if(remaining<=0)endFoolTime();
+}
+function completeFoolTime(){endFoolTime()}
+function abandonFoolTime(){
+  var ft=data.foolTime;
+  if(!ft||!ft.active)return;
+  if(confirm("确定放弃这次傻瓜时间？"))endFoolTime();
+}
+function endFoolTime(){
+  var ft=data.foolTime;
+  if(!ft||!ft.active)return;
+  ft.active=false;
+  saveData();
+  renderFoolTimeUI();
+  if(confirm("是否更新到时间记录？")){
+    switchTab("daily");
+    var actionsEl=document.getElementById("dailyActions");
+    if(actionsEl)actionsEl.value=ft.questTitle;
+    var startInput=document.getElementById("dailyStartTime");
+    var endInput=document.getElementById("dailyEndTime");
+    if(startInput&&endInput){
+      startInput.value=getLocalTimeString(new Date(ft.startTime));
+      endInput.value=getLocalTimeString(new Date(ft.startTime+ft.duration));
+      if(startInput.dataset)startInput.dataset.manual="1";
+      if(endInput.dataset)endInput.dataset.manual="1";
+    }
+    updateDailyDraftTimes();
+    showToast("已跳转到时间记录，请点击记录");
+  }
+}
 function startChallenge(){
   var sel=document.getElementById("challengeQuestSelect");
   var questId=sel.value;
@@ -722,8 +822,8 @@ function endChallenge(success){
   if(timerEl)timerEl.style.color="#f59e0b";
 }
 
-function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI()}
-init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);
+function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI()}
+init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);setInterval(tickFoolTime,1000);
 
 </script>
 
