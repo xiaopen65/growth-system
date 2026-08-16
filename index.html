@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -96,7 +96,7 @@ textarea{resize:vertical;min-height:60px}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="3">
+  <meta name="app-version" content="4">
 </head>
 <body>
 
@@ -141,7 +141,7 @@ textarea{resize:vertical;min-height:60px}
 </div>
 <div class="page" id="page-main">
 <div class="card">
-<h3>&#x1f4dd; 今日待办</h3>
+<h3>&#x1f4dd; 今日备忘录</h3>
 <div style="display:flex;gap:8px;margin-bottom:10px">
   <input type="text" id="newTodoInput" placeholder="输入要做的事..." style="flex:1" onkeydown="if(event.key==='Enter')addDailyTodo()">
   <button class="btn btn-sm" onclick="addDailyTodo()">添加</button>
@@ -168,6 +168,20 @@ textarea{resize:vertical;min-height:60px}
 <button class="btn btn-sm btn-outline" onclick="abandonFoolTime()">放弃</button>
 </div>
 </div>
+</div>
+<div class="card">
+<h3>🗺️ 主线任务</h3>
+<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
+<div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#f5f6f8;border-radius:10px;margin-bottom:14px">
+  <input type="text" id="questCategoryInput" placeholder="分类" style="flex:0 0 auto;width:80px;font-size:0.8em;padding:6px 8px">
+  <input type="text" id="questTitleInput" placeholder="任务内容" style="flex:1;min-width:120px;font-size:0.8em;padding:6px 8px">
+  <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点" style="flex:0 0 auto;width:55px;font-size:0.8em;padding:6px 4px;text-align:center">
+  <input type="hidden" id="editingQuestId" value="">
+  <button class="btn btn-sm" onclick="saveQuestFromForm()" style="padding:6px 12px;font-size:0.8em">➕ 保存</button>
+  <button class="btn btn-sm btn-outline" onclick="resetQuestForm()" style="padding:6px 10px;font-size:0.8em">清空</button>
+</div>
+<div id="questList"></div>
+
 </div>
 <div class="challenge-card" id="challengeCard">
   <h3>⚔️ 限时挑战</h3>
@@ -196,20 +210,6 @@ textarea{resize:vertical;min-height:60px}
       <button class="btn btn-sm btn-outline" onclick="abandonChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">❌ 放弃</button>
     </div>
   </div>
-</div>
-<div class="card">
-<h3>🗺️ 主线任务</h3>
-<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
-<div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#f5f6f8;border-radius:10px;margin-bottom:14px">
-  <input type="text" id="questCategoryInput" placeholder="分类" style="flex:0 0 auto;width:80px;font-size:0.8em;padding:6px 8px">
-  <input type="text" id="questTitleInput" placeholder="任务内容" style="flex:1;min-width:120px;font-size:0.8em;padding:6px 8px">
-  <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点" style="flex:0 0 auto;width:55px;font-size:0.8em;padding:6px 4px;text-align:center">
-  <input type="hidden" id="editingQuestId" value="">
-  <button class="btn btn-sm" onclick="saveQuestFromForm()" style="padding:6px 12px;font-size:0.8em">➕ 保存</button>
-  <button class="btn btn-sm btn-outline" onclick="resetQuestForm()" style="padding:6px 10px;font-size:0.8em">清空</button>
-</div>
-<div id="questList"></div>
-
 </div>
 </div>
 
