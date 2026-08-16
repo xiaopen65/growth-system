@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -96,7 +96,7 @@ textarea{resize:vertical;min-height:60px}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="2">
+  <meta name="app-version" content="3">
 </head>
 <body>
 
@@ -115,24 +115,30 @@ textarea{resize:vertical;min-height:60px}
 <div class="stat-card" style="display:flex;flex-direction:column;gap:4px;justify-content:center;padding:8px 12px"><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="exportData()">📥 导出备份</button><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入恢复</button><input type="file" id="importFile" accept=".json" onchange="importData(event)"></div>
 </div></div>
 
-<div class="page active" id="page-daily"><div class="card">
-<h3>➕ 记录时间段</h3>
-<div class="form-row"><label>日期</label><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div>
-<div class="time-strip">
-  <div class="time-gap" id="dailyDuration">0分钟</div>
-  <div class="time-row">
-    <div class="time-block"><div class="time-label">开始</div><input class="time-start-input" type="time" id="dailyStartTime" value="00:00" data-manual="0" onchange="this.dataset.manual='1';updateDailyDraftTimes()"></div>
-    <div class="time-arrow">→</div>
-    <div class="time-block"><div class="time-label">结束</div><input class="time-end-input" type="time" id="dailyEndTime" value="00:00" data-manual="0"></div>
+<div class="page active" id="page-daily"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div><div id="todayTimeline"></div></div><div class="card">
+<button class="btn" style="width:100%;padding:14px;font-size:1em" onclick="openRecordModal()">🕒 记录</button>
+</div>
+</div>
+<div id="recordOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:240;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:#ffffff;border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0">➕ 记录时间段</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeRecordModal()">← 返回</button>
+    </div>
+    <div class="time-strip">
+      <div class="time-gap" id="dailyDuration">0分钟</div>
+      <div class="time-row">
+        <div class="time-block"><div class="time-label">开始</div><input class="time-start-input" type="time" id="dailyStartTime" value="00:00" data-manual="0" onchange="this.dataset.manual='1';updateDailyDraftTimes()"></div>
+        <div class="time-arrow">→</div>
+        <div class="time-block"><div class="time-label">结束</div><input class="time-end-input" type="time" id="dailyEndTime" value="00:00" data-manual="0"></div>
+      </div>
+      <div class="time-next" id="dailyNextHint"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:6px"><label>做了什么</label><textarea id="dailyActions" placeholder="只写内容，不用写时间..."></textarea></div>
+    <button class="btn btn-sm btn-outline" style="margin-top:0;width:100%" onclick="mergeToLastEntry()">↩ 合并到上一次记录</button>
+    <div class="record-actions"><button class="record-btn daily" style="flex:1;min-width:0;padding:8px 10px;font-size:0.8em" onclick="addDailyEntry('daily')">🟢 日常记录</button><button class="record-btn main" style="flex:1;min-width:0;padding:8px 10px;font-size:0.8em" onclick="addDailyEntry('main')">🟠 主线记录</button></div>
   </div>
-  <div class="time-next" id="dailyNextHint">距下一点还差 50 分钟</div>
 </div>
-<div class="form-row"><label>做了什么</label><textarea id="dailyActions" placeholder="只写内容，不用写时间..."></textarea></div>
-<div class="record-actions"><button class="record-btn daily" onclick="addDailyEntry('daily')">🟢 日常记录</button><button class="record-btn main" onclick="addDailyEntry('main')">🟠 主线记录</button></div>
-<div class="record-hint">主线每 50 分钟 +1 点；日常每 1200 分钟 +1 点</div>
-<button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="mergeToLastEntry()">↩ 合并到上一次记录</button>
-</div>
-<button class="btn btn-sm" style="margin-top:8px;width:100%" onclick="openTimeline()">📋 查看时间线</button></div>
 <div class="page" id="page-main">
 <div class="card">
 <h3>&#x1f4dd; 今日待办</h3>
@@ -420,10 +426,37 @@ function formatDurationLabel(mins){mins=Math.max(0,mins||0);if(mins>=60){var h=M
 function escapeHtml(text){return String(text||"").replace(/[&<>"]/g,function(ch){var map={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"};return map[ch]})}
 function getDailyEntriesForDate(date){return data.dailyLog.filter(function(item){return item.date===date})}
 function getLastEndMinutes(date){var items=getDailyEntriesForDate(date).filter(function(item){return item.endTime});if(!items.length)return 0;return items.reduce(function(max,item){return Math.max(max,parseTimeToMinutes(item.endTime))},0)}
-function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");var remainder=(data.mainMinutesTotal||0);var nextRemain=50-(remainder%50);if(nextRemain===50)nextRemain=0;if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var mainRemain=50-((data.mainMinutesTotal||0)%50);if(mainRemain===50)mainRemain=0;var dailyRemain=1200-((data.dailyMinutesTotal||0)%1200);if(dailyRemain===1200)dailyRemain=0;var h="";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 50 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";if(dailyRemain===0)h+="<div><strong style='color:#f59e0b'>日常已满 1200 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#7ec8e3'>再积累 <strong>"+dailyRemain+"</strong> 分钟日常时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
+function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var mainRemain=50-((data.mainMinutesTotal||0)%50);if(mainRemain===50)mainRemain=0;var h="";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 50 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
 
 // Daily
+function renderTodayTimeline(){
+  var c=document.getElementById("todayTimeline");
+  if(!c)return;
+  var today=getLocalDateString();
+  var entries=(data.dailyLog||[]).filter(function(d){return d.date===today});
+  if(!entries.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">今天还没有时间记录</p>';return}
+  var html=entries.slice().map(function(d){
+    var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
+    var content=d.actions||"";
+    var row='<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5">';
+    row+='<span style="color:#6b7280;white-space:nowrap">'+escapeHtml(range)+'</span>';
+    row+='<span style="flex:1;color:#1f2937;white-space:pre-line">'+escapeHtml(content)+'</span>';
+    row+='</div>';
+    return row;
+  }).join("");
+  var lastEndMins=getLastEndMinutes(today);
+  var nowMins=parseTimeToMinutes(getLocalTimeString(new Date()));
+  if(nowMins>lastEndMins){
+    var gapMins=nowMins-lastEndMins;
+    html+='<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5">';
+    html+='<span style="color:#6b7280;white-space:nowrap">'+formatMinutesToTime(lastEndMins)+'~'+formatMinutesToTime(nowMins)+'</span>';
+    html+='<span class="timeline-kind" style="background:#e5e7eb;color:#4b5563;flex-shrink:0">'+formatDurationLabel(gapMins)+'未记录</span>';
+    html+='</div>';
+  }
+  c.innerHTML=html;
+}
 function renderDailyList() {
+  renderTodayTimeline();
   var c=document.getElementById("dailyList");
   if(!data.dailyLog.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">还没有记录，开始添加吧 🚀</p>';return}
   c.innerHTML=[].concat(data.dailyLog).reverse().map(function(d,i){
@@ -438,6 +471,16 @@ function renderDailyList() {
     html+='</div>';
     return html;
   }).join("");
+}
+function openRecordModal() {
+  var ov=document.getElementById("recordOverlay");
+  if(!ov)return;
+  updateDailyDraftTimes();
+  ov.style.display="flex";
+}
+function closeRecordModal() {
+  var ov=document.getElementById("recordOverlay");
+  if(ov)ov.style.display="none";
 }
 function addDailyEntry(kind) {
   var date=document.getElementById("dailyDate").value||getLocalDateString();
@@ -459,7 +502,7 @@ function addDailyEntry(kind) {
   data.dailyLog.push({date:date,kind:kind,startTime:startText,endTime:endText,clockCount:duration,pointsDelta:deltaPoints,actions:actions});
   document.getElementById("dailyActions").value="";
   if(endInput){endInput.dataset.manual="0"}
-  saveData();renderDailyList();updateStats();updateDailyDraftTimes();
+  saveData();renderDailyList();updateStats();updateDailyDraftTimes();closeRecordModal();
   showToast((kind==="main"?"主线":"日常")+"记录成功"+(deltaPoints>0?"，+"+deltaPoints+" 研发点":""))
 }
 function mergeToLastEntry(){
@@ -489,7 +532,7 @@ function mergeToLastEntry(){
   if(dp>0){data.balance=(data.balance||0)+dp;last.pointsDelta=(last.pointsDelta||0)+dp}
   endInput.value=formatMinutesToTime(parseTimeToMinutes(startText));
   endInput.dataset.manual="0";
-  saveData();renderDailyList();updateStats();updateDailyDraftTimes();
+  saveData();renderDailyList();updateStats();updateDailyDraftTimes();closeRecordModal();
   showToast("已合并 "+formatDurationLabel(duration)+" 到上一次"+(last.kind==="main"?"主线":"日常")+"记录"+(dp>0?"，+"+dp+" 研发点":""));
 }
 
@@ -803,8 +846,8 @@ function endFoolTime(){
       if(startInput.dataset)startInput.dataset.manual="1";
       if(endInput.dataset)endInput.dataset.manual="1";
     }
-    updateDailyDraftTimes();
-    showToast("已跳转到时间记录，请点击记录");
+    openRecordModal();
+    showToast("已打开记录弹窗，确认时间后点击记录");
   }
 }
 function startChallenge(){
