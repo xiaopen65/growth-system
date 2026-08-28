@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人成长系统 · 主线：积累研发点</title>
+<title>个人成长系统 · 主线：积累成长点</title>
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -56,7 +56,7 @@ textarea{resize:vertical;min-height:60px}
 .level-item .lv-name{font-weight:bold;margin-bottom:4px}
 .level-item .lv-reward{font-size:.75em;color:#6b7280}
 .level-item .lv-btn{margin-top:6px}
-.roulette-tabs{display:flex;gap:4px;margin-bottom:12px}
+.roulette-tabs{display:flex;gap:4px;margin-bottom:12px;justify-content:center;flex-wrap:wrap}
 .r-tab{flex:1;text-align:center;padding:8px;border-radius:8px;cursor:pointer;font-size:.8em;background:#f5f6f8;border:1px solid #e5e7eb;color:#6b7280;transition:all .2s}
 .r-tab.active{border-color:#f59e0b;color:#f59e0b;background:#ffffff}
 .r-tab:hover:not(.active){color:#374151}
@@ -178,11 +178,10 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div>
 <div class="header" id="headerPanel" style="display:none"><h1>🎯 个人成长系统</h1>
 <div class="stats">
-<div class="stat-card"><div class="val" id="totalPoints">0</div><div class="lbl">累计研发点</div></div>
+<div class="stat-card"><div class="val" id="totalPoints">0</div><div class="lbl">累计成长点</div></div>
 <div class="stat-card"><div class="val" id="currentLevel">Lv.1</div><div class="lbl">当前等级</div></div>
 <div class="stat-card"><div class="val" id="nextLevelPts">10</div><div class="lbl">升级还需</div></div>
-<div class="stat-card"><div class="val" id="balance">0</div><div class="lbl">研发点余额 <button class="btn btn-sm btn-outline" style="padding:1px 6px;font-size:0.6em;margin-left:4px" onclick="editBalance()">✏</button></div></div>
-<div class="stat-card" style="display:flex;align-items:center;justify-content:center;padding:8px 12px"><button class="btn btn-sm btn-outline" style="font-size:0.7em;padding:8px 12px;width:100%" onclick="openRoulette()">🎰 转盘</button></div>
+
 </div></div>
 
 <div class="page active" id="page-daily"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div><div id="todayTimeline"></div></div><div class="card">
@@ -281,7 +280,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 <button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openChallengeModal()">⚔️ 限时挑战</button>
 </div>
 </div>
-<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
+<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应成长点</p>
 <div id="questList"></div>
 
 </div>
@@ -360,7 +359,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
         <input type="number" id="challengeDuration" min="1" max="480" value="60" placeholder="分钟" style="flex:0 0 auto;width:55px;font-size:0.85em;padding:8px 4px;text-align:center" title="挑战时长（分钟）">
         <span style="color:var(--muted);font-size:0.75em">分钟</span>
         <input type="number" id="challengeBet" min="1" value="3" placeholder="赌注" style="flex:0 0 auto;width:60px;font-size:0.85em;padding:8px 4px;text-align:center">
-        <span style="color:var(--muted);font-size:0.75em">研发点</span>
+        <span style="color:var(--muted);font-size:0.75em">成长点</span>
         <button class="btn btn-sm" onclick="startChallenge()" style="padding:8px 16px">⚡ 开始挑战</button>
       </div>
       <p style="color:var(--muted);font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
@@ -370,7 +369,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
       <div class="challenge-bar"><div class="challenge-bar-fill" id="challengeBarFill"></div></div>
       <div class="challenge-info">
         <div>任务：<strong id="challengeTaskName"></strong></div>
-        <div>赌注：<strong id="challengeStakeDisplay" style="color:#f59e0b"></strong> 研发点</div>
+        <div>赌注：<strong id="challengeStakeDisplay" style="color:#f59e0b"></strong> 成长点</div>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成挑战</button>
@@ -393,8 +392,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     <div id="questCategoryPick" style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
     <label style="font-size:0.8em;color:var(--muted);margin:10px 0 4px;display:block">任务内容</label>
     <textarea id="questTitleInput" placeholder="任务内容" rows="2"></textarea>
-    <label style="font-size:0.8em;color:var(--muted);margin:10px 0 4px;display:block">研发点</label>
-    <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点">
+    <label style="font-size:0.8em;color:var(--muted);margin:10px 0 4px;display:block">成长点</label>
+    <input type="number" id="questPointsInput" min="0" value="0" placeholder="成长点">
     <input type="hidden" id="editingQuestId" value="">
     <button class="btn" style="width:100%;margin-top:12px" onclick="saveQuestFromForm()">💾 保存</button>
   </div>
@@ -419,7 +418,10 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div>
 <div class="level-bar"><div class="level-bar-fill" id="levelBar" style="width:0%"></div></div>
 </div><div class="card">
-<h3>🎁 等级奖励一览</h3>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+<h3 style="margin:0">🎁 等级奖励一览</h3>
+<button class="btn btn-sm btn-outline" style="font-size:0.7em;padding:8px 12px" onclick="openRoulette()">🎰 转盘</button>
+</div>
 <div class="level-grid" id="levelGrid"></div>
 </div>
 <div style="display:flex;justify-content:flex-end;padding:4px 2px 12px">
@@ -461,6 +463,9 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 <h3>🤖 AI 配置</h3>
 <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
 <button class="btn btn-sm btn-outline" onclick="toggleAIConfig()">⚙️ 配置</button>
+<button class="btn btn-sm btn-outline" onclick="exportAIConfig()">📤 导出配置</button>
+<button class="btn btn-sm btn-outline" onclick="document.getElementById('aiConfigImport').click()">📥 导入配置</button>
+<input type="file" id="aiConfigImport" accept="application/json" style="display:none" onchange="importAIConfig(event)">
 </div>
 <div id="aiConfigPanel" style="display:none;margin-bottom:10px">
   <div class="form-row"><label>API 地址</label><input type="text" id="aiUrl" placeholder="https://api.deepseek.com/chat/completions"></div>
@@ -487,17 +492,20 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   <span style="width:80px"></span>
 </div>
 <div class="card">
-<h3>🎰 抽奖兑换</h3>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+<h3 style="margin:0">🎰 抽奖兑换</h3>
+<span style="font-size:0.85em;color:#6b7280">成长点余额：<strong id="balance">0</strong></span>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;justify-content:center">
 <button class="btn btn-outline" onclick="spinRandomCategoryAndSpin()">🎲 随机类目抽一次</button>
 </div>
 <div class="roulette-tabs" id="rouletteTabs"></div>
 <div class="spin-area">
-<div style="color:#6b7280;font-size:0.85em">每次抽奖消耗 <span id="spinCost">3</span> 研发点</div>
+<div style="color:#6b7280;font-size:0.85em">每次抽奖消耗 <span id="spinCost">3</span> 成长点</div>
 <div class="spin-result" id="spinResult">🎯 点击下方按钮开始抽奖</div>
 <button class="btn" id="spinBtn" onclick="spinRoulette()">🎲 开始抽奖</button>
 <div style="margin-top:4px;font-size:0.8em;color:#0284c7" id="spinRemaining"></div>
-<button class="btn btn-sm btn-outline" style="margin-top:6px" onclick="restoreFivePoints()">💧 恢复5点研发点</button>
+<button class="btn btn-sm btn-outline" style="margin-top:6px" onclick="restoreFivePoints()">💧 恢复5点成长点</button>
 </div>
 <div class="roulette-items" id="rouletteItems"></div>
 </div></div>
@@ -674,7 +682,7 @@ function updateStats() {
   previousLevel=lv;
 }
 function resetProgress(){
-  if(!confirm("⚠️ 确定要重置进度吗？累计研发点、当前等级、升级还需、研发点余额将归零。时间记录、主线任务、今日待办都会保留。"))return;
+  if(!confirm("⚠️ 确定要重置进度吗？累计成长点、当前等级、升级还需、成长点余额将归零。时间记录、主线任务、今日待办都会保留。"))return;
   data.pointsOffset=(data.pointsOffset||0)+calcTotalPoints();
   data.balance=0;
   saveData();
@@ -692,7 +700,7 @@ function formatDurationLabel(mins){mins=Math.max(0,mins||0);if(mins>=60){var h=M
 function escapeHtml(text){return String(text||"").replace(/[&<>"]/g,function(ch){var map={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"};return map[ch]})}
 function getDailyEntriesForDate(date){return data.dailyLog.filter(function(item){return item.date===date})}
 function getLastEndMinutes(date){var items=getDailyEntriesForDate(date).filter(function(item){return item.endTime});if(!items.length)return 0;return items.reduce(function(max,item){return Math.max(max,parseTimeToMinutes(item.endTime))},0)}
-function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var todayMainMin=0;(data.dailyLog||[]).forEach(function(d){if(d.date===today&&d.kind==="main")todayMainMin+=(d.clockCount||0)});var mainRemain=60-((data.mainMinutesTotal||0)%60);if(mainRemain===60)mainRemain=0;var h="<div>今日累计主线时间：<strong>"+todayMainMin+"</strong> 分钟</div>";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 60 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
+function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var todayMainMin=0;(data.dailyLog||[]).forEach(function(d){if(d.date===today&&d.kind==="main")todayMainMin+=(d.clockCount||0)});var mainRemain=60-((data.mainMinutesTotal||0)%60);if(mainRemain===60)mainRemain=0;var h="<div>今日累计主线时间：<strong>"+todayMainMin+"</strong> 分钟</div>";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 60 分钟，可加 1 枚成长点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚成长点</span></div>";nextHint.innerHTML=h}}
 
 // Daily
 function renderTodayTimeline(){
@@ -781,7 +789,7 @@ function addDailyEntry(kind) {
   document.getElementById("dailyActions").value="";
   if(endInput){endInput.dataset.manual="0"}
   saveData();renderDailyList();updateStats();updateDailyDraftTimes();closeRecordModal();
-  showToast((kind==="main"?"主线":"日常")+"记录成功"+(deltaPoints>0?"，+"+deltaPoints+" 研发点":""))
+  showToast((kind==="main"?"主线":"日常")+"记录成功"+(deltaPoints>0?"，+"+deltaPoints+" 成长点":""))
 }
 function mergeToLastEntry(){
   if(!data.dailyLog.length){showToast("没有可合并的记录");return}
@@ -811,7 +819,7 @@ function mergeToLastEntry(){
   endInput.value=formatMinutesToTime(parseTimeToMinutes(startText));
   endInput.dataset.manual="0";
   saveData();renderDailyList();updateStats();updateDailyDraftTimes();closeRecordModal();
-  showToast("已合并 "+formatDurationLabel(duration)+" 到上一次"+(last.kind==="main"?"主线":"日常")+"记录"+(dp>0?"，+"+dp+" 研发点":""));
+  showToast("已合并 "+formatDurationLabel(duration)+" 到上一次"+(last.kind==="main"?"主线":"日常")+"记录"+(dp>0?"，+"+dp+" 成长点":""));
 }
 
 function editDailyEntry(idx){var d=data.dailyLog[idx];if(!d)return;var nt=prompt("编辑记录内容：",d.actions||"");if(nt!==null){d.actions=nt.trim();saveData();renderDailyList();showToast("已更新")}}
@@ -835,7 +843,7 @@ function renderQuests() {
   var ac={},arc={};
   data.mainQuests.forEach(function(q){var t=q.done?arc:ac;if(!t[q.category])t[q.category]=[];t[q.category].push(q)});
   var cats=syncQuestCatOrder().filter(function(c){return ac[c]});
-  var ah=cats.map(function(cat){return'<div class="quest-category" data-cat="'+escapeHtml(cat)+'"><h4><span class="drag-handle" title="拖动分类排序">☰</span> 📌 '+cat+' ('+ac[cat].length+') <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+cat+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+cat+'\')">&#xd7;</button></h4>'+ac[cat].map(renderQuestItem).join("")+'</div>'}).join("");
+  var ah=cats.map(function(cat){return'<div class="quest-category" data-cat="'+escapeHtml(cat)+'"><h4 style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><span class="drag-handle" title="拖动分类排序">☰</span> <span>'+cat+' ('+ac[cat].length+')</span></span><span style="display:flex;align-items:center;gap:4px"><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+cat+'\')">✏</button><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+cat+'\')">&#xd7;</button></span></h4>'+ac[cat].map(renderQuestItem).join("")+'</div>'}).join("");
   populateChallengeSelect();populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，点右上角 ➕ 添加吧 🚀</p>');
 }
 function syncQuestCatOrder(){
@@ -859,7 +867,7 @@ function moveQuestCategory(name,dir){
 }
 function toggleQuest(id){
   var q=data.mainQuests.find(function(x){return x.id===id});
-  if(q){q.done=!q.done;data.balance=(data.balance||0)+(q.done?q.points:-q.points);saveData();renderQuests();updateStats();renderLevelGrid();showToast(q.done?'✅ +'+q.points+' 研发点':'已取消完成')}
+  if(q){q.done=!q.done;data.balance=(data.balance||0)+(q.done?q.points:-q.points);saveData();renderQuests();updateStats();renderLevelGrid();showToast(q.done?'✅ +'+q.points+' 成长点':'已取消完成')}
 }
 function resetQuestForm(){document.getElementById("questCategoryInput").value="";document.getElementById("questTitleInput").value="";document.getElementById("questPointsInput").value=0;document.getElementById("editingQuestId").value=""}
 function openQuestModal(){resetQuestForm();var t=document.getElementById("questOverlayTitle");if(t)t.textContent="➕ 添加主线任务";var ov=document.getElementById("questOverlay");if(ov)ov.style.display="flex";var box=document.getElementById("questCategoryPick");if(box)box.style.display="none";setTimeout(function(){var inp=document.getElementById("questCategoryInput");if(inp)inp.focus()},50)}
@@ -978,7 +986,7 @@ function deleteRouletteItem(idx){var items=data.roulettes[currentRouletteType].i
 function addRouletteItem(){var inp=document.getElementById("newRouletteItem");var t=(inp.value||"").trim();if(!t){showToast("请先输入内容");return}data.roulettes[currentRouletteType].items.push(t);saveData();renderRouletteItems();showToast("+ 已添加")}
 function spinRoulette(){
   if(isSpinning)return;var cost=data.roulettes[currentRouletteType].cost,items=data.roulettes[currentRouletteType].items;
-  var bal=data.balance||0;if(bal<cost){showToast("❌ 研发点余额不足！");return}
+  var bal=data.balance||0;if(bal<cost){showToast("❌ 成长点余额不足！");return}
   isSpinning=true;document.getElementById("spinBtn").disabled=true;document.getElementById("spinResult").textContent="🎰 转盘转动中...";
   var count=0,mc=20,iv=setInterval(function(){
     var idx=Math.floor(Math.random()*items.length);
@@ -996,8 +1004,8 @@ function spinRoulette(){
   },100);
 }
 function updateSpinRemaining(){var cost=data.roulettes[currentRouletteType].cost,bal=data.balance||0,el=document.getElementById("spinRemaining");if(el)el.textContent="余额可抽 "+Math.max(0,Math.floor(bal/cost))+" 次"}
-function restoreFivePoints(){data.balance=(data.balance||0)+5;saveData();updateStats();updateSpinRemaining();showToast("💧 已恢复5点研发点")}
-function editBalance(){var v=prompt("修改研发点余额：",data.balance||0);if(v!==null){var n=parseInt(v);if(!isNaN(n)){data.balance=n;saveData();updateStats();updateSpinRemaining();showToast("余额已更新为 "+n)}}}
+function restoreFivePoints(){data.balance=(data.balance||0)+5;saveData();updateStats();updateSpinRemaining();showToast("💧 已恢复5点成长点")}
+function editBalance(){var v=prompt("修改成长点余额：",data.balance||0);if(v!==null){var n=parseInt(v);if(!isNaN(n)){data.balance=n;saveData();updateStats();updateSpinRemaining();showToast("余额已更新为 "+n)}}}
 
 // Tabs
 function openRoulette(){
@@ -1235,7 +1243,7 @@ function showSpinResultModal(type,result,cost){
   var overlay=document.createElement("div");overlay.className="spin-overlay";overlay.id="spinOverlay";
   var typeIcons={"放松转盘":"🧘","美食转盘":"🍜","好奇心转盘":"🔍","游戏转盘":"🎮"};
   var icon=typeIcons[type]||"🎰";
-  overlay.innerHTML='<div class="spin-modal"><span class="spin-icon">'+icon+'</span><h2>恭喜获得！</h2><div class="spin-category">'+type+'</div><div class="spin-prize"><div class="spin-prize-text">'+result+'</div></div><div class="spin-cost-info">消耗 '+cost+' 研发点 · 余额剩余 '+Math.max(0,data.balance||0)+' 点</div><div class="spin-btns"><button class="btn" style="font-size:1em;padding:10px 24px" onclick="closeSpinModal();spinRoulette()">🔄 再来一次</button><button class="btn btn-outline" style="font-size:0.9em" onclick="closeSpinModal()">✕ 关闭</button></div></div>';
+  overlay.innerHTML='<div class="spin-modal"><span class="spin-icon">'+icon+'</span><h2>恭喜获得！</h2><div class="spin-category">'+type+'</div><div class="spin-prize"><div class="spin-prize-text">'+result+'</div></div><div class="spin-cost-info">消耗 '+cost+' 成长点 · 余额剩余 '+Math.max(0,data.balance||0)+' 点</div><div class="spin-btns"><button class="btn" style="font-size:1em;padding:10px 24px" onclick="closeSpinModal();spinRoulette()">🔄 再来一次</button><button class="btn btn-outline" style="font-size:0.9em" onclick="closeSpinModal()">✕ 关闭</button></div></div>';
   document.body.appendChild(overlay);
 }
 function closeSpinModal(){var el=document.getElementById("spinOverlay");if(el)el.remove()}
@@ -1597,7 +1605,7 @@ function startChallenge(){
   if(!quest){showToast("\u4efb\u52a1\u4e0d\u5b58\u5728");return;}
   var bet=parseInt(document.getElementById("challengeBet").value)||0;
   if(bet<1){showToast("\u8d4c\u6ce8\u81f3\u5c11 1 \u70b9");return;}
-  if(bet>(data.balance||0)){showToast("\u7814\u53d1\u70b9\u4f59\u989d\u4e0d\u8db3\uff01\u5f53\u524d\u4f59\u989d "+data.balance);return;}
+  if(bet>(data.balance||0)){showToast("成长点余额不足！当前余额 "+data.balance);return;}
   var dur=parseInt(document.getElementById("challengeDuration").value)||60;data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),endTime:Date.now()+dur*60*1000,duration:dur*60*1000,active:true};
   data.balance=(data.balance||0)-bet;
   saveData();updateStats();renderChallengeUI();populateChallengeSelect();
@@ -1636,15 +1644,15 @@ function completeChallenge(){endChallenge(true)}
 function abandonChallenge(){
   var ch=data.challenge;
   if(!ch||!ch.active)return;
-  if(confirm("\u786e\u5b9a\u653e\u5f03\u6311\u6218\uff1f\u5c06\u6263\u9664\u8d4c\u6ce8 "+ch.bet+" \u7814\u53d1\u70b9"))endChallenge(false);
+  if(confirm("\u786e\u5b9a\u653e\u5f03\u6311\u6218\uff1f\u5c06\u6263\u9664\u8d4c\u6ce8 "+ch.bet+" 成长点"))endChallenge(false);
 }
 function endChallenge(success){
   var ch=data.challenge;
   if(!ch||!ch.active)return;
   ch.active=false;
   var bet=ch.bet;
-  if(success){data.balance=(data.balance||0)+bet*2;showToast("🎉 挑战成功！+"+bet+" 研发点")}
-  else{showToast("💔 挑战失败，扣除 "+bet+" 研发点")}
+  if(success){data.balance=(data.balance||0)+bet*2;showToast("🎉 挑战成功！+"+bet+" 成长点")}
+  else{showToast("💔 挑战失败，扣除 "+bet+" 成长点")}
   saveData();updateStats();renderChallengeUI();populateChallengeSelect();
   var timerEl=document.getElementById("challengeTimer");
   if(timerEl)timerEl.style.color="#f59e0b";
@@ -1776,6 +1784,34 @@ function loadAIConfig(){
   if(m)m.value=c.model||"";
   if(pr)pr.value=c.prompt||"";
   if(sp)sp.value=c.sugPrompt||"";
+}
+function exportAIConfig(){
+  var cfg=data.aiConfig||{};
+  var blob=new Blob([JSON.stringify(cfg,null,2)],{type:"application/json"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="ai_config_backup_"+new Date().toISOString().split("T")[0]+".json";
+  a.click();URL.revokeObjectURL(a.href);
+  showToast("📤 AI配置已导出（含API Key，请勿外传）");
+}
+function importAIConfig(e){
+  var file=e.target.files[0];if(!file)return;
+  if(!confirm("导入会覆盖当前 AI 配置（API 地址/Key/模型/提示词），确定继续吗？")){e.target.value="";return;}
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var j=JSON.parse(ev.target.result);
+      var cfg=data.aiConfig||{};
+      var keys=["url","key","model","prompt","sugPrompt"];
+      keys.forEach(function(kk){if(typeof j[kk]==="string")cfg[kk]=j[kk];});
+      data.aiConfig=cfg;saveData();
+      var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt"),sp=document.getElementById("aiSugPrompt");
+      if(u&&cfg.url)u.value=cfg.url;if(k&&cfg.key)k.value=cfg.key;if(m&&cfg.model)m.value=cfg.model;if(pr&&cfg.prompt)pr.value=cfg.prompt;if(sp&&cfg.sugPrompt)sp.value=cfg.sugPrompt;
+      var st=document.getElementById("aiStatus");if(st)st.textContent="✅ 已导入 AI 配置";
+      showToast("📥 AI配置已导入");
+    }catch(err){showToast("❌ 配置文件格式错误")}
+  };
+  reader.readAsText(file);
+  e.target.value="";
 }
 function saveAIConfig(){
   try{
