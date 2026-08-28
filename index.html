@@ -47,10 +47,10 @@ textarea{resize:vertical;min-height:60px}
 .quest-check{width:20px;height:20px;border-radius:50%;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0}
 .quest-check.checked{background:#4fc3f7;color:#f5f6f8}
 
-.challenge-card{background:linear-gradient(135deg,#fef3c7,#e0f2fe);border:1px solid #fbbf24;border-radius:12px;padding:16px;margin-bottom:14px}.challenge-card h3{color:#ff9f2f!important;margin-bottom:12px!important}.challenge-timer{text-align:center;font-size:2.2em;font-weight:bold;color:#f59e0b;font-family:monospace;margin:8px 0;text-shadow:0 0 20px rgba(249,212,35,0.3)}.challenge-bar{background:#f5f6f8;border-radius:8px;height:10px;margin:8px 0;overflow:hidden}.challenge-bar-fill{background:linear-gradient(90deg,#ff9f2f,#f59e0b);height:100%;border-radius:8px;transition:width 1s linear;width:100%}.challenge-info{font-size:0.85em;color:#374151;line-height:1.8}.level-bar{background:#f5f6f8;border-radius:8px;height:12px;margin:8px 0;overflow:hidden}
+.challenge-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:12px}.challenge-card h3{color:#6b7280!important;margin-bottom:12px!important}.challenge-timer{text-align:center;font-size:2.2em;font-weight:bold;color:#f59e0b;font-family:monospace;margin:8px 0;text-shadow:0 0 20px rgba(249,212,35,0.3)}.challenge-bar{background:#f5f6f8;border-radius:8px;height:10px;margin:8px 0;overflow:hidden}.challenge-bar-fill{background:linear-gradient(90deg,#ff9f2f,#f59e0b);height:100%;border-radius:8px;transition:width 1s linear;width:100%}.challenge-info{font-size:0.85em;color:#374151;line-height:1.8}.level-bar{background:#f5f6f8;border-radius:8px;height:12px;margin:8px 0;overflow:hidden}
 .level-bar-fill{background:linear-gradient(90deg,#f59e0b,#ff4e50);height:100%;border-radius:8px;transition:width .5s}
 .level-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.level-item{background:#f5f6f8;border-radius:8px;padding:10px;text-align:center;border:1px solid #e5e7eb}
+.level-item{position:relative;background:#f5f6f8;border-radius:8px;padding:10px;text-align:center;border:1px solid #e5e7eb}.level-del{position:absolute;top:6px;right:8px;background:transparent;border:none;color:#111;font-size:1.1em;cursor:pointer;padding:2px 4px;line-height:1;font-weight:700}
 .level-item.reached{border-color:#f59e0b}
 .level-item.reached .lv-name{color:#f59e0b}
 .level-item .lv-name{font-weight:bold;margin-bottom:4px}
@@ -71,7 +71,7 @@ textarea{resize:vertical;min-height:60px}
 .form-row{margin-bottom:12px}
 .form-row label{display:block;margin-bottom:4px;font-size:.85em;color:#4b5563}
 @media(max-width:500px){.stat-card{min-width:70px;padding:8px 12px}.stat-card .val{font-size:1.3em}.roulette-items{grid-template-columns:1fr}.level-grid{grid-template-columns:1fr 1fr}}
-.data-backup{display:flex;justify-content:center;gap:8px;margin-top:8px}.data-backup .btn-export,.data-backup .btn-import{font-size:.7em;padding:4px 10px;border-radius:6px;cursor:pointer;background:transparent;color:#6b7280;border:1px solid #d1d5db;transition:all .2s}.data-backup .btn-export:hover,.data-backup .btn-import:hover{color:#f59e0b;border-color:#f59e0b}#importFile{display:none}.time-strip{display:flex;flex-direction:column;gap:12px;margin:12px 0;padding:16px 12px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:12px}.time-row{display:flex;align-items:center;justify-content:center;gap:10px}.time-block{text-align:center}.time-label{font-size:.75em;color:#6b7280;margin-bottom:4px}.time-arrow{color:#9ca3af;font-size:1.2em;padding-top:12px}.time-info{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding-top:2px}.time-value{font-size:1.8em;font-weight:700;color:#6b7280;line-height:1}.time-gap{background:#ffffff;color:#6b7280;border-radius:999px;padding:6px 12px;font-weight:700;text-align:center;border:1px solid #e5e7eb;font-size:.85em}.record-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.record-btn{flex:1;min-width:160px;border:none;border-radius:12px;padding:14px 18px;font-size:1em;font-weight:700;cursor:pointer;color:#f5f6f8;transition:transform .15s,opacity .15s}.record-btn:hover{transform:translateY(-1px);opacity:.95}.record-btn.daily{background:linear-gradient(135deg,#59d36d,#2dbf5e)}.record-btn.main{background:linear-gradient(135deg,#fbbf24,#ff9f2f)}.record-hint{margin-top:8px;font-size:.75em;color:#6b7280;text-align:center}.time-next{font-size:.75em;color:#6b7280;text-align:center;line-height:1.5;padding:2px 0}.time-start-input,.time-end-input{width:100%;max-width:110px;text-align:center;font-size:1.5em;font-weight:700;color:#6b7280;background:transparent;border:1px solid transparent;padding:0 2px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#e5e7eb;background:#f3f4f6;border-radius:8px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#e5e7eb;background:#f3f4f6;border-radius:8px}.timeline-row{background:#f5f6f8;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #e5e7eb}.timeline-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.timeline-range{font-weight:700;color:#1f2937}.timeline-kind{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:999px}.timeline-kind.daily{background:#dcfce7;color:#166534}.timeline-kind.main{background:#fef3c7;color:#92400e}.timeline-duration{color:#6b7280}.timeline-note{margin-top:6px;color:#4b5563;white-space:pre-line}.timeline-legacy{color:#6b7280}
+.data-backup{display:flex;justify-content:center;gap:8px;margin-top:8px}.data-backup .btn-export,.data-backup .btn-import{font-size:.7em;padding:4px 10px;border-radius:6px;cursor:pointer;background:transparent;color:#6b7280;border:1px solid #d1d5db;transition:all .2s}.data-backup .btn-export:hover,.data-backup .btn-import:hover{color:#f59e0b;border-color:#f59e0b}#importFile{display:none}.time-strip{display:flex;flex-direction:column;gap:12px;margin:12px 0;padding:16px 12px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:12px}.time-row{display:flex;align-items:center;justify-content:center;gap:10px}.time-block{text-align:center}.time-label{font-size:.75em;color:#6b7280;margin-bottom:4px}.time-arrow{color:#9ca3af;font-size:1.2em;padding-top:12px}.time-info{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding-top:2px}.time-value{font-size:1.8em;font-weight:700;color:#6b7280;line-height:1}.time-gap{background:#ffffff;color:#6b7280;border-radius:999px;padding:6px 12px;font-weight:700;text-align:center;border:1px solid #e5e7eb;font-size:.85em}.record-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.record-btn{flex:1;min-width:160px;border:none;border-radius:12px;padding:14px 18px;font-size:1em;font-weight:700;cursor:pointer;color:#f5f6f8;transition:transform .15s,opacity .15s}.record-btn:hover{transform:translateY(-1px);opacity:.95}.record-btn.daily{background:linear-gradient(135deg,#59d36d,#2dbf5e)}.record-btn.main{background:linear-gradient(135deg,#fbbf24,#ff9f2f)}.record-hint{margin-top:8px;font-size:.75em;color:#6b7280;text-align:center}.time-next{font-size:.75em;color:#6b7280;text-align:center;line-height:1.5;padding:2px 0}.time-start-input,.time-end-input{width:100%;max-width:110px;text-align:center;font-size:1.5em;font-weight:700;color:#6b7280;background:transparent;border:1px solid transparent;padding:0 2px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#e5e7eb;background:#f3f4f6;border-radius:8px}.time-start-input:focus,.time-end-input:focus{outline:none;border-color:#e5e7eb;background:#f3f4f6;border-radius:8px}.timeline-row{background:#f5f6f8;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #e5e7eb}.timeline-date-title{font-weight:700;color:var(--accent);font-size:.95em;margin:14px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--border)}.drag-handle{touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab;color:var(--muted);padding:2px 8px;font-size:1em;display:inline-block}.todo-when-btn{border:1px solid var(--outline-border);background:transparent;color:var(--muted);border-radius:8px;padding:6px 10px;font-size:0.85em;cursor:pointer;flex:1}.todo-when-btn.active{background:var(--tab-active);border-color:var(--accent);color:var(--accent);font-weight:700}.todo-when{font-size:0.9em;color:#1f2937;background:transparent;border:none;padding:0;border-radius:0;flex-shrink:0;white-space:nowrap;font-weight:600;margin:0 4px}.goal-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f6f8;border-radius:8px;margin-bottom:4px}.goal-check{width:20px;height:20px;border-radius:50%;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0}.goal-check.checked{background:#4fc3f7;color:#f5f6f8}.goal-time{flex-shrink:0;color:#6b7280;font-size:.85em;font-weight:600;white-space:nowrap}.goal-text{flex:1;font-size:.9em}.goal-item.done .goal-text{text-decoration:line-through;color:#9ca3af}.drag-sorting{position:relative;z-index:20;opacity:.75;box-shadow:0 8px 20px rgba(0,0,0,.18)}.timeline-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.timeline-range{font-weight:700;color:#1f2937}.timeline-kind{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:999px}.timeline-kind.daily{background:#dcfce7;color:#166534}.timeline-kind.main{background:#fef3c7;color:#92400e}.timeline-duration{color:#6b7280}.timeline-note{margin-top:6px;color:#4b5563;white-space:pre-line}.timeline-legacy{color:#6b7280}
 
 .levelup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn 0.3s}
 .levelup-modal{background:linear-gradient(145deg,#ffffff,#fef3c7);border:2px solid #f59e0b;border-radius:20px;padding:32px 28px;text-align:center;max-width:360px;width:90%;box-shadow:0 0 40px rgba(249,212,35,0.3);animation:popIn 0.4s ease-out}
@@ -91,20 +91,90 @@ textarea{resize:vertical;min-height:60px}
 .spin-modal .spin-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes popIn{0%{transform:scale(0.7);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.ai-hourglass{display:inline-block;animation:aiHourglass 1s ease-in-out infinite}
+@keyframes aiHourglass{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
 .todo-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f6f8;border-radius:8px;margin-bottom:4px;transition:all .2s}.todo-check{width:20px;height:20px;border-radius:6px;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0;transition:all .2s}.todo-check.todo-checked{background:#4fc3f7;color:#f5f6f8}.todo-text{flex:1;font-size:.9em}.todo-done .todo-text{text-decoration:line-through;color:#9ca3af}
 
+:root{--bg:#f5f6f8;--card:#ffffff;--card-2:#f5f6f8;--border:#e5e7eb;--text:#1f2937;--muted:#6b7280;--muted-2:#4b5563;--hover:#374151;--input-bg:#f5f6f8;--outline-border:#9ca3af;--accent:#f59e0b;--tab-active:#fef3c7}
+body[data-theme="green"]{--bg:#eef6ee;--card:#ffffff;--card-2:#eef6ee;--border:#d4e6d4;--text:#1f2937;--muted:#56705a;--muted-2:#3f5843;--hover:#374151;--input-bg:#f2f8f2;--outline-border:#9db89f;--accent:#16a34a;--tab-active:#d9efe0}
+body[data-theme="warm"]{--bg:#fbf3e6;--card:#fffdf8;--card-2:#f8eedb;--border:#ecdcc0;--text:#2b241c;--muted:#7a6a55;--muted-2:#5f5140;--hover:#3f362c;--input-bg:#fdf7ec;--outline-border:#c9b79a;--accent:#d97706;--tab-active:#fbe9c8}
+body[data-theme="dark"]{--bg:#12141a;--card:#1c2028;--card-2:#242a34;--border:#313847;--text:#e6e8ee;--muted:#a0a8b8;--muted-2:#c2c8d4;--hover:#d1d5db;--input-bg:#232833;--outline-border:#4b5563;--accent:#fbbf24;--tab-active:#3a4150}
+body{background:var(--bg);color:var(--text)}
+.tabs{background:var(--card)}
+.tab{color:var(--muted)}
+.tab.active{background:var(--tab-active);color:var(--accent)}
+.tab:hover:not(.active){color:var(--hover)}
+.stat-card{background:var(--card);border-color:var(--border)}
+.stat-card .lbl{color:var(--muted)}
+.card{background:var(--card);border-color:var(--border)}
+.card h3{color:var(--muted)}
+input,textarea,select{background:var(--input-bg);border-color:var(--border);color:var(--text)}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.btn-outline{background:transparent;border-color:var(--outline-border);color:var(--muted)}
+.day-entry{background:var(--card-2)}
+.day-entry .day-actions{color:var(--muted-2)}
+.quest-item{background:var(--card-2)}
+.challenge-card{background:var(--card);border-color:var(--border)}
+.challenge-card h3{color:var(--muted)!important}
+.challenge-bar{background:var(--card-2)}
+.challenge-info{color:var(--muted-2)}
+.level-bar{background:var(--card-2)}
+.level-item{background:var(--card-2);border-color:var(--border)}
+.level-item .lv-reward{color:var(--muted)}
+.r-tab{background:var(--card-2);border-color:var(--border);color:var(--muted)}
+.r-tab.active{background:var(--card);border-color:var(--accent);color:var(--accent)}
+.r-tab:hover:not(.active){color:var(--hover)}
+.roulette-item{background:var(--card-2);border-color:var(--border)}
+.time-strip{background:var(--card-2);border-color:var(--border)}
+.time-label{color:var(--muted)}
+.time-arrow{color:var(--muted)}
+.time-value{color:var(--muted)}
+.time-gap{background:var(--card);color:var(--muted);border-color:var(--border)}
+.time-hint{color:var(--muted)}
+.time-next{color:var(--muted)}
+.time-start-input,.time-end-input{color:var(--muted)}
+.timeline-row{background:var(--card-2);border-color:var(--border)}
+.timeline-range{color:var(--text)}
+.timeline-duration{color:var(--muted)}
+.timeline-note{color:var(--muted-2)}
+.timeline-legacy{color:var(--muted)}
+.spin-modal .spin-prize{background:var(--card-2);border-color:var(--border)}
+.form-row label{color:var(--muted-2)}
+#timelineOverlay,#analysisReportOverlay,#reportHistoryOverlay{background:var(--bg)!important}
+.theme-btn{border:1px solid var(--border)!important}
+.theme-btn.active{outline:2px solid var(--accent);color:var(--accent)!important;font-weight:bold}
+.mode-btn{border:1px solid var(--border)!important}
+.mode-btn.active{outline:2px solid var(--accent);color:var(--accent)!important;font-weight:bold;background:rgba(245,158,11,0.08)}
+body[data-theme="dark"] .spin-modal{background:linear-gradient(145deg,#1c2028,#2a2f3a);border-color:#4b5563}
+body[data-theme="dark"] .spin-modal .spin-prize{background:#242a34;border-color:#313847}
+body[data-theme="dark"] .levelup-modal{background:linear-gradient(145deg,#1c2028,#2a2f3a);border-color:#4b5563}
+body[data-theme="dark"] .levelup-modal .lv-reward-text{color:#c2c8d4}
+body[data-theme="dark"] .toast{background:#2a2f3a;color:#fbbf24}
+body[data-theme="dark"] [style*="color:#1f2937"]{color:var(--text)!important}
+body[data-theme="dark"] [style*="color:#374151"]{color:var(--muted-2)!important}
+body[data-theme="dark"] [style*="color:#4b5563"]{color:var(--muted-2)!important}
+body[data-theme="dark"] [style*="color:#6b7280"]{color:var(--muted)!important}
+body[data-theme="dark"] [style*="background:#f5f6f8"]{background:var(--card-2)!important}
+body[data-theme="dark"] [style*="background:#ffffff"]{background:var(--card)!important}
+body[data-theme="dark"] [style*="background:#fff"]{background:var(--card)!important}
+body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--border)!important}
+.flame-wrap{text-align:center;padding:6px 0}
+.flame{display:inline-block;font-size:3.2em;animation:flamePulse 0.9s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(255,140,0,0.85))}
+@keyframes flamePulse{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.2) rotate(4deg)}}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="4">
+  <meta name="app-version" content="1">
 </head>
 <body>
+<script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
 
 <div class="app"><div class="tabs">
-<button class="tab active" onclick="switchTab('daily')">🕒 时间</button>
-<button class="tab" onclick="switchTab('main')">🎯 主线</button>
-<button class="tab" onclick="switchTab('rewards')">🏆 等级</button>
-<button class="tab" onclick="switchTab('roulette')">🎰 转盘</button>
+<button class="tab active" id="tabDaily" onclick="switchTab('daily')">🕒 时间</button>
+<button class="tab" id="tabGoal" onclick="switchTab('goal')">🎯 目标</button>
+<button class="tab" id="tabMain" onclick="switchTab('main')">🎯 主线</button>
+<button class="tab" id="tabRewards" onclick="switchTab('rewards')">🏆 等级</button>
+<button class="tab" id="tabSettings" onclick="switchTab('settings')">⚙️ 设置</button>
 </div>
 <div class="header" id="headerPanel" style="display:none"><h1>🎯 个人成长系统</h1>
 <div class="stats">
@@ -112,12 +182,34 @@ textarea{resize:vertical;min-height:60px}
 <div class="stat-card"><div class="val" id="currentLevel">Lv.1</div><div class="lbl">当前等级</div></div>
 <div class="stat-card"><div class="val" id="nextLevelPts">10</div><div class="lbl">升级还需</div></div>
 <div class="stat-card"><div class="val" id="balance">0</div><div class="lbl">研发点余额 <button class="btn btn-sm btn-outline" style="padding:1px 6px;font-size:0.6em;margin-left:4px" onclick="editBalance()">✏</button></div></div>
-<div class="stat-card" style="display:flex;flex-direction:column;gap:4px;justify-content:center;padding:8px 12px"><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="exportData()">📥 导出备份</button><button class="btn btn-sm btn-outline" style="font-size:0.65em;padding:3px 8px;width:100%" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入恢复</button><input type="file" id="importFile" accept=".json" onchange="importData(event)"></div>
+<div class="stat-card" style="display:flex;align-items:center;justify-content:center;padding:8px 12px"><button class="btn btn-sm btn-outline" style="font-size:0.7em;padding:8px 12px;width:100%" onclick="openRoulette()">🎰 转盘</button></div>
 </div></div>
 
 <div class="page active" id="page-daily"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div><div id="todayTimeline"></div></div><div class="card">
 <button class="btn" style="width:100%;padding:14px;font-size:1em" onclick="openRecordModal()">🕒 记录</button>
 </div>
+</div>
+<div class="page" id="page-daily-mode">
+<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimelineDaily()">📋 查看时间线</button></div><div id="dailyModeTimeline"></div></div>
+<div class="card">
+<button class="btn" style="width:100%;padding:14px;font-size:1em" onclick="openDailyRecordModal()">🕒 记录</button>
+</div>
+</div>
+<div class="page" id="page-goal-daily">
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0">📝 今日备忘录</h3>
+      <button class="btn btn-sm btn-outline" onclick="openTodoModal()">➕ 添加</button>
+    </div>
+    <div id="dailyTodoListGoal"></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0">🎯 近期目标</h3>
+      <button class="btn btn-sm btn-outline" onclick="openGoalModal()">➕ 添加</button>
+    </div>
+    <div id="goalList"></div>
+  </div>
 </div>
 <div id="recordOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:240;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
   <div style="background:#ffffff;border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
@@ -139,12 +231,33 @@ textarea{resize:vertical;min-height:60px}
     <div class="record-actions"><button class="record-btn daily" style="flex:1;min-width:0;padding:8px 10px;font-size:0.8em" onclick="addDailyEntry('daily')">🟢 日常记录</button><button class="record-btn main" style="flex:1;min-width:0;padding:8px 10px;font-size:0.8em" onclick="addDailyEntry('main')">🟠 主线记录</button></div>
   </div>
 </div>
+<div id="dailyRecordOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:240;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0;color:var(--muted)">➕ 记录时间段</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeDailyRecordModal()">← 返回</button>
+    </div>
+    <div class="time-strip">
+      <div class="time-gap" id="dailyModeDuration">0分钟</div>
+      <div class="time-row">
+        <div class="time-block"><div class="time-label">开始</div><input class="time-start-input" type="time" id="dailyModeStartTime" value="00:00" data-manual="0" onchange="this.dataset.manual='1';updateDailyDraftTimesDaily()"></div>
+        <div class="time-arrow">→</div>
+        <div class="time-block"><div class="time-label">结束</div><input class="time-end-input" type="time" id="dailyModeEndTime" value="00:00" data-manual="0"></div>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:6px"><label>做了什么</label><textarea id="dailyModeActions" placeholder="只写内容，不用写时间..."></textarea></div>
+    <button class="btn btn-sm btn-outline" style="margin-top:0;width:100%" onclick="mergeToLastDailyRecord()">↩ 合并到上一次记录</button>
+    <div class="record-actions"><button class="record-btn daily" style="flex:1;min-width:0;padding:8px 10px;font-size:0.8em" onclick="addDailyModeRecord()">🟢 日常记录</button></div>
+  </div>
+</div>
 <div class="page" id="page-main">
 <div class="card">
-<h3>&#x1f4dd; 今日备忘录</h3>
-<div style="display:flex;gap:8px;margin-bottom:10px">
-  <input type="text" id="newTodoInput" placeholder="输入要做的事..." style="flex:1" onkeydown="if(event.key==='Enter')addDailyTodo()">
-  <button class="btn btn-sm" onclick="addDailyTodo()">添加</button>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+<h3 style="margin:0">📝 今日备忘录</h3>
+<div style="display:flex;align-items:center;gap:8px">
+<button class="btn btn-sm btn-outline" onclick="openSuggestionModal()">💡 行动建议</button>
+<button class="btn btn-sm btn-outline" onclick="openTodoModal()">➕ 添加</button>
+</div>
 </div>
 <div id="dailyTodoList"></div>
 </div>
@@ -159,60 +272,146 @@ textarea{resize:vertical;min-height:60px}
 </div>
 <p style="color:#6b7280;font-size:0.7em;margin-top:6px">选一个主线任务，无脑行动 10 分钟</p>
 </div>
-<div id="foolTimeActive" style="display:none">
-<div class="challenge-timer">⏱ <span id="foolTimeTimer">10:00</span></div>
-<div class="challenge-bar"><div class="challenge-bar-fill" id="foolTimeBarFill"></div></div>
-<div class="challenge-info"><div>任务：<strong id="foolTimeTaskName"></strong></div></div>
-<div style="display:flex;gap:8px;margin-top:8px">
-<button class="btn btn-sm" onclick="completeFoolTime()">✅ 完成</button>
-<button class="btn btn-sm btn-outline" onclick="abandonFoolTime()">放弃</button>
-</div>
-</div>
 </div>
 <div class="card">
-<h3>🗺️ 主线任务</h3>
-<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
-<div id="questEditBar" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#f5f6f8;border-radius:10px;margin-bottom:14px">
-  <input type="text" id="questCategoryInput" placeholder="分类" style="flex:0 0 auto;width:80px;font-size:0.8em;padding:6px 8px">
-  <input type="text" id="questTitleInput" placeholder="任务内容" style="flex:1;min-width:120px;font-size:0.8em;padding:6px 8px">
-  <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点" style="flex:0 0 auto;width:55px;font-size:0.8em;padding:6px 4px;text-align:center">
-  <input type="hidden" id="editingQuestId" value="">
-  <button class="btn btn-sm" onclick="saveQuestFromForm()" style="padding:6px 12px;font-size:0.8em">➕ 保存</button>
-  <button class="btn btn-sm btn-outline" onclick="resetQuestForm()" style="padding:6px 10px;font-size:0.8em">清空</button>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+<h3 style="margin:0;color:#f59e0b">🗺️ 主线任务</h3>
+<div style="display:flex;align-items:center;gap:8px">
+<button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openQuestModal()">➕ 添加</button>
+<button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openChallengeModal()">⚔️ 限时挑战</button>
 </div>
+</div>
+<p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应研发点</p>
 <div id="questList"></div>
 
 </div>
-<div class="challenge-card" id="challengeCard">
-  <h3>⚔️ 限时挑战</h3>
-  <div id="challengeSetup">
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <select id="challengeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:8px;color:#1f2937">
-        <option value="">-- 选择主线任务 --</option>
-      </select>
-      <input type="number" id="challengeDuration" min="1" max="480" value="60" placeholder="分钟" style="flex:0 0 auto;width:55px;font-size:0.85em;padding:8px 4px;text-align:center" title="挑战时长（分钟）">
-      <span style="color:#6b7280;font-size:0.75em">分钟</span>
-      <input type="number" id="challengeBet" min="1" value="3" placeholder="赌注" style="flex:0 0 auto;width:60px;font-size:0.85em;padding:8px 4px;text-align:center">
-      <span style="color:#6b7280;font-size:0.75em">研发点</span>
-      <button class="btn btn-sm" onclick="startChallenge()" style="padding:8px 16px">⚡ 开始挑战</button>
-    </div>
-    <p style="color:#6b7280;font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
-  </div>
-  <div id="challengeActive" style="display:none">
-    <div class="challenge-timer">⏱ <span id="challengeTimer">60:00</span></div>
-    <div class="challenge-bar"><div class="challenge-bar-fill" id="challengeBarFill"></div></div>
-    <div class="challenge-info">
-      <div>任务：<strong id="challengeTaskName"></strong></div>
-      <div>赌注：<strong id="challengeStakeDisplay" style="color:#f59e0b"></strong> 研发点</div>
-    </div>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成挑战</button>
-      <button class="btn btn-sm btn-outline" onclick="abandonChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">❌ 放弃</button>
-    </div>
-  </div>
-</div>
 </div>
 
+<div id="todoOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:360px;width:100%">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 id="todoOverlayTitle" style="margin:0;color:var(--muted)">➕ 今日备忘录</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeTodoModal()">✕ 关闭</button>
+    </div>
+    
+    <div style="margin-top:10px;font-size:0.85em;color:var(--muted)">在什么时候：</div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button type="button" class="btn btn-sm todo-when-btn active" id="todoWhenNoneBtn" onclick="selectTodoWhen('none')">不固定</button>
+      <button type="button" class="btn btn-sm todo-when-btn" id="todoWhenTimeBtn" onclick="selectTodoWhen('time')">时间点</button>
+      <button type="button" class="btn btn-sm todo-when-btn" id="todoWhenRangeBtn" onclick="selectTodoWhen('range')">时间段</button>
+    </div>
+    <div id="todoWhenTimeWrap" style="display:none;margin-top:8px">
+      <input type="time" id="todoWhenTime" style="width:100%;font-size:1em;padding:8px">
+    </div>
+    <div id="todoWhenRangeWrap" style="display:none;margin-top:8px">
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="time" id="todoWhenStart" style="flex:1;font-size:1em;padding:8px">
+        <span style="color:var(--muted)">~</span>
+        <input type="time" id="todoWhenEnd" style="flex:1;font-size:1em;padding:8px">
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:0.85em;color:var(--muted)">要做的事：</div>
+    <input type="text" id="newTodoInput" placeholder="输入要做的事..." style="margin-top:6px" onkeydown="if(event.key==='Enter')saveDailyTodo()">
+    <button class="btn" style="width:100%;margin-top:12px" id="todoSaveBtn" onclick="saveDailyTodo()">💾 保存</button>
+  </div>
+</div>
+<div id="goalOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:246;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:360px;width:100%">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 id="goalOverlayTitle" style="margin:0;color:var(--muted)">➕ 添加近期目标</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeGoalModal()">✕ 关闭</button>
+    </div>
+    <div style="margin-top:10px;font-size:0.85em;color:var(--muted)">最晚截至时间：</div>
+    <input type="text" id="goalDue" placeholder="例如：本周五 / 8月30日 / 月底" style="margin-top:6px">
+    <div style="margin-top:10px;font-size:0.85em;color:var(--muted)">目标内容：</div>
+    <input type="text" id="goalText" placeholder="输入目标..." style="margin-top:6px" onkeydown="if(event.key==='Enter')saveGoal()">
+    <button class="btn" style="width:100%;margin-top:12px" id="goalSaveBtn" onclick="saveGoal()">💾 保存</button>
+  </div>
+</div>
+<div id="foolTimeOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0;color:var(--muted)">⏰ 傻瓜时间</h3>
+      <span style="width:70px"></span>
+    </div>
+    <div id="foolTimeActive" style="display:none">
+      <div class="flame-wrap"><div class="flame" id="foolFlame">🔥</div></div>
+      <div class="challenge-timer">⏱ <span id="foolTimeTimer">10:00</span></div>
+      <div class="challenge-bar"><div class="challenge-bar-fill" id="foolTimeBarFill"></div></div>
+      <div class="challenge-info"><div>任务：<strong id="foolTimeTaskName"></strong></div></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-sm" onclick="completeFoolTime()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成</button>
+        <button class="btn btn-sm btn-outline" onclick="abandonFoolTime()" style="flex:1;color:#ff4e50;border-color:#ff4e50">放弃</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="challengeOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0;color:var(--muted)">⚔️ 限时挑战</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeChallengeModal()">✕ 关闭</button>
+    </div>
+    <div id="challengeSetup">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <select id="challengeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text)">
+          <option value="">-- 选择主线任务 --</option>
+        </select>
+        <input type="number" id="challengeDuration" min="1" max="480" value="60" placeholder="分钟" style="flex:0 0 auto;width:55px;font-size:0.85em;padding:8px 4px;text-align:center" title="挑战时长（分钟）">
+        <span style="color:var(--muted);font-size:0.75em">分钟</span>
+        <input type="number" id="challengeBet" min="1" value="3" placeholder="赌注" style="flex:0 0 auto;width:60px;font-size:0.85em;padding:8px 4px;text-align:center">
+        <span style="color:var(--muted);font-size:0.75em">研发点</span>
+        <button class="btn btn-sm" onclick="startChallenge()" style="padding:8px 16px">⚡ 开始挑战</button>
+      </div>
+      <p style="color:var(--muted);font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
+    </div>
+    <div id="challengeActive" style="display:none">
+      <div class="challenge-timer">⏱ <span id="challengeTimer">60:00</span></div>
+      <div class="challenge-bar"><div class="challenge-bar-fill" id="challengeBarFill"></div></div>
+      <div class="challenge-info">
+        <div>任务：<strong id="challengeTaskName"></strong></div>
+        <div>赌注：<strong id="challengeStakeDisplay" style="color:#f59e0b"></strong> 研发点</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成挑战</button>
+        <button class="btn btn-sm btn-outline" onclick="abandonChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">❌ 放弃</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="questOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:360px;width:100%">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0;color:var(--muted)" id="questOverlayTitle">➕ 添加主线任务</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeQuestModal()">✕ 关闭</button>
+    </div>
+    <label style="font-size:0.8em;color:var(--muted);margin-bottom:4px;display:block">分类</label>
+    <div style="display:flex;align-items:center;gap:8px">
+      <input type="text" id="questCategoryInput" placeholder="分类（可输入或选择）" style="flex:1;min-width:0">
+      <button type="button" class="btn btn-sm btn-outline" onclick="toggleQuestCategoryPick()" style="white-space:nowrap">▾ 选择</button>
+    </div>
+    <div id="questCategoryPick" style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+    <label style="font-size:0.8em;color:var(--muted);margin:10px 0 4px;display:block">任务内容</label>
+    <textarea id="questTitleInput" placeholder="任务内容" rows="2"></textarea>
+    <label style="font-size:0.8em;color:var(--muted);margin:10px 0 4px;display:block">研发点</label>
+    <input type="number" id="questPointsInput" min="0" value="0" placeholder="研发点">
+    <input type="hidden" id="editingQuestId" value="">
+    <button class="btn" style="width:100%;margin-top:12px" onclick="saveQuestFromForm()">💾 保存</button>
+  </div>
+</div>
+<div id="suggestionOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0;color:var(--muted)">💡 行动建议</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeSuggestionModal()">✕ 关闭</button>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div id="suggestionHourglass" style="font-size:1.8em;line-height:1.2"><span class="ai-hourglass">⏳</span></div>
+      <div id="suggestionText" style="flex:1;white-space:pre-wrap;line-height:1.7;font-size:0.9em;min-height:60px"></div>
+    </div>
+    <button class="btn" style="width:100%;margin-top:12px;display:none" id="suggestionRetryBtn" onclick="runSuggestion()">🔄 重新分析</button>
+  </div>
+</div>
 <div class="page" id="page-rewards"><div class="card">
 <h3>📊 升级进度</h3>
 <div style="display:flex;justify-content:space-between;font-size:0.85em;margin-bottom:4px">
@@ -222,8 +421,72 @@ textarea{resize:vertical;min-height:60px}
 </div><div class="card">
 <h3>🎁 等级奖励一览</h3>
 <div class="level-grid" id="levelGrid"></div>
+</div>
+<div style="display:flex;justify-content:flex-end;padding:4px 2px 12px">
+<button class="btn btn-sm btn-outline" style="color:#ff4e50;border-color:#ff4e50" onclick="resetProgress()">🔄 重置进度</button>
+</div>
+</div>
+<div class="page" id="page-settings-daily">
+<div class="card">
+<h3>🎛️ 模式切换</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline mode-btn" data-mode="daily" onclick="requestMode('daily')">☀️ 日常模式</button>
+<button class="btn btn-sm btn-outline mode-btn" data-mode="main" onclick="requestMode('main')">🎯 主线模式</button>
+</div>
+</div>
+<div class="card">
+<h3>🎨 风格设置</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline theme-btn" data-theme="default" onclick="setTheme('default')">⬜ 白底</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="green" onclick="setTheme('green')">🌿 护眼绿</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="warm" onclick="setTheme('warm')">🌅 暖阳</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="dark" onclick="setTheme('dark')">🌙 暗夜</button>
+</div>
+</div>
+</div>
+<div class="page" id="page-settings"><div class="card">
+<h3>🎛️ 模式切换</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline mode-btn" data-mode="daily" onclick="requestMode('daily')">☀️ 日常模式</button>
+<button class="btn btn-sm btn-outline mode-btn" data-mode="main" onclick="requestMode('main')">🎯 主线模式</button>
+</div>
+</div><div class="card">
+<h3>📥 导入导出</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="exportData()">📥 导出备份</button>
+<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入恢复</button>
+<input type="file" id="importFile" accept=".json" onchange="importData(event)">
+</div>
+</div><div class="card">
+<h3>🤖 AI 配置</h3>
+<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline" onclick="toggleAIConfig()">⚙️ 配置</button>
+</div>
+<div id="aiConfigPanel" style="display:none;margin-bottom:10px">
+  <div class="form-row"><label>API 地址</label><input type="text" id="aiUrl" placeholder="https://api.deepseek.com/chat/completions"></div>
+  <div class="form-row"><label>API Key</label><input type="password" id="aiKey" placeholder="sk-..."></div>
+  <div class="form-row"><label>模型</label><input type="text" id="aiModel" placeholder="gpt-4o-mini"></div>
+  <div class="form-row"><label>今日分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="例如：请分析我今天的时间使用情况，找出效率问题和改进建议..."></textarea></div>
+  <div class="form-row"><label>行动建议分析提示词</label><textarea id="aiSugPrompt" rows="5" placeholder="例如：请结合今日备忘录和主线任务，按优先级给出今天的具体行动建议..."></textarea></div>
+  <button class="btn btn-sm" onclick="saveAIConfig()" style="margin-top:6px">💾 保存</button>
+</div>
+<div id="aiStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
+</div><div class="card">
+<h3>🎨 风格设置</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline theme-btn" data-theme="default" onclick="setTheme('default')">⬜ 白底</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="green" onclick="setTheme('green')">🌿 护眼绿</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="warm" onclick="setTheme('warm')">🌅 暖阳</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="dark" onclick="setTheme('dark')">🌙 暗夜</button>
+</div>
 </div></div>
-<div class="page" id="page-roulette"><div class="card">
+<div class="page" id="page-roulette">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+  <button class="btn btn-sm btn-outline" onclick="closeRoulette()">← 返回等级</button>
+  <h3 style="margin:0;color:#6b7280">🎰 转盘</h3>
+  <span style="width:80px"></span>
+</div>
+<div class="card">
 <h3>🎰 抽奖兑换</h3>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
 <button class="btn btn-outline" onclick="spinRandomCategoryAndSpin()">🎲 随机类目抽一次</button>
@@ -247,9 +510,9 @@ textarea{resize:vertical;min-height:60px}
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <button class="btn btn-sm btn-outline" onclick="closeTimeline()">← 返回</button>
       <h3 style="margin:0;color:#6b7280">📋 时间线</h3>
-      <span style="width:50px"></span>
+      <button class="btn btn-sm btn-outline" id="dailyExportTodayBtn" onclick="exportDailyModeToday()" style="display:none">📤 导出今天</button>
     </div>
-    <div class="card">
+    <div class="card" id="timelineExportCard">
       <div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
         <div style="font-size:0.8em;color:#6b7280;margin-bottom:6px">📤 导出时间线</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
@@ -267,18 +530,10 @@ textarea{resize:vertical;min-height:60px}
     <div class="card" id="todayAnalysisCard">
       <h3>📊 今日分析</h3>
       <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-        <button class="btn btn-sm btn-outline" onclick="toggleAIConfig()">⚙️ 配置</button>
         <button class="btn btn-sm" onclick="analyzeToday()">🔍 分析今日</button>
         <button class="btn btn-sm btn-outline" onclick="showReportHistory()">📜 查看报告记录</button>
       </div>
-      <div id="aiConfigPanel" style="display:none;margin-bottom:10px">
-        <div class="form-row"><label>API 地址</label><input type="text" id="aiUrl" placeholder="https://api.deepseek.com/chat/completions"></div>
-        <div class="form-row"><label>API Key</label><input type="password" id="aiKey" placeholder="sk-..."></div>
-        <div class="form-row"><label>模型</label><input type="text" id="aiModel" placeholder="gpt-4o-mini"></div>
-        <div class="form-row"><label>分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="例如：请分析我今天的时间使用情况，找出效率问题和改进建议..."></textarea></div>
-        <button class="btn btn-sm" onclick="saveAIConfig()" style="margin-top:6px">💾 保存</button>
-      </div>
-      <div id="aiStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
+      <div id="analysisStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
     </div>
     <div class="card">
       <div id="dailyList"></div>
@@ -290,7 +545,7 @@ textarea{resize:vertical;min-height:60px}
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <button class="btn btn-sm btn-outline" onclick="closeAnalysisReport()">← 返回</button>
       <h3 style="margin:0;color:#6b7280">📊 今日分析报告</h3>
-      <span style="width:50px"></span>
+      <button class="btn btn-sm btn-outline" id="editReportBtn" onclick="toggleReportEdit()">✏️ 编辑报告</button>
     </div>
     <div id="analysisReportContent" class="card" style="white-space:pre-wrap;line-height:1.7"></div>
     <div style="margin-top:12px;display:flex;gap:8px"><button class="btn btn-sm" id="saveReportBtn" onclick="saveCurrentReport()">💾 保存报告</button></div>
@@ -398,23 +653,34 @@ function loadData() {
   recalcMainMinutesTotal();recalcDailyMinutesTotal();
   if(savedRouletteContentVersion!=="all-roulette-v1"){["放松转盘","美食转盘","好奇心转盘","游戏转盘"].forEach(function(type){data.roulettes[type]=JSON.parse(JSON.stringify(DEFAULT_DATA.roulettes[type]))});data.rouletteContentVersion="all-roulette-v1";saveData()}
   if(data.balanceResetVersion!=="52-fix-v2"){data.balance=52;data.balanceResetVersion="52-fix-v2";saveData()}
+  if(!data.levelRewards.some(function(r){return r.lv===1})){data.levelRewards.unshift({lv:1,need:0,reward:"奖励一次随机转盘",claimed:true});saveData()}
 }
 
-function calcDailyPoints() { return Math.floor((data.mainMinutesTotal||0)/50) + Math.floor((data.dailyMinutesTotal||0)/1200); }
+function calcDailyPoints() { return Math.floor((data.mainMinutesTotal||0)/60) + Math.floor((data.dailyMinutesTotal||0)/1200); }
 function calcMainPoints() { return data.mainQuests.filter(function(q){return q.done}).reduce(function(s,q){return s+(q.points||0)},0); }
 function calcTotalPoints() { return calcDailyPoints()+calcMainPoints(); }
+function calcDisplayPoints() { return Math.max(0, calcTotalPoints()-(data.pointsOffset||0)); }
 function calcLevel(t) { return Math.floor((Math.sqrt(1+4*t/5)-1)/2); }
 function calcNextLevelPts(t,l) { return (l+1)*10-(t-5*l*(l+1)); }
 function calcLevelPoints(l) { return 5*l*(l+1); }
 
 function updateStats() {
-  var t=calcTotalPoints(), lv=calcLevel(t), np=calcNextLevelPts(t,lv);
+  var t=calcDisplayPoints(), lv=calcLevel(t), np=calcNextLevelPts(t,lv);
   document.getElementById("totalPoints").textContent=t;
   document.getElementById("currentLevel").textContent="Lv."+(lv+1);
   document.getElementById("nextLevelPts").textContent=Math.max(0,np);
   document.getElementById("balance").textContent=Math.max(0,data.balance||0);
   if(previousLevel>=0&&lv>previousLevel){showLevelUpModal(lv+1)}
   previousLevel=lv;
+}
+function resetProgress(){
+  if(!confirm("⚠️ 确定要重置进度吗？累计研发点、当前等级、升级还需、研发点余额将归零。时间记录、主线任务、今日待办都会保留。"))return;
+  data.pointsOffset=(data.pointsOffset||0)+calcTotalPoints();
+  data.balance=0;
+  saveData();
+  updateStats();
+  renderLevelGrid();
+  showToast("进度已重置");
 }
 
 function pad2(n){return n<10?"0"+n:""+n}
@@ -426,7 +692,7 @@ function formatDurationLabel(mins){mins=Math.max(0,mins||0);if(mins>=60){var h=M
 function escapeHtml(text){return String(text||"").replace(/[&<>"]/g,function(ch){var map={"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"};return map[ch]})}
 function getDailyEntriesForDate(date){return data.dailyLog.filter(function(item){return item.date===date})}
 function getLastEndMinutes(date){var items=getDailyEntriesForDate(date).filter(function(item){return item.endTime});if(!items.length)return 0;return items.reduce(function(max,item){return Math.max(max,parseTimeToMinutes(item.endTime))},0)}
-function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var mainRemain=50-((data.mainMinutesTotal||0)%50);if(mainRemain===50)mainRemain=0;var h="";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 50 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
+function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var todayMainMin=0;(data.dailyLog||[]).forEach(function(d){if(d.date===today&&d.kind==="main")todayMainMin+=(d.clockCount||0)});var mainRemain=60-((data.mainMinutesTotal||0)%60);if(mainRemain===60)mainRemain=0;var h="<div>今日累计主线时间：<strong>"+todayMainMin+"</strong> 分钟</div>";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 60 分钟，可加 1 枚研发点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚研发点</span></div>";nextHint.innerHTML=h}}
 
 // Daily
 function renderTodayTimeline(){
@@ -459,16 +725,28 @@ function renderDailyList() {
   renderTodayTimeline();
   var c=document.getElementById("dailyList");
   if(!data.dailyLog.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">还没有记录，开始添加吧 🚀</p>';return}
-  c.innerHTML=[].concat(data.dailyLog).reverse().map(function(d,i){
-    var idx=data.dailyLog.length-1-i;
-    var range=(d.date||"")+" "+(d.startTime&&d.endTime ? d.startTime+"~"+d.endTime : "");
-    var duration=typeof d.clockCount==="number" ? d.clockCount : 0;
-    var kind=(d.kind==="main")?"main":"daily";
-    var kindLabel=kind==="main"?"主线记录":"日常记录";
-    var html='<div class="timeline-row">';
-    html+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+kind+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" style="color:#0284c7" onclick="editDailyEntry('+idx+')">✏</button><button class="btn btn-sm btn-outline" onclick="deleteDaily('+idx+')">🗑</button></div>';
-    if(d.actions) html+='<div class="timeline-note">'+escapeHtml(d.actions)+'</div>';
-    html+='</div>';
+  var groups={};
+  data.dailyLog.forEach(function(d,i){
+    var key=d.date||"未知日期";
+    if(!groups[key])groups[key]=[];
+    groups[key].push({d:d,idx:i});
+  });
+  var dates=Object.keys(groups).sort(function(a,b){return a<b?1:-1});
+  c.innerHTML=dates.map(function(date){
+    var items=groups[date].sort(function(a,b){return parseTimeToMinutes(a.d.startTime||"00:00")-parseTimeToMinutes(b.d.startTime||"00:00")});
+    var html='<div class="timeline-date-title">'+escapeHtml(date)+'</div>';
+    html+=items.map(function(item){
+      var d=item.d,idx=item.idx;
+      var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
+      var duration=typeof d.clockCount==="number"?d.clockCount:0;
+      var kind=(d.kind==="main")?"main":"daily";
+      var kindLabel=kind==="main"?"主线记录":"日常记录";
+      var row='<div class="timeline-row">';
+      row+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+kind+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" style="color:#0284c7" onclick="editDailyEntry('+idx+')">✏</button><button class="btn btn-sm btn-outline" onclick="deleteDaily('+idx+')">🗑</button></div>';
+      if(d.actions)row+='<div class="timeline-note">'+escapeHtml(d.actions)+'</div>';
+      row+='</div>';
+      return row;
+    }).join("");
     return html;
   }).join("");
 }
@@ -496,7 +774,7 @@ function addDailyEntry(kind) {
   var oldMainMinutes=data.mainMinutesTotal||0,oldDailyMinutes=data.dailyMinutesTotal||0;
   if(kind==="main"){data.mainMinutesTotal=oldMainMinutes+duration}else{data.dailyMinutesTotal=oldDailyMinutes+duration}
   var deltaPoints;
-  if(kind==="main"){deltaPoints=Math.floor(data.mainMinutesTotal/50)-Math.floor(oldMainMinutes/50)}
+  if(kind==="main"){deltaPoints=Math.floor(data.mainMinutesTotal/60)-Math.floor(oldMainMinutes/60)}
   else{deltaPoints=Math.floor(data.dailyMinutesTotal/1200)-Math.floor(oldDailyMinutes/1200)}
   if(deltaPoints>0){data.balance=(data.balance||0)+deltaPoints}
   data.dailyLog.push({date:date,kind:kind,startTime:startText,endTime:endText,clockCount:duration,pointsDelta:deltaPoints,actions:actions});
@@ -523,7 +801,7 @@ function mergeToLastEntry(){
   if(last.kind==="main"){
     var oldMM=data.mainMinutesTotal||0;
     data.mainMinutesTotal=oldMM+duration;
-    dp=Math.floor(data.mainMinutesTotal/50)-Math.floor(oldMM/50)
+    dp=Math.floor(data.mainMinutesTotal/60)-Math.floor(oldMM/60)
   }else{
     var oldDM=data.dailyMinutesTotal||0;
     data.dailyMinutesTotal=oldDM+duration;
@@ -537,35 +815,76 @@ function mergeToLastEntry(){
 }
 
 function editDailyEntry(idx){var d=data.dailyLog[idx];if(!d)return;var nt=prompt("编辑记录内容：",d.actions||"");if(nt!==null){d.actions=nt.trim();saveData();renderDailyList();showToast("已更新")}}
-function deleteDaily(i){if(confirm("确定删除？")){var item=data.dailyLog[i];if(item){var oldMM=data.mainMinutesTotal||0,oldDM=data.dailyMinutesTotal||0;data.dailyLog.splice(i,1);if(item.kind==="main"){recalcMainMinutesTotal();var dp=Math.floor((data.mainMinutesTotal||0)/50)-Math.floor(oldMM/50);if(dp!==0)data.balance=(data.balance||0)+dp}else{recalcDailyMinutesTotal();var dp=Math.floor((data.dailyMinutesTotal||0)/1200)-Math.floor(oldDM/1200);if(dp!==0)data.balance=(data.balance||0)+dp}}else{data.dailyLog.splice(i,1)}saveData();renderDailyList();updateStats();updateDailyDraftTimes();showToast("已删除")}}
+function deleteDaily(i){if(confirm("确定删除？")){var item=data.dailyLog[i];if(item){var oldMM=data.mainMinutesTotal||0,oldDM=data.dailyMinutesTotal||0;data.dailyLog.splice(i,1);if(item.kind==="main"){recalcMainMinutesTotal();var dp=Math.floor((data.mainMinutesTotal||0)/60)-Math.floor(oldMM/60);if(dp!==0)data.balance=(data.balance||0)+dp}else{recalcDailyMinutesTotal();var dp=Math.floor((data.dailyMinutesTotal||0)/1200)-Math.floor(oldDM/1200);if(dp!==0)data.balance=(data.balance||0)+dp}}else{data.dailyLog.splice(i,1)}saveData();renderDailyList();updateStats();updateDailyDraftTimes();showToast("已删除")}}
 
 // Quests
 function renderQuests() {
   var container=document.getElementById("questList");
   function renderQuestItem(q){
-    return'<div class="quest-item '+(q.done?'done':'')+'">'+
+    return'<div class="quest-item '+(q.done?'done':'')+'" data-qid="'+escapeHtml(q.id)+'">'+
       '<div class="quest-row-top">'+
         '<div class="quest-check '+(q.done?'checked':'')+'" onclick="toggleQuest(\''+q.id+'\')">'+(q.done?'&#x2713;':'')+'</div>'+
         '<span class="name">'+q.title+'</span>'+
         '<span class="pts">+'+q.points+'点</span>'+
-      '</div>'+
-      '<div class="quest-row-bot">'+
-        '<button class="btn btn-xs btn-outline" onclick="moveQuest(\''+q.id+'\',\'up\')">&#x25B2;</button>'+
-        '<button class="btn btn-xs btn-outline" onclick="moveQuest(\''+q.id+'\',\'down\')">&#x25BC;</button>'+
-        '<button class="btn btn-xs btn-outline" onclick="editQuest(\''+q.id+'\')">&#x270F; 编辑</button>'+
-        '<button class="btn btn-xs btn-outline" onclick="removeQuest(\''+q.id+'\')">&#x1F5D1; 删除</button>'+
+        '<button class="btn btn-xs btn-outline" title="一键记录主线时间" style="color:#f59e0b" onclick="quickRecordQuest(\''+q.id+'\')">记录</button>'+
+        '<button class="btn btn-xs btn-outline" title="编辑" onclick="editQuest(\''+q.id+'\')">&#x270F;</button>'+
+        '<button class="btn btn-xs btn-outline" title="删除" style="color:#ff4e50" onclick="removeQuest(\''+q.id+'\')">&#xd7;</button>'+
+        '<span class="drag-handle" title="拖动排序">☰</span>'+
       '</div></div>';
   }
   var ac={},arc={};
   data.mainQuests.forEach(function(q){var t=q.done?arc:ac;if(!t[q.category])t[q.category]=[];t[q.category].push(q)});
-  var ah=Object.entries(ac).map(function(e){return'<div class="quest-category"><h4>📌 '+e[0]+' ('+e[1].length+') <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+e[0]+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+e[0]+'\')">🗑</button></h4>'+e[1].map(renderQuestItem).join("")+'</div>'}).join("");
-  populateChallengeSelect();populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，在上方添加吧 🚀</p>');
+  var cats=syncQuestCatOrder().filter(function(c){return ac[c]});
+  var ah=cats.map(function(cat){return'<div class="quest-category" data-cat="'+escapeHtml(cat)+'"><h4><span class="drag-handle" title="拖动分类排序">☰</span> 📌 '+cat+' ('+ac[cat].length+') <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+cat+'\')">✏</button> <button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+cat+'\')">&#xd7;</button></h4>'+ac[cat].map(renderQuestItem).join("")+'</div>'}).join("");
+  populateChallengeSelect();populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，点右上角 ➕ 添加吧 🚀</p>');
+}
+function syncQuestCatOrder(){
+  if(!data.questCatOrder)data.questCatOrder=[];
+  var present=[];
+  data.mainQuests.forEach(function(q){if(!q.done&&present.indexOf(q.category)<0)present.push(q.category)});
+  var order=[];
+  data.questCatOrder.forEach(function(c){if(present.indexOf(c)>=0&&order.indexOf(c)<0)order.push(c)});
+  present.forEach(function(c){if(order.indexOf(c)<0)order.push(c)});
+  data.questCatOrder=order;
+  return order;
+}
+function moveQuestCategory(name,dir){
+  syncQuestCatOrder();
+  var idx=data.questCatOrder.indexOf(name);
+  if(idx<0)return;
+  var target=dir==='up'?idx-1:idx+1;
+  if(target<0||target>=data.questCatOrder.length)return;
+  var t=data.questCatOrder[idx];data.questCatOrder[idx]=data.questCatOrder[target];data.questCatOrder[target]=t;
+  saveData();renderQuests();
 }
 function toggleQuest(id){
   var q=data.mainQuests.find(function(x){return x.id===id});
   if(q){q.done=!q.done;data.balance=(data.balance||0)+(q.done?q.points:-q.points);saveData();renderQuests();updateStats();renderLevelGrid();showToast(q.done?'✅ +'+q.points+' 研发点':'已取消完成')}
 }
 function resetQuestForm(){document.getElementById("questCategoryInput").value="";document.getElementById("questTitleInput").value="";document.getElementById("questPointsInput").value=0;document.getElementById("editingQuestId").value=""}
+function openQuestModal(){resetQuestForm();var t=document.getElementById("questOverlayTitle");if(t)t.textContent="➕ 添加主线任务";var ov=document.getElementById("questOverlay");if(ov)ov.style.display="flex";var box=document.getElementById("questCategoryPick");if(box)box.style.display="none";setTimeout(function(){var inp=document.getElementById("questCategoryInput");if(inp)inp.focus()},50)}
+function closeQuestModal(){var ov=document.getElementById("questOverlay");if(ov)ov.style.display="none"}
+function toggleQuestCategoryPick(){
+  var box=document.getElementById("questCategoryPick");
+  if(!box)return;
+  renderQuestCategoryPick();
+  box.style.display=box.style.display==="none"?"flex":"none";
+}
+function renderQuestCategoryPick(){
+  var box=document.getElementById("questCategoryPick");
+  if(!box)return;
+  var order=syncQuestCatOrder();
+  var all=[];
+  data.mainQuests.forEach(function(q){if(all.indexOf(q.category)<0)all.push(q.category)});
+  var cats=order.concat(all.filter(function(c){return order.indexOf(c)<0}));
+  box.innerHTML=cats.map(function(c){return '<button type="button" class="btn btn-sm btn-outline" style="padding:4px 10px;font-size:0.78em;border-radius:999px" data-cat="'+c.replace(/"/g,"&quot;")+'" onclick="pickQuestCategory(this)">'+c+'</button>'}).join("")||'<span style="color:var(--muted);font-size:0.75em">暂无已有分类</span>';
+}
+function pickQuestCategory(btn){
+  var inp=document.getElementById("questCategoryInput");
+  if(inp&&btn.dataset.cat)inp.value=btn.dataset.cat;
+  var box=document.getElementById("questCategoryPick");
+  if(box)box.style.display="none";
+}
 function saveQuestFromForm(){
   var cat=document.getElementById("questCategoryInput").value.trim();
   var title=document.getElementById("questTitleInput").value.trim();
@@ -573,21 +892,33 @@ function saveQuestFromForm(){
   var eid=document.getElementById("editingQuestId").value;
   if(!cat||!title){showToast("请先填写分类和内容");return}
   if(eid){var q=data.mainQuests.find(function(x){return x.id===eid});if(q){q.category=cat;q.title=title;q.points=pts;showToast("主线已更新")}}
-  else{data.mainQuests.unshift({id:"q"+Date.now(),category:cat,title:title,points:pts,done:false});showToast("主线已添加")}
-  saveData();renderQuests();resetQuestForm();
+  else{data.mainQuests.unshift({id:"q"+Date.now(),category:cat,title:title,points:pts,done:false});if(!data.questCatOrder)data.questCatOrder=[];if(data.questCatOrder.indexOf(cat)<0)data.questCatOrder.unshift(cat);showToast("主线已添加")}
+  saveData();renderQuests();resetQuestForm();closeQuestModal();switchTab("main");
+}
+function quickRecordQuest(id){
+  var q=data.mainQuests.find(function(x){return x.id===id});if(!q)return;
+  var actionsEl=document.getElementById("dailyActions");
+  if(actionsEl)actionsEl.value=q.title;
+  updateDailyDraftTimes();
+  addDailyEntry("main");
 }
 function editQuest(id){
   var q=data.mainQuests.find(function(x){return x.id===id});if(!q)return;
   document.getElementById("questCategoryInput").value=q.category;document.getElementById("questTitleInput").value=q.title;
-  document.getElementById("questPointsInput").value=q.points;document.getElementById("editingQuestId").value=q.id;showToast("已载入编辑")
+  document.getElementById("questPointsInput").value=q.points;document.getElementById("editingQuestId").value=q.id;
+  var t=document.getElementById("questOverlayTitle");if(t)t.textContent="✏ 编辑任务";
+  var box=document.getElementById("questCategoryPick");if(box)box.style.display="none";
+  var ov=document.getElementById("questOverlay");if(ov)ov.style.display="flex";
 }
 function removeQuest(id){if(!confirm("确定删除？"))return;data.mainQuests=data.mainQuests.filter(function(x){return x.id!==id});saveData();renderQuests();resetQuestForm();showToast("主线已删除")}
 function editCategory(oldName){
   var nn=prompt("编辑分类名称：",oldName);if(nn!==null&&nn.trim()!==""&&nn.trim()!==oldName){
-    data.mainQuests.forEach(function(q){if(q.category===oldName)q.category=nn.trim()});saveData();renderQuests();showToast("分类已更新")
+    data.mainQuests.forEach(function(q){if(q.category===oldName)q.category=nn.trim()});
+    if(data.questCatOrder){var oi=data.questCatOrder.indexOf(oldName);if(oi>=0)data.questCatOrder[oi]=nn.trim()}
+    saveData();renderQuests();showToast("分类已更新")
   }
 }
-function deleteCategory(cn){if(!confirm('确定删除整个"'+cn+'"分类及其所有任务？此操作不可恢复。'))return;data.mainQuests=data.mainQuests.filter(function(q){return q.category!==cn});saveData();renderQuests();updateStats();renderLevelGrid();showToast("已删除分类："+cn)}
+function deleteCategory(cn){if(!confirm('确定删除整个"'+cn+'"分类及其所有任务？此操作不可恢复。'))return;data.mainQuests=data.mainQuests.filter(function(q){return q.category!==cn});if(data.questCatOrder){var oi=data.questCatOrder.indexOf(cn);if(oi>=0)data.questCatOrder.splice(oi,1)}saveData();renderQuests();updateStats();renderLevelGrid();showToast("已删除分类："+cn)}
 function moveQuest(id,dir){
   var idx=data.mainQuests.findIndex(function(q){return q.id===id});if(idx<0)return;
   var q=data.mainQuests[idx],si;
@@ -598,11 +929,13 @@ function moveQuest(id,dir){
 
 // Levels
 function renderLevelGrid(){
-  var t=calcTotalPoints(),cl=calcLevel(t)+1,c=document.getElementById("levelGrid");
-  c.innerHTML=data.levelRewards.map(function(r){
+  var t=calcDisplayPoints(),cl=calcLevel(t)+1,c=document.getElementById("levelGrid");
+  c.innerHTML=data.levelRewards.map(function(r,idx){
     var reached=r.lv<=cl,cb='';
+    var isLast=idx===data.levelRewards.length-1;
+    var delBtn=isLast?'<button class="level-del" title="删除该等级奖励" onclick="deleteLevelReward('+idx+')">&#xd7;</button>':'';
     if(reached){cb=r.claimed?'<button class="btn btn-sm lv-btn" style="background:#4fc3f7;color:#ffffff" onclick="claimReward('+r.lv+')">✅ 已领取</button>':'<button class="btn btn-sm lv-btn" onclick="claimReward('+r.lv+')">🎁 领取</button>'}
-    return'<div class="level-item '+(reached?'reached':'')+'"><div class="lv-name">Lv.'+r.lv+' '+(r.lv===cl?'👈 当前':'')+' <button class="btn btn-sm btn-outline" style="padding:1px 4px;font-size:0.6em;color:#ff4e50" onclick="deleteLevelReward('+r.lv+')">🗑</button></div><div style="font-size:0.7em;color:#6b7280">需累计 '+r.need+' 点</div><div class="lv-reward">'+r.reward+' <button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="editReward('+r.lv+')">✏</button></div>'+cb+'</div>';
+    return'<div class="level-item '+(reached?'reached':'')+'">'+delBtn+'<div class="lv-name">Lv.'+r.lv+' '+(r.lv===cl?'👈 当前':'')+'</div><div style="font-size:0.7em;color:#6b7280">需累计 '+r.need+' 点</div><div class="lv-reward">'+r.reward+' <button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="editReward('+r.lv+')">✏</button></div>'+cb+'</div>';
   }).join("")+'<button class="btn btn-sm btn-outline" style="margin-top:8px;width:100%" onclick="addLevelReward()">+ 新增等级奖励</button>';
   var nl=cl,pt=calcLevelPoints(nl-1),nt=calcLevelPoints(nl),pg=Math.min(100,Math.max(0,((t-pt)/(nt-pt))*100));
   document.getElementById("levelBar").style.width=pg+"%";
@@ -622,7 +955,7 @@ function addLevelReward(){
   var nl=data.levelRewards.length+1,ln=data.levelRewards.length>0?data.levelRewards[data.levelRewards.length-1].need:0;
   data.levelRewards.push({lv:nl,need:ln+25+(nl-1)*5,reward:"还没想好",claimed:false});saveData();renderLevelGrid();showToast("+ 已添加 Lv."+nl)
 }
-function deleteLevelReward(lv){if(!confirm("确定删除 Lv."+lv+" 奖励？"))return;data.levelRewards=data.levelRewards.filter(function(r){return r.lv!==lv});saveData();renderLevelGrid();showToast("已删除 Lv."+lv)}
+function deleteLevelReward(idx){var r=data.levelRewards[idx];if(!r)return;if(!confirm("确定删除 Lv."+r.lv+" 奖励？"))return;data.levelRewards.splice(idx,1);saveData();renderLevelGrid();showToast("已删除 Lv."+r.lv)}
 
 // Roulette
 var currentRouletteType="放松转盘",isSpinning=false;
@@ -667,19 +1000,187 @@ function restoreFivePoints(){data.balance=(data.balance||0)+5;saveData();updateS
 function editBalance(){var v=prompt("修改研发点余额：",data.balance||0);if(v!==null){var n=parseInt(v);if(!isNaN(n)){data.balance=n;saveData();updateStats();updateSpinRemaining();showToast("余额已更新为 "+n)}}}
 
 // Tabs
+function openRoulette(){
+  document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});
+  document.getElementById("page-roulette").classList.add("active");
+  var headerPanel=document.getElementById("headerPanel");
+  if(headerPanel)headerPanel.style.display="none";
+  renderRouletteTabs();renderRouletteItems();updateSpinRemaining();
+}
+function closeRoulette(){switchTab("rewards")}
 function switchTab(tab){
+  if(currentMode==="daily"&&(tab==="main"||tab==="rewards"))tab="daily";
   document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active")});
   document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});
-  var map={daily:1,main:2,rewards:3,roulette:4};
-  document.querySelector(".tab:nth-child("+map[tab]+")").classList.add("active");
-  document.getElementById("page-"+tab).classList.add("active");var headerPanel=document.getElementById("headerPanel");if(headerPanel)headerPanel.style.display=(tab==="rewards")?"block":"none";
+  var tabIds={daily:"tabDaily",main:"tabMain",rewards:"tabRewards",settings:"tabSettings",goal:"tabGoal"};
+  var tabEl=tabIds[tab]?document.getElementById(tabIds[tab]):null;
+  if(tabEl)tabEl.classList.add("active");
+  var pageId="page-"+tab;
+  if(currentMode==="daily"&&tab==="daily")pageId="page-daily-mode";
+  if(currentMode==="daily"&&tab==="settings")pageId="page-settings-daily";
+  if(currentMode==="daily"&&tab==="goal")pageId="page-goal-daily";
+  var page=document.getElementById(pageId);
+  if(page)page.classList.add("active");
+  var headerPanel=document.getElementById("headerPanel");if(headerPanel)headerPanel.style.display=(tab==="rewards")?"block":"none";
   if(tab==="rewards")renderLevelGrid();
-  if(tab==="roulette"){renderRouletteTabs();renderRouletteItems();updateSpinRemaining()}
-  if(tab==="main"){renderQuests();renderDailyTodos();populateFoolTimeSelect();}if(tab==="daily"){renderDailyList();updateDailyDraftTimes();var today=getLocalDateString();var df=document.getElementById("exportDateFrom");var dt=document.getElementById("exportDateTo");if(df)df.value=today;if(dt)dt.value=today}
+  if(tab==="main"){renderQuests();renderDailyTodos();populateFoolTimeSelect();}
+  if(tab==="goal"){renderDailyTodos();renderGoals();}
+  if(tab==="daily"){
+    if(currentMode==="daily"){renderDailyModeList();updateDailyDraftTimesDaily();}
+    else{renderDailyList();updateDailyDraftTimes();var today=getLocalDateString();var df=document.getElementById("exportDateFrom");var dt=document.getElementById("exportDateTo");if(df)df.value=today;if(dt)dt.value=today}
+  }
+  if(tab==="settings")renderModeButtons();
 }
 
 // Toast
 function showToast(msg){var c=document.getElementById("toastContainer"),t=document.createElement("div");t.className="toast";t.textContent=msg;c.appendChild(t);setTimeout(function(){t.remove()},2000)}
+
+// === MODE SYSTEM (模式切换) ===
+var currentMode="daily";
+try{var savedMode=localStorage.getItem("growth_mode");if(savedMode==="main")currentMode="main"}catch(e){}
+function saveMode(){try{localStorage.setItem("growth_mode",currentMode)}catch(e){}}
+function requestMode(m){
+  if(m===currentMode){showToast(m==="main"?"已处于主线模式":"已处于日常模式");return}
+  if(m==="main"){
+    if(!confirm("是否进入主线模式？"))return;
+    currentMode="main";
+    saveMode();
+    applyMode();
+    showToast("已进入主线模式");
+  }else{
+    if(!confirm("是否退出主线模式，进入日常模式？"))return;
+    currentMode="daily";
+    saveMode();
+    applyMode();
+    showToast("已进入日常模式");
+  }
+}
+function applyMode(){
+  var mainTab=document.getElementById("tabMain");
+  var rewardsTab=document.getElementById("tabRewards");
+  var goalTab=document.getElementById("tabGoal");
+  if(mainTab)mainTab.style.display=currentMode==="main"?"":"none";
+  if(rewardsTab)rewardsTab.style.display=currentMode==="main"?"":"none";
+  if(goalTab)goalTab.style.display=currentMode==="daily"?"":"none";
+  renderModeButtons();
+  switchTab(currentMode==="main"?"main":"daily");
+}
+function renderModeButtons(){
+  document.querySelectorAll(".mode-btn").forEach(function(b){
+    var m=b.getAttribute("data-mode");
+    b.classList.toggle("active",m===currentMode);
+    if(m==="main"){
+      if(currentMode==="main"){
+        b.textContent="🎯 退出主线模式";
+        b.setAttribute("onclick","requestMode('daily')");
+      }else{
+        b.textContent="🎯 主线模式";
+        b.setAttribute("onclick","requestMode('main')");
+      }
+    }else{
+      b.textContent="☀️ 日常模式";
+      b.setAttribute("onclick","requestMode('daily')");
+    }
+  });
+}
+
+// === DAILY MODE (日常模式：独立数据 growth_system_data_daily) ===
+var DEFAULT_DAILY_DATA={dailyLog:[], futureGoals:[]};
+var dataDaily=null;
+function loadDailyData(){
+  var saved=null;
+  try{saved=localStorage.getItem("growth_system_data_daily")}catch(e){}
+  if(saved){
+    try{
+      var p=JSON.parse(saved);
+      dataDaily={dailyLog:Array.isArray(p.dailyLog)?p.dailyLog:[], futureGoals:Array.isArray(p.futureGoals)?p.futureGoals:[]};
+    }catch(e){dataDaily=JSON.parse(JSON.stringify(DEFAULT_DAILY_DATA))}
+  }else{
+    dataDaily=JSON.parse(JSON.stringify(DEFAULT_DAILY_DATA));
+  }
+}
+function saveDailyData(){try{localStorage.setItem("growth_system_data_daily",JSON.stringify(dataDaily))}catch(e){}}
+function getDailyLastEndMinutes(date){
+  var items=(dataDaily.dailyLog||[]).filter(function(item){return item.date===date&&item.endTime});
+  if(!items.length)return 0;
+  return items.reduce(function(max,item){return Math.max(max,parseTimeToMinutes(item.endTime))},0);
+}
+function updateDailyDraftTimesDaily(){
+  var now=new Date();
+  var today=getLocalDateString(now);
+  var startEl=document.getElementById("dailyModeStartTime");
+  var endEl=document.getElementById("dailyModeEndTime");
+  if(!startEl||!endEl)return;
+  var startManual=startEl.dataset.manual==="1";
+  var endManual=endEl.dataset.manual==="1";
+  var startM=startManual?parseTimeToMinutes(startEl.value):getDailyLastEndMinutes(today);
+  var endM=endManual?parseTimeToMinutes(endEl.value):parseTimeToMinutes(getLocalTimeString(now));
+  if(endM<startM)endM=startM;
+  if(!startManual)startEl.value=formatMinutesToTime(startM);
+  if(!endManual)endEl.value=formatMinutesToTime(endM);
+  var duration=endM-startM;
+  var durationEl=document.getElementById("dailyModeDuration");
+  if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");
+}
+function openDailyRecordModal(){
+  var ov=document.getElementById("dailyRecordOverlay");
+  if(!ov)return;
+  updateDailyDraftTimesDaily();
+  ov.style.display="flex";
+}
+function closeDailyRecordModal(){
+  var ov=document.getElementById("dailyRecordOverlay");
+  if(ov)ov.style.display="none";
+}
+function addDailyModeRecord(){
+  var actions=document.getElementById("dailyModeActions").value.trim();
+  var startText=document.getElementById("dailyModeStartTime").value.trim();
+  var endText=document.getElementById("dailyModeEndTime").value.trim();
+  var start=parseTimeToMinutes(startText);
+  var end=parseTimeToMinutes(endText);
+  var duration=Math.max(0,end-start);
+  dataDaily.dailyLog.push({date:getLocalDateString(),kind:"daily",startTime:startText,endTime:endText,clockCount:duration,actions:actions});
+  document.getElementById("dailyModeActions").value="";
+  var endEl=document.getElementById("dailyModeEndTime");
+  if(endEl)endEl.dataset.manual="0";
+  saveDailyData();renderDailyModeList();updateDailyDraftTimesDaily();closeDailyRecordModal();
+  showToast("日常记录成功");
+}
+function mergeToLastDailyRecord(){
+  if(!dataDaily.dailyLog.length){showToast("没有可合并的记录");return}
+  var startText=document.getElementById("dailyModeStartTime").value.trim();
+  var endText=document.getElementById("dailyModeEndTime").value.trim();
+  var duration=parseTimeToMinutes(endText)-parseTimeToMinutes(startText);
+  if(duration<=0){showToast("当前没有未记录的时间");return}
+  var last=dataDaily.dailyLog[dataDaily.dailyLog.length-1];
+  if(last.date!==getLocalDateString()){showToast("上一次记录不在同一天，无法合并");return}
+  var oldEnd=parseTimeToMinutes(last.endTime);
+  last.endTime=formatMinutesToTime(oldEnd+duration);
+  last.clockCount=(last.clockCount||0)+duration;
+  var endEl=document.getElementById("dailyModeEndTime");
+  if(endEl){endEl.value=formatMinutesToTime(parseTimeToMinutes(startText));endEl.dataset.manual="0"}
+  saveDailyData();renderDailyModeList();updateDailyDraftTimesDaily();closeDailyRecordModal();
+  showToast("已合并 "+formatDurationLabel(duration)+" 到上一次记录");
+}
+function renderDailyModeList(){
+  var c=document.getElementById("dailyModeTimeline");
+  if(!c)return;
+  var today=getLocalDateString();
+  var entries=(dataDaily.dailyLog||[]).filter(function(item){return item.date===today});
+  if(!entries.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">今天还没有时间记录</p>';return}
+  var html=entries.map(function(d){
+    var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
+    var content=d.actions||"";
+    return '<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5"><span style="color:#6b7280;white-space:nowrap">'+escapeHtml(range)+'</span><span style="flex:1;color:#1f2937;white-space:pre-line">'+escapeHtml(content)+'</span></div>';
+  }).join("");
+  var lastEndMins=getDailyLastEndMinutes(today);
+  var nowMins=parseTimeToMinutes(getLocalTimeString(new Date()));
+  if(nowMins>lastEndMins){
+    var gapMins=nowMins-lastEndMins;
+    html+='<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5"><span style="color:#6b7280;white-space:nowrap">'+formatMinutesToTime(lastEndMins)+'~'+formatMinutesToTime(nowMins)+'</span><span style="background:#e5e7eb;color:#4b5563;flex-shrink:0;font-size:.75em;font-weight:700;padding:3px 8px;border-radius:999px">'+formatDurationLabel(gapMins)+'未记录</span></div>';
+  }
+  c.innerHTML=html;
+}
 
 // Init
 function exportTimelineToday(){
@@ -750,12 +1251,224 @@ function showLevelUpModal(lv){
 function closeLevelUpModal(){var el=document.getElementById("levelupOverlay");if(el)el.remove()}
 function claimRewardFromModal(lv){var r=data.levelRewards.find(function(x){return x.lv===lv});if(r&&!r.claimed){r.claimed=true;saveData();renderLevelGrid();showToast("🎉 已领取 Lv."+lv+" 奖励！")}closeLevelUpModal()}
 
-function renderDailyTodos(){var todos=data.dailyTodos||[];var html='';todos.forEach(function(todo,idx){html+='<div class="todo-item'+(todo.done?' todo-done':'')+'"><div class="todo-check'+(todo.done?' todo-checked':'')+'" onclick="toggleDailyTodo('+idx+')">'+(todo.done?'&#x2713;':'')+'</div><span class="todo-text">'+escapeHtml(todo.text)+'</span><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em;color:#f59e0b" title="转移到主线任务" onclick="transferTodoToQuest('+idx+')">→主线</button><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="deleteDailyTodo('+idx+')">&#xd7;</button></div>'});document.getElementById('dailyTodoList').innerHTML=html||'<div style="color:#666;font-size:0.8em">还没有待办，添加一条吧</div>'}
-function addDailyTodo(){var inp=document.getElementById('newTodoInput');var text=(inp.value||'').trim();if(!text){showToast('请先输入内容');return}if(!data.dailyTodos)data.dailyTodos=[];data.dailyTodos.push({text:text,done:false});saveData();inp.value='';renderDailyTodos();showToast('+ 已添加')}
+function renderDailyTodos(){
+  var todos=data.dailyTodos||[];var html='';
+  todos.forEach(function(todo,idx){
+    var whenHtml='';
+    var w=todo.when;
+    if(w&&w.type==='time'&&w.time)whenHtml='<span class="todo-when">'+escapeHtml(formatMinutesToTime(parseTimeToMinutes(w.time)))+'</span>';
+    else if(w&&w.type==='range'&&w.start&&w.end)whenHtml='<span class="todo-when">'+escapeHtml(formatMinutesToTime(parseTimeToMinutes(w.start))+'~'+formatMinutesToTime(parseTimeToMinutes(w.end)))+'</span>';
+    html+='<div class="todo-item'+(todo.done?' todo-done':'')+'" data-todo-idx="'+idx+'"><div class="todo-check'+(todo.done?' todo-checked':'')+'" onclick="toggleDailyTodo('+idx+')">'+(todo.done?'&#x2713;':'')+'</div>'+whenHtml+'<span class="todo-text">'+escapeHtml(todo.text)+'</span><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="editDailyTodo('+idx+')">✏</button><button class="btn btn-sm btn-outline" style="padding:2px 6px;font-size:0.7em" onclick="deleteDailyTodo('+idx+')">&#xd7;</button><span class="drag-handle" title="拖动排序">☰</span></div>'
+  });
+  var empty='<div style="color:#666;font-size:0.8em">还没有待办，添加一条吧</div>';
+  var a=document.getElementById('dailyTodoList');if(a)a.innerHTML=html||empty;
+  var b=document.getElementById('dailyTodoListGoal');if(b)b.innerHTML=html||empty;
+}
+// === 拖拽排序（pointer 事件，触摸/鼠标通用） ===
+var __dragState=null;
+function bindDragSort(list){
+  if(!list)return;
+  list.addEventListener("pointerdown",function(e){
+    var handle=e.target.closest(".drag-handle");
+    if(!handle)return;
+    var cfg=null;
+    if(list.id==="dailyTodoList"||list.id==="dailyTodoListGoal"){
+      var ti=handle.closest(".todo-item");
+      if(ti)cfg={item:ti,zone:ti.parentElement,itemSel:".todo-item",onOrder:onTodoReorder};
+    }else if(list.id==="goalList"){
+      var gi=handle.closest(".goal-item");
+      if(gi)cfg={item:gi,zone:gi.parentElement,itemSel:".goal-item",onOrder:onGoalReorder};
+    }else if(list.id==="questList"){
+      var qi=handle.closest(".quest-item");
+      if(qi)cfg={item:qi,zone:qi.parentElement,itemSel:".quest-item",onOrder:onQuestReorder};
+      else{
+        var cat=handle.closest(".quest-category");
+        if(cat)cfg={item:cat,zone:cat.parentElement,itemSel:".quest-category",onOrder:onQuestCatReorder};
+      }
+    }
+    if(!cfg)return;
+    __dragState=cfg;__dragState.y=e.clientY;__dragState.startY=e.clientY;__dragState.moved=false;
+    try{if(cfg.item.setPointerCapture)cfg.item.setPointerCapture(e.pointerId)}catch(err){}
+  });
+  list.addEventListener("pointermove",function(e){
+    var s=__dragState;
+    if(!s)return;
+    if(!s.moved&&Math.abs(e.clientY-s.startY)>6){s.moved=true;s.item.classList.add("drag-sorting")}
+    if(!s.moved)return;
+    e.preventDefault();
+    var siblings=Array.prototype.slice.call(s.zone.children).filter(function(el){return el!==s.item&&el.matches(s.itemSel)});
+    var after=null;
+    siblings.forEach(function(el){
+      var r=el.getBoundingClientRect();
+      var mid=r.top+r.height/2;
+      if(e.clientY>mid)after=el;
+    });
+    if(after){if(after.nextSibling!==s.item)s.zone.insertBefore(s.item,after.nextSibling)}
+    else{if(s.zone.firstChild!==s.item)s.zone.insertBefore(s.item,s.zone.firstChild)}
+  });
+  function endDrag(){
+    var s=__dragState;
+    if(!s)return;
+    __dragState=null;
+    s.item.classList.remove("drag-sorting");
+    if(s.moved&&s.onOrder){
+      var els=Array.prototype.slice.call(s.zone.children).filter(function(el){return el.matches(s.itemSel)});
+      s.onOrder(els);
+    }
+  }
+  list.addEventListener("pointerup",endDrag);
+  list.addEventListener("pointercancel",endDrag);
+}
+function onTodoReorder(items){
+  var arr=data.dailyTodos||[];
+  data.dailyTodos=items.map(function(el){return arr[parseInt(el.getAttribute("data-todo-idx"),10)]}).filter(Boolean);
+  saveData();renderDailyTodos();showToast("已保存排序");
+}
+function onQuestReorder(items){
+  var cat=items.length?items[0].parentElement.getAttribute("data-cat"):"";
+  var ids=items.map(function(el){return el.getAttribute("data-qid")});
+  var byId={};data.mainQuests.forEach(function(q){byId[q.id]=q});
+  var ordered=ids.map(function(id){return byId[id]}).filter(Boolean);
+  var rest=data.mainQuests.filter(function(q){return q.category===cat&&!q.done&&ids.indexOf(q.id)<0});
+  var done=data.mainQuests.filter(function(q){return q.category===cat&&q.done});
+  var others=data.mainQuests.filter(function(q){return q.category!==cat});
+  data.mainQuests=others.concat(ordered).concat(rest).concat(done);
+  saveData();renderQuests();showToast("已保存排序");
+}
+function onQuestCatReorder(items){
+  data.questCatOrder=items.map(function(el){return el.getAttribute("data-cat")});
+  saveData();renderQuests();showToast("已保存排序");
+}
+var todoWhenType="none";
+var todoEditingIdx=null;
+function selectTodoWhen(type){
+  todoWhenType=type;
+  ["none","time","range"].forEach(function(t){
+    var btn=document.getElementById("todoWhen"+t.charAt(0).toUpperCase()+t.slice(1)+"Btn");
+    if(btn)btn.classList.toggle("active",t===type);
+  });
+  var tw=document.getElementById("todoWhenTimeWrap");
+  var rw=document.getElementById("todoWhenRangeWrap");
+  if(tw)tw.style.display=(type==="time"?"block":"none");
+  if(rw)rw.style.display=(type==="range"?"block":"none");
+}
+function resetTodoWhen(){
+  todoWhenType="none";
+  selectTodoWhen("none");
+  ["todoWhenTime","todoWhenStart","todoWhenEnd"].forEach(function(id){var el=document.getElementById(id);if(el)el.value=""});
+}
+function collectTodoWhen(){
+  if(todoWhenType==="time"){
+    var time=document.getElementById("todoWhenTime").value;
+    if(time)return {type:"time",time:time};
+  }else if(todoWhenType==="range"){
+    var st=document.getElementById("todoWhenStart").value;
+    var en=document.getElementById("todoWhenEnd").value;
+    if(st&&en)return {type:"range",start:st,end:en};
+  }
+  return null;
+}
+function openTodoModal(){
+  var ov=document.getElementById("todoOverlay");if(ov)ov.style.display="flex";
+  var t=document.getElementById("todoOverlayTitle");if(t)t.textContent="➕ 添加备忘录";
+  var sb=document.getElementById("todoSaveBtn");if(sb)sb.textContent="💾 保存";
+  todoEditingIdx=null;
+  resetTodoWhen();
+  var inp=document.getElementById("newTodoInput");if(inp){inp.value="";inp.focus()}
+}
+function editDailyTodo(idx){
+  var todo=data.dailyTodos&&data.dailyTodos[idx];if(!todo)return;
+  todoEditingIdx=idx;
+  var ov=document.getElementById("todoOverlay");if(ov)ov.style.display="flex";
+  var t=document.getElementById("todoOverlayTitle");if(t)t.textContent="✏️ 编辑备忘录";
+  var sb=document.getElementById("todoSaveBtn");if(sb)sb.textContent="💾 保存修改";
+  var inp=document.getElementById("newTodoInput");if(inp){inp.value=todo.text||"";inp.focus()}
+  var when=todo.when||{type:"none"};
+  todoWhenType=when.type||"none";
+  selectTodoWhen(todoWhenType);
+  var timeEl=document.getElementById("todoWhenTime");if(timeEl)timeEl.value=when.time||"";
+  var stEl=document.getElementById("todoWhenStart");if(stEl)stEl.value=when.start||"";
+  var enEl=document.getElementById("todoWhenEnd");if(enEl)enEl.value=when.end||"";
+}
+function closeTodoModal(){var ov=document.getElementById("todoOverlay");if(ov)ov.style.display="none"}
+function saveDailyTodo(){
+  var inp=document.getElementById('newTodoInput');
+  var text=(inp.value||'').trim();
+  if(!text){showToast('请先输入内容');return}
+  if(!data.dailyTodos)data.dailyTodos=[];
+  var when=collectTodoWhen();
+  if(todoEditingIdx!==null&&data.dailyTodos[todoEditingIdx]){
+    data.dailyTodos[todoEditingIdx].text=text;
+    data.dailyTodos[todoEditingIdx].when=when;
+  }else{
+    data.dailyTodos.push({text:text,done:false,when:when});
+  }
+  saveData();inp.value='';renderDailyTodos();closeTodoModal();showToast(todoEditingIdx!==null?'✓ 已更新':'+ 已添加');
+  todoEditingIdx=null;
+}
 function toggleDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos[idx].done=!data.dailyTodos[idx].done;saveData();renderDailyTodos()}
 function deleteDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();showToast('已删除')}
 
 
+// === 近期目标 (Relevant Goals, 日常模式独有) ===
+var goalEditingIdx=null;
+function renderGoals(){
+  var c=document.getElementById("goalList");
+  if(!c)return;
+  var goals=dataDaily.futureGoals||[];
+  var html=goals.map(function(g,idx){
+    return '<div class="goal-item'+(g.done?' done':'')+'" data-goal-idx="'+idx+'">'
+      +'<div class="goal-check'+(g.done?' checked':'')+'" onclick="toggleGoal('+idx+')">'+(g.done?'&#x2713;':'')+'</div>'
+      +'<span class="goal-time">'+escapeHtml(g.due||'')+'</span>'
+      +'<span class="goal-text">'+escapeHtml(g.text)+'</span>'
+      +'<button class="btn btn-xs btn-outline" title="编辑" onclick="editGoal('+idx+')">&#x270F;</button>'
+      +'<button class="btn btn-xs btn-outline" title="删除" style="color:#ff4e50" onclick="deleteGoal('+idx+')">&#xd7;</button>'
+      +'<span class="drag-handle" title="拖动排序">☰</span>'
+      +'</div>';
+  }).join("");
+  c.innerHTML=html||'<p style="color:#666;text-align:center;padding:16px">还没有近期目标，点右上角 ➕ 添加吧 🚀</p>';
+}
+function openGoalModal(){
+  var ov=document.getElementById("goalOverlay");if(ov)ov.style.display="flex";
+  var t=document.getElementById("goalOverlayTitle");if(t)t.textContent="➕ 添加近期目标";
+  var sb=document.getElementById("goalSaveBtn");if(sb)sb.textContent="💾 保存";
+  goalEditingIdx=null;
+  var d=document.getElementById("goalDue");if(d)d.value="";
+  var tx=document.getElementById("goalText");if(tx){tx.value="";tx.focus()}
+}
+function editGoal(idx){
+  var g=dataDaily.futureGoals&&dataDaily.futureGoals[idx];if(!g)return;
+  goalEditingIdx=idx;
+  var ov=document.getElementById("goalOverlay");if(ov)ov.style.display="flex";
+  var t=document.getElementById("goalOverlayTitle");if(t)t.textContent="✏️ 编辑近期目标";
+  var sb=document.getElementById("goalSaveBtn");if(sb)sb.textContent="💾 保存修改";
+  var d=document.getElementById("goalDue");if(d)d.value=g.due||"";
+  var tx=document.getElementById("goalText");if(tx){tx.value=g.text||"";tx.focus()}
+}
+function closeGoalModal(){var ov=document.getElementById("goalOverlay");if(ov)ov.style.display="none"}
+function saveGoal(){
+  var tx=document.getElementById("goalText");
+  var text=(tx.value||"").trim();
+  if(!text){showToast("请先输入目标内容");return}
+  var d=document.getElementById("goalDue");
+  var due=(d.value||"").trim();
+  if(!dataDaily.futureGoals)dataDaily.futureGoals=[];
+  if(goalEditingIdx!==null&&dataDaily.futureGoals[goalEditingIdx]){
+    dataDaily.futureGoals[goalEditingIdx].text=text;
+    dataDaily.futureGoals[goalEditingIdx].due=due;
+  }else{
+    dataDaily.futureGoals.push({id:"g"+Date.now(),due:due,text:text,done:false});
+  }
+  saveDailyData();renderGoals();closeGoalModal();showToast(goalEditingIdx!==null?"✓ 已更新":"+ 已添加");
+  goalEditingIdx=null;
+}
+function toggleGoal(idx){if(!dataDaily.futureGoals||!dataDaily.futureGoals[idx])return;dataDaily.futureGoals[idx].done=!dataDaily.futureGoals[idx].done;saveDailyData();renderGoals()}
+function deleteGoal(idx){if(!dataDaily.futureGoals||!dataDaily.futureGoals[idx])return;if(!confirm("确定删除？"))return;dataDaily.futureGoals.splice(idx,1);saveDailyData();renderGoals();showToast("已删除")}
+function onGoalReorder(items){
+  var arr=dataDaily.futureGoals||[];
+  dataDaily.futureGoals=items.map(function(el){return arr[parseInt(el.getAttribute("data-goal-idx"),10)]}).filter(Boolean);
+  saveDailyData();renderGoals();showToast("已保存排序");
+}
 function transferTodoToQuest(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;var todo=data.dailyTodos[idx];if(!data.quests)data.quests=[];data.quests.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),category:"",title:todo.text,points:0,done:false,archived:false});data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();renderQuests();showToast("已转移到主线任务")}
 
 
@@ -788,10 +1501,21 @@ function startFoolTime(){
   if(!questId){showToast("请先选择一个主线任务");return;}
   var quest=data.mainQuests.find(function(q){return q.id===questId});
   if(!quest){showToast("任务不存在");return;}
-  data.foolTime={questId:questId,questTitle:quest.title,startTime:Date.now(),duration:10*60*1000,active:true};
+  data.foolTime={questId:questId,questTitle:quest.title,startTime:Date.now(),endTime:Date.now()+10*60*1000,duration:10*60*1000,active:true};
   saveData();
+  openFoolTimeModal();
   renderFoolTimeUI();
   showToast("✅ 开始行动，10分钟倒计时");
+}
+function openFoolTimeModal(){
+  var ov=document.getElementById("foolTimeOverlay");
+  if(!ov)return;
+  renderFoolTimeUI();
+  ov.style.display="flex";
+}
+function closeFoolTimeModal(){
+  var ov=document.getElementById("foolTimeOverlay");
+  if(ov)ov.style.display="none";
 }
 function renderFoolTimeUI(){
   var ft=data.foolTime;
@@ -810,8 +1534,8 @@ function renderFoolTimeUI(){
 function tickFoolTime(){
   var ft=data.foolTime;
   if(!ft||!ft.active)return;
-  var elapsed=Date.now()-ft.startTime;
-  var remaining=Math.max(0,ft.duration-elapsed);
+  var end=ft.endTime||(ft.startTime+ft.duration);
+  var remaining=Math.max(0,end-Date.now());
   var totalSec=Math.floor(remaining/1000);
   var min=Math.floor(totalSec/60);
   var sec=totalSec%60;
@@ -819,6 +1543,9 @@ function tickFoolTime(){
   if(timerEl)timerEl.textContent=min+":"+(sec<10?"0":"")+sec;
   var barEl=document.getElementById("foolTimeBarFill");
   if(barEl)barEl.style.width=(remaining/ft.duration*100)+"%";
+  var frac=Math.max(0,Math.min(1,remaining/(ft.duration||1)));
+  var fl=document.getElementById("foolFlame");
+  if(fl){fl.style.fontSize=(2.0+1.6*frac)+"em";fl.style.opacity=(0.55+0.45*frac);fl.style.filter="drop-shadow(0 0 "+Math.round(6+14*frac)+"px rgba(255,140,0,"+(0.4+0.6*frac).toFixed(2)+"))"}
   if(totalSec<60&&timerEl)timerEl.style.color="#ef4444";
   if(remaining<=0)endFoolTime();
 }
@@ -834,6 +1561,7 @@ function endFoolTime(){
   ft.active=false;
   saveData();
   renderFoolTimeUI();
+  closeFoolTimeModal();
   if(confirm("是否更新到时间记录？")){
     switchTab("daily");
     var actionsEl=document.getElementById("dailyActions");
@@ -850,6 +1578,17 @@ function endFoolTime(){
     showToast("已打开记录弹窗，确认时间后点击记录");
   }
 }
+function openChallengeModal(){
+  var ov=document.getElementById("challengeOverlay");
+  if(!ov)return;
+  populateChallengeSelect();
+  renderChallengeUI();
+  ov.style.display="flex";
+}
+function closeChallengeModal(){
+  var ov=document.getElementById("challengeOverlay");
+  if(ov)ov.style.display="none";
+}
 function startChallenge(){
   var sel=document.getElementById("challengeQuestSelect");
   var questId=sel.value;
@@ -859,7 +1598,7 @@ function startChallenge(){
   var bet=parseInt(document.getElementById("challengeBet").value)||0;
   if(bet<1){showToast("\u8d4c\u6ce8\u81f3\u5c11 1 \u70b9");return;}
   if(bet>(data.balance||0)){showToast("\u7814\u53d1\u70b9\u4f59\u989d\u4e0d\u8db3\uff01\u5f53\u524d\u4f59\u989d "+data.balance);return;}
-  var dur=parseInt(document.getElementById("challengeDuration").value)||60;data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),duration:dur*60*1000,active:true};
+  var dur=parseInt(document.getElementById("challengeDuration").value)||60;data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),endTime:Date.now()+dur*60*1000,duration:dur*60*1000,active:true};
   data.balance=(data.balance||0)-bet;
   saveData();updateStats();renderChallengeUI();populateChallengeSelect();
   showToast("\u26a1 \u6311\u6218\u5f00\u59cb\uff01"+dur+"\u5206\u949f\u5012\u8ba1\u65f6");
@@ -881,8 +1620,8 @@ function renderChallengeUI(){
 function tickChallenge(){
   var ch=data.challenge;
   if(!ch||!ch.active)return;
-  var elapsed=Date.now()-ch.startTime;
-  var remaining=Math.max(0,ch.duration-elapsed);
+  var end=ch.endTime||(ch.startTime+ch.duration);
+  var remaining=Math.max(0,end-Date.now());
   var totalSec=Math.floor(remaining/1000);
   var min=Math.floor(totalSec/60);
   var sec=totalSec%60;
@@ -909,16 +1648,119 @@ function endChallenge(success){
   saveData();updateStats();renderChallengeUI();populateChallengeSelect();
   var timerEl=document.getElementById("challengeTimer");
   if(timerEl)timerEl.style.color="#f59e0b";
+  closeChallengeModal();
 }
 
 function openTimeline(){
+  var exportCard=document.getElementById("timelineExportCard");
+  var analysisCard=document.getElementById("todayAnalysisCard");
+  var dailyExportBtn=document.getElementById("dailyExportTodayBtn");
+  if(exportCard)exportCard.style.display="";
+  if(analysisCard)analysisCard.style.display="";
+  if(dailyExportBtn)dailyExportBtn.style.display="none";
   renderDailyList();
+  var ov=document.getElementById("timelineOverlay");
+  if(ov)ov.style.display="block";
+}
+function openTimelineDaily(){
+  var exportCard=document.getElementById("timelineExportCard");
+  var analysisCard=document.getElementById("todayAnalysisCard");
+  var dailyExportBtn=document.getElementById("dailyExportTodayBtn");
+  if(exportCard)exportCard.style.display="none";
+  if(analysisCard)analysisCard.style.display="none";
+  if(dailyExportBtn)dailyExportBtn.style.display="";
+  renderDailyModeTimelineAll();
   var ov=document.getElementById("timelineOverlay");
   if(ov)ov.style.display="block";
 }
 function closeTimeline(){
   var ov=document.getElementById("timelineOverlay");
   if(ov)ov.style.display="none";
+}
+function getAllTimelineEntries(){
+  var merged=[];
+  (data.dailyLog||[]).forEach(function(d,i){merged.push({date:d.date,startTime:d.startTime,endTime:d.endTime,clockCount:d.clockCount,kind:d.kind||"daily",actions:d.actions,src:"main",srcIdx:i})});
+  (dataDaily.dailyLog||[]).forEach(function(d,i){merged.push({date:d.date,startTime:d.startTime,endTime:d.endTime,clockCount:d.clockCount,kind:"daily",actions:d.actions,src:"daily",srcIdx:i})});
+  merged.sort(function(a,b){
+    if(a.date!==b.date)return a.date<b.date?-1:1;
+    return parseTimeToMinutes(a.startTime||"00:00")-parseTimeToMinutes(b.startTime||"00:00");
+  });
+  return merged;
+}
+function renderDailyModeTimelineAll(){
+  var c=document.getElementById("dailyList");
+  if(!c)return;
+  var merged=getAllTimelineEntries();
+  if(!merged.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">还没有记录，开始添加吧 🚀</p>';return}
+  var groups={};
+  merged.forEach(function(d){
+    var key=d.date||"未知日期";
+    if(!groups[key])groups[key]=[];
+    groups[key].push(d);
+  });
+  var dates=Object.keys(groups).sort(function(a,b){return a<b?1:-1});
+  c.innerHTML=dates.map(function(date){
+    var items=groups[date].sort(function(a,b){return parseTimeToMinutes(a.startTime||"00:00")-parseTimeToMinutes(b.startTime||"00:00")});
+    var html='<div class="timeline-date-title">'+escapeHtml(date)+'</div>';
+    html+=items.map(function(d){
+      var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
+      var duration=typeof d.clockCount==="number"?d.clockCount:0;
+      var kindLabel=(d.kind==="main"&&d.src==="main")?"主线记录":"日常记录";
+      var row='<div class="timeline-row">';
+      row+='<div class="timeline-head"><span class="timeline-range">'+escapeHtml(range)+'</span><span class="timeline-kind '+(d.kind==="main"?"main":"daily")+'">'+kindLabel+'</span><span class="timeline-duration">'+formatDurationLabel(duration)+'</span><button class="btn btn-sm btn-outline" style="color:#0284c7" onclick="editDailyModeEntry(\''+d.src+'\','+d.srcIdx+')">✏</button><button class="btn btn-sm btn-outline" onclick="deleteDailyModeEntry(\''+d.src+'\','+d.srcIdx+')">🗑</button></div>';
+      if(d.actions)row+='<div class="timeline-note">'+escapeHtml(d.actions)+'</div>';
+      row+='</div>';
+      return row;
+    }).join("");
+    return html;
+  }).join("");
+}
+function editDailyModeEntry(src,idx){
+  if(src==="main"){
+    var d=data.dailyLog[idx];if(!d)return;
+    var nt=prompt("编辑记录内容：",d.actions||"");if(nt!==null){d.actions=nt.trim();saveData();renderDailyModeTimelineAll();renderTodayTimeline();renderDailyModeList();showToast("已更新")}
+  }else{
+    var d2=dataDaily.dailyLog[idx];if(!d2)return;
+    var nt2=prompt("编辑记录内容：",d2.actions||"");if(nt2!==null){d2.actions=nt2.trim();saveDailyData();renderDailyModeTimelineAll();renderTodayTimeline();renderDailyModeList();showToast("已更新")}
+  }
+}
+function deleteDailyModeEntry(src,idx){
+  if(!confirm("确定删除？"))return;
+  if(src==="main"){
+    var item=data.dailyLog[idx];if(item){
+      var oldMM=data.mainMinutesTotal||0,oldDM=data.dailyMinutesTotal||0;
+      data.dailyLog.splice(idx,1);
+      if(item.kind==="main"){recalcMainMinutesTotal();var dp=Math.floor((data.mainMinutesTotal||0)/60)-Math.floor(oldMM/60);if(dp!==0)data.balance=(data.balance||0)+dp}
+      else{recalcDailyMinutesTotal();var dp=Math.floor((data.dailyMinutesTotal||0)/1200)-Math.floor(oldDM/1200);if(dp!==0)data.balance=(data.balance||0)+dp}
+    }else{data.dailyLog.splice(idx,1)}
+    saveData();renderDailyModeTimelineAll();renderTodayTimeline();renderDailyModeList();updateStats();showToast("已删除")
+  }else{
+    dataDaily.dailyLog.splice(idx,1);
+    saveDailyData();renderDailyModeTimelineAll();renderTodayTimeline();renderDailyModeList();showToast("已删除")
+  }
+}
+function exportDailyModeToday(){
+  var today=getLocalDateString();
+  var entries=getAllTimelineEntries().filter(function(d){return d.date===today});
+  if(!entries.length){showToast("今天还没有记录");return}
+  var text="时间线导出报告\n";
+  text+="导出范围："+today+" 至 "+today+"\n";
+  text+="导出时间："+new Date().toLocaleString()+"\n";
+  text+="=".repeat(50)+"\n\n";
+  entries.forEach(function(e){
+    var kind=(e.kind==="main"&&e.src==="main")?"【主线记录】":"【日常记录】";
+    var range=e.startTime&&e.endTime?e.startTime+"~"+e.endTime:"";
+    var dur=formatDurationLabel(e.clockCount||0);
+    text+=kind+" "+range+" ("+dur+")"+"\n";
+    if(e.actions)text+="  "+e.actions.replace(/\n/g,"\n  ")+"\n";
+    text+="\n";
+  });
+  var blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="timeline_"+today+".txt";
+  a.click();URL.revokeObjectURL(a.href);
+  showToast("📤 已导出 "+entries.length+" 条记录");
 }
 // === TODAY ANALYSIS (今日分析) ===
 function toggleAIConfig(){
@@ -928,11 +1770,12 @@ function toggleAIConfig(){
 }
 function loadAIConfig(){
   var c=data.aiConfig||{};
-  var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt");
+  var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt"),sp=document.getElementById("aiSugPrompt");
   if(u)u.value=c.url||"";
   if(k)k.value=c.key||"";
   if(m)m.value=c.model||"";
   if(pr)pr.value=c.prompt||"";
+  if(sp)sp.value=c.sugPrompt||"";
 }
 function saveAIConfig(){
   try{
@@ -940,7 +1783,8 @@ function saveAIConfig(){
       url:(document.getElementById("aiUrl").value||"").trim(),
       key:(document.getElementById("aiKey").value||"").trim(),
       model:(document.getElementById("aiModel").value||"").trim(),
-      prompt:(document.getElementById("aiPrompt").value||"").trim()
+      prompt:(document.getElementById("aiPrompt").value||"").trim(),
+      sugPrompt:(document.getElementById("aiSugPrompt").value||"").trim()
     };
     saveData();
     var statusEl=document.getElementById("aiStatus");
@@ -952,7 +1796,7 @@ function saveAIConfig(){
 }
 function analyzeToday(){
   var cfg=data.aiConfig;
-  if(!cfg||!cfg.url||!cfg.key){showToast("请先配置API地址和Key");toggleAIConfig();return;}
+  if(!cfg||!cfg.url||!cfg.key){showToast("请先到「设置」页配置AI");return;}
   var today=getLocalDateString();
   var entries=(data.dailyLog||[]).filter(function(item){return item.date===today});
   if(!entries.length){showToast("今日暂无记录");return;}
@@ -961,17 +1805,28 @@ function analyzeToday(){
     text+=(idx+1)+". "+item.startTime+"~"+item.endTime+" ["+(item.kind==="main"?"主线":"日常")+"] "+(item.actions||"无描述")+"\n";
   });
   var prompt=(cfg.prompt||"请分析这些时间记录，给出改进建议");
-  var statusEl=document.getElementById("aiStatus");
-  if(statusEl)statusEl.textContent="⏳ 正在分析今日记录...";
+  var statusEl=document.getElementById("analysisStatus")||document.getElementById("aiStatus");
+  if(statusEl)statusEl.innerHTML='<span class="ai-hourglass">⏳</span> 正在分析今日记录...';
+  callAI(prompt,text).then(function(report){
+    if(statusEl)statusEl.textContent="";
+    showAnalysisReport(report);
+  }).catch(function(e){
+    var msg=e&&e.message?e.message:String(e);
+    if(statusEl)statusEl.textContent="❌ 分析失败："+msg;
+    showToast("分析失败，请检查API配置");
+  });
+}
+function callAI(prompt,userText){
+  var cfg=data.aiConfig;
   var apiUrl=(cfg.url||"").trim();if(apiUrl&&!/\/chat\/completions$/i.test(apiUrl)){apiUrl=apiUrl.replace(/\/+$/,"")+"/chat/completions";}
-  fetch(apiUrl,{
+  return fetch(apiUrl,{
     method:"POST",
     headers:{"Content-Type":"application/json","Authorization":"Bearer "+cfg.key},
     body:JSON.stringify({
       model:cfg.model||"gpt-4o-mini",
       messages:[
         {role:"system",content:prompt},
-        {role:"user",content:text}
+        {role:"user",content:userText}
       ]
     })
   }).then(function(r){
@@ -985,33 +1840,89 @@ function analyzeToday(){
     if(!txt||!txt.trim())throw new Error("接口返回了空内容");
     var json;
     try{json=JSON.parse(txt)}catch(e){throw new Error("接口返回不是JSON："+txt.slice(0,200))}
-    var report="";
     if(json.choices&&json.choices[0]&&json.choices[0].message&&json.choices[0].message.content){
-      report=json.choices[0].message.content;
+      return json.choices[0].message.content;
     } else if(json.output_text){
-      report=json.output_text;
+      return json.output_text;
     } else if(typeof json.content==="string"){
-      report=json.content;
+      return json.content;
     } else if(json.data){
-      report=typeof json.data==="string"?json.data:JSON.stringify(json.data,null,2);
+      return typeof json.data==="string"?json.data:JSON.stringify(json.data,null,2);
     } else {
-      report=JSON.stringify(json,null,2);
+      return JSON.stringify(json,null,2);
     }
-    if(statusEl)statusEl.textContent="";
-    showAnalysisReport(report);
+  });
+}
+function openSuggestionModal(){
+  var ov=document.getElementById("suggestionOverlay");
+  if(!ov)return;
+  ov.style.display="flex";
+  runSuggestion();
+}
+function closeSuggestionModal(){
+  var ov=document.getElementById("suggestionOverlay");
+  if(ov)ov.style.display="none";
+}
+function runSuggestion(){
+  var cfg=data.aiConfig;
+  var hourglass=document.getElementById("suggestionHourglass");
+  var textEl=document.getElementById("suggestionText");
+  var retryBtn=document.getElementById("suggestionRetryBtn");
+  if(!cfg||!cfg.url||!cfg.key){
+    if(textEl)textEl.textContent="请先到「设置」→「AI 配置」里填写 API 地址和 Key。";
+    if(hourglass)hourglass.style.display="none";
+    if(retryBtn)retryBtn.style.display="none";
+    return;
+  }
+  if(hourglass)hourglass.style.display="block";
+  if(textEl)textEl.textContent="正在结合主线任务和今日备忘录生成行动建议...";
+  if(retryBtn)retryBtn.style.display="none";
+  var todos=data.dailyTodos||[];
+  var text="今日备忘录：\n";
+  if(!todos.length){text+="（今日暂无待办事项）\n";}
+  else{todos.forEach(function(t,i){text+=(i+1)+". "+(t.done?"[已完成] ":"[未完成] ")+t.text+"\n";});}
+  text+="\n主线任务：\n";
+  var quests=(data.mainQuests||[]).filter(function(q){return !q.done});
+  if(!quests.length){text+="（暂无未完成主线任务）\n";}
+  else{quests.forEach(function(q,i){text+=(i+1)+". ["+q.category+"] "+q.title+"（"+q.points+"点）\n";});}
+  var prompt=(cfg.sugPrompt||"请根据今日备忘录，按优先级给出今天的具体行动建议");
+  callAI(prompt,text).then(function(report){
+    if(hourglass)hourglass.style.display="none";
+    if(textEl)textEl.textContent=report;
   }).catch(function(e){
     var msg=e&&e.message?e.message:String(e);
-    if(statusEl)statusEl.textContent="❌ 分析失败："+msg;
-    showToast("分析失败，请检查API配置");
+    if(hourglass)hourglass.style.display="none";
+    if(textEl)textEl.textContent="❌ 分析失败："+msg;
+    if(retryBtn)retryBtn.style.display="block";
   });
 }
 function showAnalysisReport(text){
   var ov=document.getElementById("analysisReportOverlay");
   var content=document.getElementById("analysisReportContent");
   if(content)content.textContent=text;
+  var editBtn=document.getElementById("editReportBtn");
+  if(editBtn)editBtn.textContent="✏️ 编辑报告";
+  if(content){content.setAttribute("contenteditable","false");content.style.outline="none";}
   var saveBtn=document.getElementById("saveReportBtn");
   if(saveBtn)saveBtn.style.display="inline-block";
   if(ov)ov.style.display="block";
+}
+function toggleReportEdit(){
+  var content=document.getElementById("analysisReportContent");
+  var btn=document.getElementById("editReportBtn");
+  if(!content||!btn)return;
+  if(content.getAttribute("contenteditable")==="true"){
+    content.setAttribute("contenteditable","false");
+    content.style.outline="none";
+    btn.textContent="✏️ 编辑报告";
+    showToast("编辑内容已生效，可直接保存");
+  }else{
+    content.setAttribute("contenteditable","true");
+    content.style.outline="2px solid #f59e0b";
+    content.style.outlineOffset="2px";
+    btn.textContent="✔ 完成编辑";
+    content.focus();
+  }
 }
 function saveCurrentReport(){
   var content=document.getElementById("analysisReportContent");
@@ -1083,8 +1994,23 @@ function exportAllReports(){
   var ov=document.getElementById("reportHistoryOverlay");
   if(ov)ov.style.display="none";
 }
-function init(){loadData();renderDailyTodos();document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI()}
-init();setInterval(updateDailyDraftTimes,1000);setInterval(tickChallenge,1000);setInterval(tickFoolTime,1000);
+// Theme
+function setTheme(name){
+  var themes=["default","green","warm","dark"];
+  if(themes.indexOf(name)<0)name="default";
+  document.body.setAttribute("data-theme",name);
+  try{localStorage.setItem("growth_theme",name)}catch(e){}
+  document.querySelectorAll(".theme-btn").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-theme")===name)});
+  showToast("已切换风格");
+}
+function applyTheme(){
+  var t="default";
+  try{var s=localStorage.getItem("growth_theme");if(s)t=s}catch(e){}
+  document.body.setAttribute("data-theme",t);
+  document.querySelectorAll(".theme-btn").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-theme")===t)});
+}
+function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode();if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
+init();setInterval(updateDailyDraftTimes,1000);setInterval(updateDailyDraftTimesDaily,1000);setInterval(tickChallenge,250);setInterval(tickFoolTime,250);
 
 </script>
 
