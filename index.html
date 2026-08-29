@@ -32,6 +32,7 @@ textarea{resize:vertical;min-height:60px}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-sm{padding:6px 12px;font-size:.8em}
 .btn-outline{background:transparent;border:1px solid #9ca3af;color:#6b7280}
+.btn-record-sticky{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(64px + env(safe-area-inset-bottom));margin:0;width:auto;min-width:150px;white-space:nowrap;z-index:55;padding:13px 38px;font-size:1em;border-radius:14px;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
 .day-entry{background:#f5f6f8;border-radius:8px;padding:12px;margin-bottom:8px}
 .day-entry .day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .day-entry .day-date{color:#f59e0b;font-weight:bold}
@@ -164,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="2">
+  <meta name="app-version" content="3">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -184,15 +185,13 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 
 </div></div>
 
-<div class="page active" id="page-daily"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div><div id="todayTimeline"></div></div><div class="card">
-<button class="btn" style="width:100%;padding:14px;font-size:1em" onclick="openRecordModal()">🕒 记录</button>
+<div class="page active" id="page-daily" style="padding-bottom:110px"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div><div id="todayTimeline"></div></div>
+<button class="btn btn-record-sticky" onclick="openRecordModal()">🕒 记录</button>
 </div>
-</div>
-<div class="page" id="page-daily-mode">
+<div class="page" id="page-daily-mode" style="padding-bottom:110px">
 <div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimelineDaily()">📋 查看时间线</button></div><div id="dailyModeTimeline"></div></div>
-<div class="card">
-<button class="btn" style="width:100%;padding:14px;font-size:1em" onclick="openDailyRecordModal()">🕒 记录</button>
-</div>
+
+<button class="btn btn-record-sticky" onclick="openDailyRecordModal()">🕒 记录</button>
 </div>
 <div class="page" id="page-goal-daily">
   <div class="card">
@@ -471,8 +470,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   <div class="form-row"><label>API 地址</label><input type="text" id="aiUrl" placeholder="https://api.deepseek.com/chat/completions"></div>
   <div class="form-row"><label>API Key</label><input type="password" id="aiKey" placeholder="sk-..."></div>
   <div class="form-row"><label>模型</label><input type="text" id="aiModel" placeholder="gpt-4o-mini"></div>
-  <div class="form-row"><label>今日分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="例如：请分析我今天的时间使用情况，找出效率问题和改进建议..."></textarea></div>
-  <div class="form-row"><label>行动建议分析提示词</label><textarea id="aiSugPrompt" rows="5" placeholder="例如：请结合今日备忘录和主线任务，按优先级给出今天的具体行动建议..."></textarea></div>
+  <div class="form-row"><label>今日分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="例如：请分析今日日常/主线时间投入，给3个高质量问题+明日行动建议，不要用markdown"></textarea></div>
+  <div class="form-row"><label>行动建议分析提示词</label><textarea id="aiSugPrompt" rows="5" placeholder="例如：结合今日备忘录和主线任务给优先级行动建议+理由，不要用markdown"></textarea></div>
   <button class="btn btn-sm" onclick="saveAIConfig()" style="margin-top:6px">💾 保存</button>
 </div>
 <div id="aiStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
@@ -1065,7 +1064,7 @@ function requestMode(m){
     showToast("已进入日常模式");
   }
 }
-function applyMode(){
+function applyMode(initial){
   var mainTab=document.getElementById("tabMain");
   var rewardsTab=document.getElementById("tabRewards");
   var goalTab=document.getElementById("tabGoal");
@@ -1073,7 +1072,7 @@ function applyMode(){
   if(rewardsTab)rewardsTab.style.display=currentMode==="main"?"":"none";
   if(goalTab)goalTab.style.display=currentMode==="daily"?"":"none";
   renderModeButtons();
-  switchTab(currentMode==="main"?"main":"daily");
+  switchTab(initial?"daily":(currentMode==="main"?"main":"daily"));
 }
 function renderModeButtons(){
   document.querySelectorAll(".mode-btn").forEach(function(b){
@@ -1842,7 +1841,7 @@ function analyzeToday(){
   entries.forEach(function(item,idx){
     text+=(idx+1)+". "+item.startTime+"~"+item.endTime+" ["+(item.kind==="main"?"主线":"日常")+"] "+(item.actions||"无描述")+"\n";
   });
-  var prompt=(cfg.prompt||"请分析这些时间记录，给出改进建议");
+  var prompt=(cfg.prompt||"请分析我今天的时间使用情况（日常时间和主线时间的投入情况，以及其他时间投入也总结下），给我三个有趣高质量的问题，给我明天的行动建议和理由，不要用markdown格式");
   var statusEl=document.getElementById("analysisStatus")||document.getElementById("aiStatus");
   if(statusEl)statusEl.innerHTML='<span class="ai-hourglass">⏳</span> 正在分析今日记录...';
   callAI(prompt,text).then(function(report){
@@ -1923,7 +1922,7 @@ function runSuggestion(){
   var quests=(data.mainQuests||[]).filter(function(q){return !q.done});
   if(!quests.length){text+="（暂无未完成主线任务）\n";}
   else{quests.forEach(function(q,i){text+=(i+1)+". ["+q.category+"] "+q.title+"（"+q.points+"点）\n";});}
-  var prompt=(cfg.sugPrompt||"请根据今日备忘录，按优先级给出今天的具体行动建议");
+  var prompt=(cfg.sugPrompt||"请结合今日备忘录和未完成的主线任务，分析今天应该优先做什么，按优先级给出行动建议并说明理由，不要用markdown格式");
   callAI(prompt,text).then(function(report){
     if(hourglass)hourglass.style.display="none";
     if(textEl)textEl.textContent=report;
@@ -2047,7 +2046,7 @@ function applyTheme(){
   document.body.setAttribute("data-theme",t);
   document.querySelectorAll(".theme-btn").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-theme")===t)});
 }
-function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode();if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
+function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode(true);if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
 init();setInterval(updateDailyDraftTimes,1000);setInterval(updateDailyDraftTimesDaily,1000);setInterval(tickChallenge,250);setInterval(tickFoolTime,250);
 
 </script>
