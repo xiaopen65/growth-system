@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="3">
+  <meta name="app-version" content="4">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -454,8 +454,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div><div class="card">
 <h3>📥 导入导出</h3>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="exportData()">📥 导出备份</button>
-<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入恢复</button>
+<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="exportData()">📥 导出主线</button>
+<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入主线</button>
 <input type="file" id="importFile" accept=".json" onchange="importData(event)">
 </div>
 </div><div class="card">
@@ -1238,8 +1238,8 @@ function doExportTimeline(from,to){
   showToast("📤 已导出 "+entries.length+" 条记录");
 }
 
-function exportData(){var exportCopy=JSON.parse(JSON.stringify(data));if(exportCopy.aiConfig){exportCopy.aiConfig.key="";}var blob=new Blob([JSON.stringify(exportCopy,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_system_backup_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 数据已导出（不含API Key）")}
-function importData(e){var file=e.target.files[0];if(!file)return;if(!confirm("导入会覆盖当前所有数据，确定继续吗？")){e.target.value="";return;}var reader=new FileReader();reader.onload=function(ev){try{var j=JSON.parse(ev.target.result);data=Object.assign(JSON.parse(JSON.stringify(DEFAULT_DATA)),j);saveData();init();showToast("📤 数据已恢复！")}catch(err){showToast("❌ 文件格式错误")}};reader.readAsText(file);e.target.value=""}
+function exportData(){var out={mainQuests:(data.mainQuests||[]),questCatOrder:(data.questCatOrder||[]),dailyTodos:(data.dailyTodos||[])};var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_mainline_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 已导出主线任务和待办")}
+function importData(e){var file=e.target.files[0];if(!file)return;if(!confirm("导入会覆盖当前主线任务和待办，其他数据不受影响。确定继续吗？")){e.target.value="";return;}var reader=new FileReader();reader.onload=function(ev){try{var j=JSON.parse(ev.target.result);if(Array.isArray(j.mainQuests))data.mainQuests=j.mainQuests;if(Array.isArray(j.questCatOrder))data.questCatOrder=j.questCatOrder;if(Array.isArray(j.dailyTodos))data.dailyTodos=j.dailyTodos;saveData();renderDailyTodos();renderQuests();renderLevelGrid();updateStats();showToast("📤 已导入主线任务和待办")}catch(err){showToast("❌ 文件格式错误")}};reader.readAsText(file);e.target.value=""}
 function showSpinResultModal(type,result,cost){
   var overlay=document.createElement("div");overlay.className="spin-overlay";overlay.id="spinOverlay";
   var typeIcons={"放松转盘":"🧘","美食转盘":"🍜","好奇心转盘":"🔍","游戏转盘":"🎮"};
