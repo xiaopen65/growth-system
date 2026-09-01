@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="6">
+  <meta name="app-version" content="7">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -281,6 +281,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
       <button class="btn btn-sm btn-outline" onclick="closeTodoModal()">✕ 关闭</button>
     </div>
     
+    <div id="todoSingleWrap">
     <div style="margin-top:10px;font-size:0.85em;color:var(--muted)">在什么时候：</div>
     <div style="display:flex;gap:6px;margin-top:6px">
       <button type="button" class="btn btn-sm todo-when-btn active" id="todoWhenNoneBtn" onclick="selectTodoWhen('none')">不固定</button>
@@ -300,6 +301,14 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     <div style="margin-top:10px;font-size:0.85em;color:var(--muted)">要做的事：</div>
     <input type="text" id="newTodoInput" placeholder="输入要做的事..." style="margin-top:6px" onkeydown="if(event.key==='Enter')saveDailyTodo()">
     <button class="btn" style="width:100%;margin-top:12px" id="todoSaveBtn" onclick="saveDailyTodo()">💾 保存</button>
+    <button class="btn btn-sm btn-outline" style="width:100%;margin-top:8px" onclick="enterBatchMode()">📋 批量添加</button>
+  </div>
+  <div id="todoBatchWrap" style="display:none;margin-top:12px">
+    <div style="font-size:0.85em;color:var(--muted);margin-bottom:6px">批量添加：回车自动加下一行，全部为「不固定」</div>
+    <div id="todoBatchList"></div>
+    <button class="btn" style="width:100%;margin-top:12px" onclick="saveBatchTodos()">✅ 全部添加</button>
+    <button class="btn btn-sm btn-outline" style="width:100%;margin-top:8px" onclick="exitBatchMode()">↩ 返回单个添加</button>
+  </div>
   </div>
 </div>
 <div id="goalOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:246;align-items:center;justify-content:center;padding:16px">
@@ -1338,12 +1347,14 @@ function openTodoModal(){
   var t=document.getElementById("todoOverlayTitle");if(t)t.textContent="➕ 添加备忘录";
   var sb=document.getElementById("todoSaveBtn");if(sb)sb.textContent="💾 保存";
   todoEditingIdx=null;
+  exitBatchMode();
   resetTodoWhen();
   var inp=document.getElementById("newTodoInput");if(inp){inp.value="";inp.focus()}
 }
 function editDailyTodo(idx){
   var todo=data.dailyTodos&&data.dailyTodos[idx];if(!todo)return;
   todoEditingIdx=idx;
+  exitBatchMode();
   var ov=document.getElementById("todoOverlay");if(ov)ov.style.display="flex";
   var t=document.getElementById("todoOverlayTitle");if(t)t.textContent="✏️ 编辑备忘录";
   var sb=document.getElementById("todoSaveBtn");if(sb)sb.textContent="💾 保存修改";
@@ -1371,6 +1382,67 @@ function saveDailyTodo(){
   saveData();inp.value='';renderDailyTodos();closeTodoModal();showToast(todoEditingIdx!==null?'✓ 已更新':'+ 已添加');
   todoEditingIdx=null;
 }
+function enterBatchMode(){
+  todoBatchRows=5;
+  var single=document.getElementById("todoSingleWrap");
+  var batch=document.getElementById("todoBatchWrap");
+  if(single)single.style.display="none";
+  if(batch)batch.style.display="block";
+  renderTodoBatch();
+}
+function exitBatchMode(){
+  todoBatchRows=5;
+  var single=document.getElementById("todoSingleWrap");
+  var batch=document.getElementById("todoBatchWrap");
+  var list=document.getElementById("todoBatchList");
+  if(list)list.innerHTML="";
+  if(single)single.style.display="";
+  if(batch)batch.style.display="none";
+}
+function renderTodoBatch(){
+  var c=document.getElementById("todoBatchList");
+  if(!c)return;
+  var html="";
+  for(var i=1;i<=todoBatchRows;i++){
+    html+='<div class="todo-batch-row" style="display:flex;align-items:center;gap:6px;margin-bottom:6px">';
+    html+='<span style="width:22px;text-align:right;color:#6b7280;font-size:0.85em">'+i+'·</span>';
+    html+='<input type="text" class="todo-batch-input" placeholder="事项 '+i+'" style="flex:1;min-width:0;font-size:0.9em;padding:7px 8px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text)" onkeydown="if(event.key===\'Enter\')onBatchEnter(event)">';
+    html+='</div>';
+  }
+  c.innerHTML=html;
+  var last=c.querySelector(".todo-batch-input:last-child");
+  if(last)last.focus();
+}
+function onBatchEnter(e){
+  var list=document.getElementById("todoBatchList");
+  var rows=list.querySelectorAll(".todo-batch-input");
+  if(e.target!==rows[rows.length-1])return;
+  todoBatchRows++;
+  var html='<div class="todo-batch-row" style="display:flex;align-items:center;gap:6px;margin-bottom:6px">';
+  html+='<span style="width:22px;text-align:right;color:#6b7280;font-size:0.85em">'+todoBatchRows+'·</span>';
+  html+='<input type="text" class="todo-batch-input" placeholder="事项 '+todoBatchRows+'" style="flex:1;min-width:0;font-size:0.9em;padding:7px 8px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text)" onkeydown="if(event.key===\'Enter\')onBatchEnter(event)">';
+  html+='</div>';
+  var tmp=document.createElement("div");tmp.innerHTML=html;
+  var row=tmp.firstElementChild;
+  list.appendChild(row);
+  var ni=row.querySelector(".todo-batch-input");
+  if(ni)ni.focus();
+}
+function saveBatchTodos(){
+  if(!data.dailyTodos)data.dailyTodos=[];
+  var inputs=document.querySelectorAll(".todo-batch-input");
+  var added=0;
+  for(var i=0;i<inputs.length;i++){
+    var t=(inputs[i].value||"").trim();
+    if(!t)continue;
+    data.dailyTodos.push({text:t,done:false,when:null});
+    added++;
+  }
+  if(!added){showToast("请先填写内容");return;}
+  saveData();renderDailyTodos();exitBatchMode();closeTodoModal();
+  showToast("📋 已添加 "+added+" 条（不固定）");
+}
+var todoBatchRows=5;
 function toggleDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos[idx].done=!data.dailyTodos[idx].done;saveData();renderDailyTodos()}
 function deleteDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();showToast('已删除')}
 
