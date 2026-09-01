@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="10">
+  <meta name="app-version" content="14">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -435,8 +435,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   <div class="form-row"><label>API 地址</label><input type="text" id="aiUrl" placeholder="https://api.deepseek.com/chat/completions"></div>
   <div class="form-row"><label>API Key</label><input type="password" id="aiKey" placeholder="sk-..."></div>
   <div class="form-row"><label>模型</label><input type="text" id="aiModel" placeholder="gpt-4o-mini"></div>
-  <div class="form-row"><label>今日分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="例如：请分析今日日常/主线时间投入，给3个高质量问题+明日行动建议，不要用markdown"></textarea></div>
-  <div class="form-row"><label>行动建议分析提示词</label><textarea id="aiSugPrompt" rows="5" placeholder="例如：结合今日备忘录和主线任务给优先级行动建议+理由，不要用markdown"></textarea></div>
+  <div class="form-row"><label>今日分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="请分析今日日常/主线时间投入，然后再一句话夸夸+一句话鼓励+给3个高质量问题，不要用markdown"></textarea></div>
+  <div class="form-row"><label>行动建议分析提示词</label><textarea id="aiSugPrompt" rows="5" placeholder="结合今日备忘录和主线任务给优先级行动建议+理由，不要用markdown"></textarea></div>
   <button class="btn btn-sm" onclick="saveAIConfig()" style="margin-top:6px">💾 保存</button>
 </div>
 <div id="aiStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
@@ -1214,6 +1214,7 @@ function buildTimelineExport(from,to){
 function openExportPopup(title,text){
   var t=document.getElementById("exportPopupTitle");if(t)t.textContent=title;
   var ta=document.getElementById("exportPopupText");if(ta)ta.value=text;
+  var b=document.getElementById("copyExportBtn");if(b)b.textContent="📋 复制";
   var ov=document.getElementById("exportPopupOverlay");if(ov)ov.style.display="flex";
 }
 function closeExportPopup(){var ov=document.getElementById("exportPopupOverlay");if(ov)ov.style.display="none"}
@@ -1986,7 +1987,7 @@ function analyzeToday(){
   entries.forEach(function(item,idx){
     text+=(idx+1)+". "+item.startTime+"~"+item.endTime+" ["+(item.kind==="main"?"主线":"日常")+"] "+(item.actions||"无描述")+"\n";
   });
-  var prompt=(cfg.prompt||"请分析我今天的时间使用情况（日常时间和主线时间的投入情况，以及其他时间投入也总结下），给我三个有趣高质量的问题，给我明天的行动建议和理由，不要用markdown格式");
+  var prompt=(cfg.prompt||"请分析今日日常/主线时间投入，然后再一句话夸夸+一句话鼓励+给3个高质量问题，不要用markdown");
   var statusEl=document.getElementById("analysisStatus")||document.getElementById("aiStatus");
   if(statusEl)statusEl.innerHTML='<span class="ai-hourglass">⏳</span> 正在分析今日记录...';
   callAI(prompt,text).then(function(report){
@@ -2067,7 +2068,7 @@ function runSuggestion(){
   var quests=(data.mainQuests||[]).filter(function(q){return !q.done});
   if(!quests.length){text+="（暂无未完成主线任务）\n";}
   else{quests.forEach(function(q,i){text+=(i+1)+". ["+q.category+"] "+q.title+"（"+q.points+"点）\n";});}
-  var prompt=(cfg.sugPrompt||"请结合今日备忘录和未完成的主线任务，分析今天应该优先做什么，按优先级给出行动建议并说明理由，不要用markdown格式");
+  var prompt=(cfg.sugPrompt||"结合今日备忘录和主线任务给优先级行动建议+理由，不要用markdown");
   callAI(prompt,text).then(function(report){
     if(hourglass)hourglass.style.display="none";
     if(textEl)textEl.textContent=report;
