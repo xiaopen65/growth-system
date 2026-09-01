@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="5">
+  <meta name="app-version" content="6">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -249,7 +249,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   </div>
 </div>
 <div class="page" id="page-main">
-<div class="card" style="border:1px solid #f59e0b"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;color:#f59e0b">🎯 今日行动</h3><button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="generateTodayPlan()">✨ 一键生成</button></div><p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">生成今天要做的任务并排好序，每项显示今天建议先做几个傻瓜时间，点「▶ 开跑」直接开始</p><div id="todayPlanList" style="font-size:0.85em"></div></div>
+<div class="card" style="border:1px solid #f59e0b"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;color:#f59e0b">🎯 今日行动</h3><button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="generateTodayPlan()">✨ 一键生成</button></div><p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">生成今天要做的任务并排好序，每项显示今天建议先做几个傻瓜时间，点「▶ 开跑」直接开始</p><div id="todayPlanList" style="font-size:0.85em"></div><div id="dailyChallengeCard" style="margin-top:10px;border-top:1px dashed #e5e7eb;padding-top:10px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-weight:bold;color:#f59e0b">⚔️ 今日限时任务</span><button class="btn btn-sm" id="dailyChallengeStartBtn">▶ 开跑 30 分钟</button></div><p id="dailyChallengeHint" style="color:#6b7280;font-size:0.8em;margin-top:6px">自动派一个任务，专注做满 30 分钟，完成后 +1 成长点</p></div></div>
 <div class="card">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
 <h3 style="margin:0">📝 今日备忘录</h3>
@@ -265,7 +265,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 <h3 style="margin:0;color:#f59e0b">🗺️ 主线任务</h3>
 <div style="display:flex;align-items:center;gap:8px">
 <button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openQuestModal()">➕ 添加</button>
-<button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openChallengeModal()">⚔️ 限时挑战</button>
+
 </div>
 </div>
 <p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">完成主线任务获得对应成长点</p>
@@ -333,40 +333,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     </div>
   </div>
 </div>
-<div id="challengeOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
-  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <h3 style="margin:0;color:var(--muted)">⚔️ 限时挑战</h3>
-      <button class="btn btn-sm btn-outline" onclick="closeChallengeModal()">✕ 关闭</button>
-    </div>
-    <div id="challengeSetup">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <select id="challengeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text)">
-          <option value="">-- 选择主线任务 --</option>
-        </select>
-        <input type="number" id="challengeDuration" min="1" max="480" value="60" placeholder="分钟" style="flex:0 0 auto;width:55px;font-size:0.85em;padding:8px 4px;text-align:center" title="挑战时长（分钟）">
-        <span style="color:var(--muted);font-size:0.75em">分钟</span>
-        <input type="number" id="challengeBet" min="1" value="3" placeholder="赌注" style="flex:0 0 auto;width:60px;font-size:0.85em;padding:8px 4px;text-align:center">
-        <span style="color:var(--muted);font-size:0.75em">成长点</span>
-        <button class="btn btn-sm" onclick="startChallenge()" style="padding:8px 16px">⚡ 开始挑战</button>
-      </div>
-      <p style="color:var(--muted);font-size:0.7em;margin-top:6px">选择任务，设置赌注。限时完成 +赌注点，超时或放弃 -赌注点</p>
-    </div>
-    <div id="challengeActive" style="display:none">
-      <div class="challenge-timer">⏱ <span id="challengeTimer">60:00</span></div>
-      <div class="challenge-bar"><div class="challenge-bar-fill" id="challengeBarFill"></div></div>
-      <div class="challenge-info">
-        <div>任务：<strong id="challengeTaskName"></strong></div>
-        <div>赌注：<strong id="challengeStakeDisplay" style="color:#f59e0b"></strong> 成长点</div>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn btn-sm" onclick="completeChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成挑战</button>
-        <button class="btn btn-sm btn-outline" onclick="abandonChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">❌ 放弃</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="questOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+<div id="dailyChallengeOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto"><div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0;color:var(--muted)">⚔️ 今日限时任务</h3><button class="btn btn-sm btn-outline" onclick="closeDailyChallengeModal()">✕ 关闭</button></div><div id="dailyChallengeEmpty" style="display:none"><p style="color:#6b7280;text-align:center;padding:12px">今天没有可挑战的任务，先去主线添加吧</p></div><div id="dailyChallengeActive" style="display:none"><div class="challenge-timer">⏱ <span id="dailyChallengeTimer">30:00</span></div><div class="challenge-bar"><div class="challenge-bar-fill" id="dailyChallengeBarFill"></div></div><div class="challenge-info"><div>任务：<strong id="dailyChallengeTaskName"></strong></div><div>专注做满 30 分钟，完成后 <strong style="color:#f59e0b">+1 成长点</strong></div></div><div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-sm" onclick="completeDailyChallenge()" style="flex:1;background:linear-gradient(135deg,#59d36d,#2dbf5e);color:#ffffff">✅ 完成</button><button class="btn btn-sm btn-outline" onclick="abandonDailyChallenge()" style="flex:1;color:#ff4e50;border-color:#ff4e50">放弃</button></div></div></div></div><div id="questOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
   <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:360px;width:100%">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <h3 style="margin:0;color:var(--muted)" id="questOverlayTitle">➕ 添加主线任务</h3>
@@ -630,7 +597,8 @@ var DEFAULT_DATA = {
   dailyMinutesTotal: 0,
   balance: 0,
   rouletteContentVersion: "all-roulette-v1",
-  balanceResetVersion: "52-fix-v2"
+  balanceResetVersion: "52-fix-v2",
+  dailyChallenge: null
 };
 
 var data = JSON.parse(JSON.stringify(DEFAULT_DATA));
@@ -833,7 +801,7 @@ function renderQuests() {
   data.mainQuests.forEach(function(q){var t=q.done?arc:ac;if(!t[q.category])t[q.category]=[];t[q.category].push(q)});
   var cats=syncQuestCatOrder().filter(function(c){return ac[c]});
   var ah=cats.map(function(cat){return'<div class="quest-category" data-cat="'+escapeHtml(cat)+'"><h4 style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><span class="drag-handle" title="拖动分类排序">☰</span> <span>'+cat+' ('+ac[cat].length+')</span></span><span style="display:flex;align-items:center;gap:4px"><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+cat+'\')">✏</button><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+cat+'\')">&#xd7;</button></span></h4>'+ac[cat].map(renderQuestItem).join("")+'</div>'}).join("");
-  populateChallengeSelect();populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，点右上角 ➕ 添加吧 🚀</p>');
+  populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，点右上角 ➕ 添加吧 🚀</p>');
 }
 function syncQuestCatOrder(){
   if(!data.questCatOrder)data.questCatOrder=[];
@@ -1468,17 +1436,6 @@ function onGoalReorder(items){
 function transferTodoToQuest(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;var todo=data.dailyTodos[idx];if(!data.quests)data.quests=[];data.quests.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),category:"",title:todo.text,points:0,done:false,archived:false});data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();renderQuests();showToast("已转移到主线任务")}
 
 
-// === CHALLENGE SYSTEM ===
-function populateChallengeSelect(){
-  var sel=document.getElementById("challengeQuestSelect");
-  if(!sel)return;
-  var def=sel.value;
-  sel.innerHTML='<option value="">-- 选择主线任务 --</option>';
-  data.mainQuests.forEach(function(q){
-    if(!q.done) sel.innerHTML+='<option value="'+q.id+'">'+q.title+' (+'+q.points+'\u70b9)</option>';
-  });
-  if(def)sel.value=def;
-}
 // === FOOL TIME (傻瓜时间) ===
 function populateFoolTimeSelect(){
   var sel=document.getElementById("foolTimeQuestSelect");
@@ -1637,79 +1594,111 @@ function endFoolTime(){
     showToast("已打开记录弹窗，确认时间后点击记录");
   }
 }
-function openChallengeModal(){
-  var ov=document.getElementById("challengeOverlay");
+function openDailyChallengeModal(){
+  var ov=document.getElementById("dailyChallengeOverlay");
   if(!ov)return;
-  populateChallengeSelect();
-  renderChallengeUI();
+  renderDailyChallengeUI();
   ov.style.display="flex";
 }
-function closeChallengeModal(){
-  var ov=document.getElementById("challengeOverlay");
+function closeDailyChallengeModal(){
+  var ov=document.getElementById("dailyChallengeOverlay");
   if(ov)ov.style.display="none";
 }
-function startChallenge(){
-  var sel=document.getElementById("challengeQuestSelect");
-  var questId=sel.value;
-  if(!questId){showToast("\u8bf7\u5148\u9009\u62e9\u4e00\u4e2a\u4e3b\u7ebf\u4efb\u52a1");return;}
-  var quest=data.mainQuests.find(function(q){return q.id===questId});
-  if(!quest){showToast("\u4efb\u52a1\u4e0d\u5b58\u5728");return;}
-  var bet=parseInt(document.getElementById("challengeBet").value)||0;
-  if(bet<1){showToast("\u8d4c\u6ce8\u81f3\u5c11 1 \u70b9");return;}
-  if(bet>(data.balance||0)){showToast("成长点余额不足！当前余额 "+data.balance);return;}
-  var dur=parseInt(document.getElementById("challengeDuration").value)||60;data.challenge={questId:questId,questTitle:quest.title,bet:bet,startTime:Date.now(),endTime:Date.now()+dur*60*1000,duration:dur*60*1000,active:true};
-  data.balance=(data.balance||0)-bet;
-  saveData();updateStats();renderChallengeUI();populateChallengeSelect();
-  showToast("\u26a1 \u6311\u6218\u5f00\u59cb\uff01"+dur+"\u5206\u949f\u5012\u8ba1\u65f6");
-}
-function renderChallengeUI(){
-  var ch=data.challenge;
-  var setup=document.getElementById("challengeSetup");
-  var active=document.getElementById("challengeActive");
-  if(!ch||!ch.active){
-    if(setup)setup.style.display="block";
-    if(active)active.style.display="none";
-    return;
+function pickChallengeTask(){
+  var today=getLocalDateString();
+  var p=(data.todayPlan&&data.todayPlan.date===today)?data.todayPlan:null;
+  if(p&&p.items&&p.items.length){
+    var q=p.items.filter(function(it){return it.type==="quest"});
+    var pick=q.length?q[0]:p.items[0];
+    return {title:pick.title};
   }
-  if(setup)setup.style.display="none";
-  if(active)active.style.display="block";
-  document.getElementById("challengeTaskName").textContent=ch.questTitle;
-  document.getElementById("challengeStakeDisplay").textContent=ch.bet;
+  var quests=(data.mainQuests||[]).filter(function(q){return !q.done});
+  if(quests.length)return {title:quests[0].title};
+  return null;
 }
-function tickChallenge(){
-  var ch=data.challenge;
-  if(!ch||!ch.active)return;
-  var end=ch.endTime||(ch.startTime+ch.duration);
+function startDailyChallenge(){
+  var task=pickChallengeTask();
+  if(!task){showToast("今天没有可挑战的任务，先去主线添加吧");return;}
+  var dur=30*60*1000;
+  data.dailyChallenge={date:getLocalDateString(),questTitle:task.title,startTime:Date.now(),endTime:Date.now()+dur,duration:dur,active:true,status:"active"};
+  saveData();renderDailyChallenge();openDailyChallengeModal();
+  showToast("⚔️ 限时任务开始，专注做满 30 分钟");
+}
+function renderDailyChallenge(){
+  var card=document.getElementById("dailyChallengeCard");
+  if(!card)return;
+  var dc=data.dailyChallenge;
+  var today=getLocalDateString();
+  if(dc&&dc.date!==today){dc.active=false;data.dailyChallenge=null;saveData();dc=null;}
+  if(dc&&dc.date===today&&(dc.status==="done"||dc.status==="abandoned")){card.style.display="none";return;}
+  card.style.display="";
+  var btn=document.getElementById("dailyChallengeStartBtn");
+  var hint=document.getElementById("dailyChallengeHint");
+  if(dc&&dc.active&&dc.date===today){
+    if(btn){btn.textContent="⏳ 计时中 · 点击查看";btn.onclick=function(){openDailyChallengeModal()};}
+    if(hint)hint.textContent="挑战进行中，点击按钮回到计时窗口";
+  }else{
+    if(btn){btn.textContent="▶ 开跑 30 分钟";btn.onclick=function(){startDailyChallenge()};}
+    if(hint)hint.textContent="自动派一个任务，专注做满 30 分钟，完成后 +1 成长点";
+  }
+}
+function renderDailyChallengeUI(){
+  var dc=data.dailyChallenge;
+  var active=document.getElementById("dailyChallengeActive");
+  var empty=document.getElementById("dailyChallengeEmpty");
+  if(!dc||!dc.active){if(active)active.style.display="none";if(empty)empty.style.display="block";return;}
+  if(active)active.style.display="block";
+  if(empty)empty.style.display="none";
+  var nameEl=document.getElementById("dailyChallengeTaskName");
+  if(nameEl)nameEl.textContent=dc.questTitle;
+}
+function tickDailyChallenge(){
+  var dc=data.dailyChallenge;
+  if(!dc||!dc.active)return;
+  var today=getLocalDateString();
+  if(dc.date!==today){dc.active=false;data.dailyChallenge=null;saveData();renderDailyChallenge();return;}
+  var end=dc.endTime||(dc.startTime+dc.duration);
   var remaining=Math.max(0,end-Date.now());
   var totalSec=Math.floor(remaining/1000);
   var min=Math.floor(totalSec/60);
   var sec=totalSec%60;
-  var timerEl=document.getElementById("challengeTimer");
+  var timerEl=document.getElementById("dailyChallengeTimer");
   if(timerEl)timerEl.textContent=min+":"+(sec<10?"0":"")+sec;
-  var barEl=document.getElementById("challengeBarFill");
-  if(barEl)barEl.style.width=(remaining/ch.duration*100)+"%";
+  var barEl=document.getElementById("dailyChallengeBarFill");
+  if(barEl)barEl.style.width=(remaining/dc.duration*100)+"%";
   if(totalSec<600&&timerEl)timerEl.style.color="#ef4444";
-  if(remaining<=0)endChallenge(false);
 }
-function completeChallenge(){endChallenge(true)}
-function abandonChallenge(){
-  var ch=data.challenge;
-  if(!ch||!ch.active)return;
-  if(confirm("\u786e\u5b9a\u653e\u5f03\u6311\u6218\uff1f\u5c06\u6263\u9664\u8d4c\u6ce8 "+ch.bet+" 成长点"))endChallenge(false);
+function completeDailyChallenge(){
+  var dc=data.dailyChallenge;
+  if(!dc||!dc.active)return;
+  dc.active=false;dc.status="done";
+  data.balance=(data.balance||0)+1;
+  saveData();updateStats();renderDailyChallenge();renderDailyChallengeUI();closeDailyChallengeModal();
+  showToast("🎉 挑战完成！+1 成长点");
+  if(confirm("是否更新到时间记录？")){
+    switchTab("daily");
+    var actionsEl=document.getElementById("dailyActions");
+    if(actionsEl)actionsEl.value=dc.questTitle;
+    var startInput=document.getElementById("dailyStartTime");
+    var endInput=document.getElementById("dailyEndTime");
+    if(startInput&&endInput){
+      startInput.value=getLocalTimeString(new Date(dc.startTime));
+      endInput.value=getLocalTimeString(new Date(dc.startTime+dc.duration));
+      if(startInput.dataset)startInput.dataset.manual="1";
+      if(endInput.dataset)endInput.dataset.manual="1";
+    }
+    openRecordModal();
+    showToast("已打开记录弹窗，确认时间后点击记录");
+  }
 }
-function endChallenge(success){
-  var ch=data.challenge;
-  if(!ch||!ch.active)return;
-  ch.active=false;
-  var bet=ch.bet;
-  if(success){data.balance=(data.balance||0)+bet*2;showToast("🎉 挑战成功！+"+bet+" 成长点")}
-  else{showToast("💔 挑战失败，扣除 "+bet+" 成长点")}
-  saveData();updateStats();renderChallengeUI();populateChallengeSelect();
-  var timerEl=document.getElementById("challengeTimer");
-  if(timerEl)timerEl.style.color="#f59e0b";
-  closeChallengeModal();
+function abandonDailyChallenge(){
+  var dc=data.dailyChallenge;
+  if(!dc||!dc.active)return;
+  if(!confirm("确定放弃这次限时任务？"))return;
+  dc.active=false;dc.status="abandoned";
+  saveData();renderDailyChallenge();renderDailyChallengeUI();closeDailyChallengeModal();
+  showToast("已放弃，今日不再显示");
 }
-
 function openTimeline(){
   var exportCard=document.getElementById("timelineExportCard");
   var analysisCard=document.getElementById("todayAnalysisCard");
@@ -2096,8 +2085,8 @@ function applyTheme(){
   document.body.setAttribute("data-theme",t);
   document.querySelectorAll(".theme-btn").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-theme")===t)});
 }
-function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();renderTodayPlan();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode(true);if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
-init();setInterval(updateDailyDraftTimes,1000);setInterval(updateDailyDraftTimesDaily,1000);setInterval(tickChallenge,250);setInterval(tickFoolTime,250);
+function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();renderTodayPlan();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateFoolTimeSelect();renderFoolTimeUI();renderDailyChallenge();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode(true);renderDailyChallenge();if(data.dailyChallenge&&data.dailyChallenge.active&&data.dailyChallenge.date===getLocalDateString())openDailyChallengeModal();if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
+init();setInterval(updateDailyDraftTimes,1000);setInterval(updateDailyDraftTimesDaily,1000);setInterval(tickDailyChallenge,250);setInterval(tickFoolTime,250);
 
 </script>
 
