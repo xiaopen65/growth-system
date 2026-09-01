@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="8">
+  <meta name="app-version" content="9">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -185,7 +185,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 
 </div></div>
 
-<div class="page active" id="page-daily" style="padding-bottom:110px"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes()"></div><div id="todayTimeline"></div></div>
+<div class="page active" id="page-daily" style="padding-bottom:110px"><div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">📋 今日时间线</h3><button class="btn btn-sm" style="background:#fff;color:#000;border:1px solid #f59e0b" onclick="openTimeline()">📋 查看时间线</button></div><div style="margin-bottom:10px"><input type="date" id="dailyDate" onchange="var e=document.getElementById('dailyEndTime');if(e)e.dataset.manual='0';updateDailyDraftTimes();renderTodayTimeline()"></div><div id="todayTimeline"></div></div>
 <button class="btn btn-record-sticky" onclick="openRecordModal()">🕒 记录</button>
 </div>
 <div class="page" id="page-daily-mode" style="padding-bottom:110px">
@@ -485,14 +485,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     </div>
     <div class="card" id="timelineExportCard">
       <div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
-        <div style="font-size:0.8em;color:#6b7280;margin-bottom:6px">📤 导出时间线</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-          <input type="date" id="exportDateFrom" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
-          <span style="color:#6b7280;font-size:0.8em">至</span>
-          <input type="date" id="exportDateTo" style="flex:1;min-width:120px;font-size:0.8em;padding:6px">
-          <button class="btn btn-sm" style="padding:6px 12px;font-size:0.8em" onclick="exportTimelineRange()">导出</button>
-        </div>
-        <div style="margin-top:6px;display:flex;gap:6px">
+        <div style="font-size:0.8em;color:#6b7280;margin-bottom:8px">📤 导出时间线</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineToday()">导出今天</button>
           <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineAll()">导出全部</button>
         </div>
@@ -530,7 +524,20 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     </div>
     <div id="reportHistoryList"></div>
   </div>
-</div><script>
+</div>
+<div id="exportPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:480px;width:100%;max-height:88vh;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <h3 id="exportPopupTitle" style="margin:0;color:var(--muted)">📤 导出</h3>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="copyExportText()">📋 复制</button>
+        <button class="btn btn-sm btn-outline" onclick="closeExportPopup()">✕ 关闭</button>
+      </div>
+    </div>
+    <textarea id="exportPopupText" readonly style="flex:1;min-height:240px;white-space:pre;overflow:auto;font-family:monospace;font-size:0.85em;resize:none"></textarea>
+  </div>
+</div>
+<script>
 var DEFAULT_DATA = {
   dailyLog: [],
   mainQuests: [
@@ -672,8 +679,9 @@ function renderTodayTimeline(){
   var c=document.getElementById("todayTimeline");
   if(!c)return;
   var today=getLocalDateString();
-  var entries=(data.dailyLog||[]).filter(function(d){return d.date===today});
-  if(!entries.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">今天还没有时间记录</p>';return}
+  var date=document.getElementById("dailyDate").value||today;
+  var entries=(data.dailyLog||[]).filter(function(d){return d.date===date});
+  if(!entries.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">'+(date===today?"今天还没有时间记录":"这一天还没有时间记录")+'</p>';return}
   var html=entries.slice().map(function(d){
     var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
     var content=d.actions||"";
@@ -683,14 +691,16 @@ function renderTodayTimeline(){
     row+='</div>';
     return row;
   }).join("");
-  var lastEndMins=getLastEndMinutes(today);
-  var nowMins=parseTimeToMinutes(getLocalTimeString(new Date()));
-  if(nowMins>lastEndMins){
-    var gapMins=nowMins-lastEndMins;
-    html+='<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5">';
-    html+='<span style="color:#6b7280;white-space:nowrap">'+formatMinutesToTime(lastEndMins)+'~'+formatMinutesToTime(nowMins)+'</span>';
-    html+='<span class="timeline-kind" style="background:#e5e7eb;color:#4b5563;flex-shrink:0">'+formatDurationLabel(gapMins)+'未记录</span>';
-    html+='</div>';
+  if(date===today){
+    var lastEndMins=getLastEndMinutes(today);
+    var nowMins=parseTimeToMinutes(getLocalTimeString(new Date()));
+    if(nowMins>lastEndMins){
+      var gapMins=nowMins-lastEndMins;
+      html+='<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5">';
+      html+='<span style="color:#6b7280;white-space:nowrap">'+formatMinutesToTime(lastEndMins)+'~'+formatMinutesToTime(nowMins)+'</span>';
+      html+='<span class="timeline-kind" style="background:#e5e7eb;color:#4b5563;flex-shrink:0">'+formatDurationLabel(gapMins)+'未记录</span>';
+      html+='</div>';
+    }
   }
   c.innerHTML=html;
 }
@@ -1010,7 +1020,7 @@ function switchTab(tab){
   if(tab==="goal"){renderDailyTodos();renderGoals();}
   if(tab==="daily"){
     if(currentMode==="daily"){renderDailyModeList();updateDailyDraftTimesDaily();}
-    else{renderDailyList();updateDailyDraftTimes();var today=getLocalDateString();var df=document.getElementById("exportDateFrom");var dt=document.getElementById("exportDateTo");if(df)df.value=today;if(dt)dt.value=today}
+    else{renderDailyList();updateDailyDraftTimes()}
   }
   if(tab==="settings")renderModeButtons();
 }
@@ -1168,25 +1178,20 @@ function renderDailyModeList(){
 // Init
 function exportTimelineToday(){
   var today=getLocalDateString();
-  document.getElementById("exportDateFrom").value=today;
-  document.getElementById("exportDateTo").value=today;
-  doExportTimeline(today,today);
+  var text=buildTimelineExport(today,today);
+  if(!text){showToast("今天没有可导出的记录");return}
+  openExportPopup("📤 导出今天",text);
 }
 function exportTimelineAll(){
   if(!data.dailyLog.length){showToast("没有可导出的记录");return}
   var dates=data.dailyLog.map(function(d){return d.date}).sort();
-  doExportTimeline(dates[0],dates[dates.length-1]);
+  var text=buildTimelineExport(dates[0],dates[dates.length-1]);
+  if(!text){showToast("没有可导出的记录");return}
+  openExportPopup("📤 导出全部",text);
 }
-function exportTimelineRange(){
-  var from=document.getElementById("exportDateFrom").value;
-  var to=document.getElementById("exportDateTo").value;
-  if(!from||!to){showToast("请选择日期范围");return}
-  if(from>to){showToast("开始日期不能晚于结束日期");return}
-  doExportTimeline(from,to);
-}
-function doExportTimeline(from,to){
+function buildTimelineExport(from,to){
   var entries=data.dailyLog.filter(function(d){return d.date>=from&&d.date<=to}).sort(function(a,b){return a.date>b.date?1:a.date<b.date?-1:0});
-  if(!entries.length){showToast("该时间段内没有记录");return}
+  if(!entries.length){return ""}
   var text="时间线导出报告\n";
   text+="导出范围："+from+" 至 "+to+"\n";
   text+="导出时间："+new Date().toLocaleString()+"\n";
@@ -1204,12 +1209,27 @@ function doExportTimeline(from,to){
     if(e.actions)text+="  "+e.actions.replace(/\n/g,"\n  ")+"\n";
     text+="\n";
   });
-  var blob=new Blob([text],{type:"text/plain;charset=utf-8"});
-  var a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="timeline_"+from+"_"+to+".txt";
-  a.click();URL.revokeObjectURL(a.href);
-  showToast("📤 已导出 "+entries.length+" 条记录");
+  return text;
+}
+function openExportPopup(title,text){
+  var t=document.getElementById("exportPopupTitle");if(t)t.textContent=title;
+  var ta=document.getElementById("exportPopupText");if(ta)ta.value=text;
+  var ov=document.getElementById("exportPopupOverlay");if(ov)ov.style.display="flex";
+}
+function closeExportPopup(){var ov=document.getElementById("exportPopupOverlay");if(ov)ov.style.display="none"}
+function copyExportText(){
+  var ta=document.getElementById("exportPopupText");
+  var text=ta?ta.value:"";
+  if(!text){showToast("没有可复制的内容");return}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){showToast("📋 已复制全部内容")}).catch(function(){fallbackCopyExport(text)});
+  }else{fallbackCopyExport(text)}
+}
+function fallbackCopyExport(text){
+  var ta=document.getElementById("exportPopupText");
+  if(!ta)return;
+  ta.focus();ta.select();
+  try{document.execCommand("copy");showToast("📋 已复制全部内容")}catch(e){showToast("复制失败，请手动复制")}
 }
 
 function exportData(){var out={mainQuests:(data.mainQuests||[]),questCatOrder:(data.questCatOrder||[]),dailyTodos:(data.dailyTodos||[])};var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_mainline_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 已导出主线任务和待办")}
