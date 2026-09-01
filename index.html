@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="4">
+  <meta name="app-version" content="5">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -249,6 +249,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   </div>
 </div>
 <div class="page" id="page-main">
+<div class="card" style="border:1px solid #f59e0b"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;color:#f59e0b">🎯 今日行动</h3><button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="generateTodayPlan()">✨ 一键生成</button></div><p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">生成今天要做的任务并排好序，每项显示今天建议先做几个傻瓜时间，点「▶ 开跑」直接开始</p><div id="todayPlanList" style="font-size:0.85em"></div></div>
 <div class="card">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
 <h3 style="margin:0">📝 今日备忘录</h3>
@@ -258,18 +259,6 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div>
 </div>
 <div id="dailyTodoList"></div>
-</div>
-<div class="card" id="foolTimeCard">
-<h3>⏰ 傻瓜时间</h3>
-<div id="foolTimeSetup">
-<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-<select id="foolTimeQuestSelect" style="flex:1;min-width:140px;font-size:0.85em;padding:8px;background:#f5f6f8;border:1px solid #e5e7eb;border-radius:8px;color:#1f2937">
-<option value="">-- 选择主线任务 --</option>
-</select>
-<button class="btn btn-sm pulse-btn" onclick="startFoolTime()" style="padding:8px 16px;margin-left:6px">▶ 开始行动</button>
-</div>
-<p style="color:#6b7280;font-size:0.7em;margin-top:6px">选一个主线任务，无脑行动 10 分钟</p>
-</div>
 </div>
 <div class="card">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
@@ -510,7 +499,6 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div></div>
 </div>
 <div id="toastContainer"></div>
-
 
 <div id="timelineOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f6f8;z-index:200;overflow-y:auto">
   <div style="max-width:800px;margin:0 auto;padding:16px">
@@ -1418,7 +1406,6 @@ function saveDailyTodo(){
 function toggleDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos[idx].done=!data.dailyTodos[idx].done;saveData();renderDailyTodos()}
 function deleteDailyTodo(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();showToast('已删除')}
 
-
 // === 近期目标 (Relevant Goals, 日常模式独有) ===
 var goalEditingIdx=null;
 function renderGoals(){
@@ -1481,7 +1468,6 @@ function onGoalReorder(items){
 function transferTodoToQuest(idx){if(!data.dailyTodos||!data.dailyTodos[idx])return;var todo=data.dailyTodos[idx];if(!data.quests)data.quests=[];data.quests.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),category:"",title:todo.text,points:0,done:false,archived:false});data.dailyTodos.splice(idx,1);saveData();renderDailyTodos();renderQuests();showToast("已转移到主线任务")}
 
 
-
 // === CHALLENGE SYSTEM ===
 function populateChallengeSelect(){
   var sel=document.getElementById("challengeQuestSelect");
@@ -1506,6 +1492,7 @@ function populateFoolTimeSelect(){
 }
 function startFoolTime(){
   var sel=document.getElementById("foolTimeQuestSelect");
+  if(!sel){showToast("请从今日行动生成并开始");return;}
   var questId=sel.value;
   if(!questId){showToast("请先选择一个主线任务");return;}
   var quest=data.mainQuests.find(function(q){return q.id===questId});
@@ -1515,6 +1502,69 @@ function startFoolTime(){
   openFoolTimeModal();
   renderFoolTimeUI();
   showToast("✅ 开始行动，10分钟倒计时");
+}
+function startFoolTimeWith(title){
+  if(!title){showToast("请先选择任务");return;}
+  data.foolTime={questId:"",questTitle:title,startTime:Date.now(),endTime:Date.now()+10*60*1000,duration:10*60*1000,active:true};
+  saveData();
+  openFoolTimeModal();
+  renderFoolTimeUI();
+  showToast("⏰ 开始行动，10分钟倒计时");
+}
+function generateTodayPlan(random){
+  var today=getLocalDateString();
+  var quests=(data.mainQuests||[]).filter(function(q){return !q.done}).slice();
+  var todos=(data.dailyTodos||[]).filter(function(t){return !t.done}).slice();
+  if(random){
+    quests.sort(function(){return Math.random()-0.5});
+    todos.sort(function(){return Math.random()-0.5});
+  }else{
+    quests.sort(function(a,b){return (b.points||0)-(a.points||0)});
+  }
+  var items=[];
+  quests.slice(0,2).forEach(function(q){
+    var s=Math.min(4,Math.max(1,q.points||0));
+    items.push({type:"quest",id:q.id,title:q.title,sessions:s});
+  });
+  todos.slice(0,1).forEach(function(t){
+    items.push({type:"todo",id:t.id,title:t.text,sessions:1});
+  });
+  if(random&&items.length>1){items.sort(function(){return Math.random()-0.5});}
+  var extra=Math.max(0,quests.length+todos.length-items.length);
+  data.todayPlan={date:today,items:items,extraCount:extra};
+  saveData();
+  renderTodayPlan();
+  if(items.length){showToast((random?"🔄 已重新生成":"✅ 已生成今日行动")+"，共 "+items.length+" 项");}else{showToast("今天还没有可安排的任务");}
+}
+function renderTodayPlan(){
+  var c=document.getElementById("todayPlanList");
+  if(!c)return;
+  var today=getLocalDateString();
+  var p=(data.todayPlan&&data.todayPlan.date===today)?data.todayPlan:null;
+  if(!p||!p.items.length){
+    c.innerHTML='<p style="color:#6b7280;text-align:center;padding:12px">还没有今日行动，点「✨ 一键生成」自动排好</p>';
+    return;
+  }
+  var html="";
+  p.items.forEach(function(it,i){
+    var tag=it.type==="quest"?"主线":"待办";
+    var tagColor=it.type==="quest"?"#f59e0b":"#6b7280";
+    html+='<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0">';
+    html+='<span style="color:#f59e0b;font-weight:bold">'+(i+1)+'</span>';
+    html+='<span style="flex:1;line-height:1.4">'+escapeHtml(it.title)+'</span>';
+    html+='<span style="color:'+tagColor+';white-space:nowrap;font-size:0.8em">'+tag+'</span>';
+    html+='<span style="color:#6b7280;white-space:nowrap;font-size:0.8em">🎮×'+it.sessions+'</span>';
+    html+='<button class="btn btn-sm" style="padding:5px 10px" onclick="startPlanItem('+i+')">▶ 开跑</button>';
+    html+='</div>';
+  });
+  if(p.extraCount>0){html+='<p style="color:#6b7280;font-size:0.8em;margin-top:6px">其余 '+p.extraCount+' 件未列入，可在今日备忘录或主线任务里查看</p>';}
+  html+='<button class="btn btn-sm btn-outline" style="width:100%;margin-top:8px" onclick="generateTodayPlan(true)">🔄 重新生成</button>';
+  c.innerHTML=html;
+}
+function startPlanItem(idx){
+  var p=data.todayPlan;
+  if(!p||!p.items[idx])return;
+  startFoolTimeWith(p.items[idx].title);
 }
 function openFoolTimeModal(){
   var ov=document.getElementById("foolTimeOverlay");
@@ -2046,11 +2096,10 @@ function applyTheme(){
   document.body.setAttribute("data-theme",t);
   document.querySelectorAll(".theme-btn").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-theme")===t)});
 }
-function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode(true);if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
+function init(){applyTheme();loadData();loadDailyData();renderDailyTodos();renderTodayPlan();bindDragSort(document.getElementById("dailyTodoList"));var __gl=document.getElementById("dailyTodoListGoal");if(__gl)bindDragSort(__gl);bindDragSort(document.getElementById("questList"));document.getElementById("dailyDate").value=getLocalDateString();var endInput=document.getElementById("dailyEndTime");if(endInput){endInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var startInput=document.getElementById("dailyStartTime");if(startInput){startInput.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimes()})}var dmEnd=document.getElementById("dailyModeEndTime");if(dmEnd){dmEnd.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}var dmStart=document.getElementById("dailyModeStartTime");if(dmStart){dmStart.addEventListener("input",function(){this.dataset.manual="1";updateDailyDraftTimesDaily()})}renderDailyList();renderLevelGrid();updateStats();resetQuestForm();renderQuests();renderRouletteTabs();renderRouletteItems();updateDailyDraftTimes();populateChallengeSelect();renderChallengeUI();populateFoolTimeSelect();renderFoolTimeUI();renderDailyModeList();renderGoals();if(document.getElementById("goalList"))bindDragSort(document.getElementById("goalList"));renderModeButtons();applyMode(true);if(data.foolTime&&data.foolTime.active)openFoolTimeModal()}
 init();setInterval(updateDailyDraftTimes,1000);setInterval(updateDailyDraftTimesDaily,1000);setInterval(tickChallenge,250);setInterval(tickFoolTime,250);
 
 </script>
-
 
 
 
