@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="7">
+  <meta name="app-version" content="8">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -350,8 +350,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     </div>
     <label style="font-size:0.8em;color:var(--muted);margin-bottom:4px;display:block">分类</label>
     <div style="display:flex;align-items:center;gap:8px">
-      <input type="text" id="questCategoryInput" placeholder="分类（可输入或选择）" style="flex:1;min-width:0">
       <button type="button" class="btn btn-sm btn-outline" onclick="toggleQuestCategoryPick()" style="white-space:nowrap">▾ 选择</button>
+      <input type="text" id="questCategoryInput" placeholder="分类（可输入或选择）" style="flex:1;min-width:0">
     </div>
     <div id="questCategoryPick" style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
     <label style="font-size:0.8em;color:var(--muted);margin:10px 0 4px;display:block">任务内容</label>
@@ -403,10 +403,10 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 <div class="card">
 <h3>🎨 风格设置</h3>
 <div style="display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn btn-sm btn-outline theme-btn" data-theme="default" onclick="setTheme('default')">⬜ 白底</button>
-<button class="btn btn-sm btn-outline theme-btn" data-theme="green" onclick="setTheme('green')">🌿 护眼绿</button>
-<button class="btn btn-sm btn-outline theme-btn" data-theme="warm" onclick="setTheme('warm')">🌅 暖阳</button>
-<button class="btn btn-sm btn-outline theme-btn" data-theme="dark" onclick="setTheme('dark')">🌙 暗夜</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="default" onclick="setTheme('default')">白底</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="green" onclick="setTheme('green')">护眼绿</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="warm" onclick="setTheme('warm')">暖阳</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="dark" onclick="setTheme('dark')">暗夜</button>
 </div>
 </div>
 </div>
@@ -419,8 +419,8 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div><div class="card">
 <h3>📥 导入导出</h3>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="exportData()">📥 导出主线</button>
-<button class="btn btn-sm btn-outline" style="flex:1;min-width:120px" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入主线</button>
+<button class="btn btn-sm btn-outline" onclick="exportData()">📥 导出主线</button>
+<button class="btn btn-sm btn-outline" onclick="document.getElementById(&quot;importFile&quot;).click()">📤 导入主线</button>
 <input type="file" id="importFile" accept=".json" onchange="importData(event)">
 </div>
 </div><div class="card">
@@ -443,10 +443,10 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </div><div class="card">
 <h3>🎨 风格设置</h3>
 <div style="display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn btn-sm btn-outline theme-btn" data-theme="default" onclick="setTheme('default')">⬜ 白底</button>
-<button class="btn btn-sm btn-outline theme-btn" data-theme="green" onclick="setTheme('green')">🌿 护眼绿</button>
-<button class="btn btn-sm btn-outline theme-btn" data-theme="warm" onclick="setTheme('warm')">🌅 暖阳</button>
-<button class="btn btn-sm btn-outline theme-btn" data-theme="dark" onclick="setTheme('dark')">🌙 暗夜</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="default" onclick="setTheme('default')">白底</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="green" onclick="setTheme('green')">护眼绿</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="warm" onclick="setTheme('warm')">暖阳</button>
+<button class="btn btn-sm btn-outline theme-btn" data-theme="dark" onclick="setTheme('dark')">暗夜</button>
 </div>
 </div></div>
 <div class="page" id="page-roulette">
@@ -583,10 +583,10 @@ var DEFAULT_DATA = {
     { id: "q47", category: "15个冒险篇的行动副本", title: "创造一个AI解决问题教练手册", points: 0, done: false }
   ],
   roulettes: {
-    "放松转盘": { cost: 5, items: ["10分钟站桩/拉伸，立刻执行","看一集喜欢的剧/综艺，配一杯热茶","白天出门晒太阳15分钟，只要求出门","按摩仪/筋膜球/热敷放松15分钟","泡脚20分钟，顺便听音乐/播客","做一次10分钟呼吸训练或冥想","听一张完整专辑，不做其他任何事","一节瑜伽/普拉提/拉伸课","写一页感恩日记或记录3件今日小确幸","做一次10分钟自由涂鸦、填色或折纸","给自己做一杯手冲咖啡、泡茶或调一杯饮品","断舍离：整理一个抽屉/角落，扔掉至少3件东西","给一个好久没联系的朋友发条消息问候","学做一道简单的新菜式或甜点","不看手机看30分钟闲书（非工作学习类）","一次专业按摩、SPA、理疗或采耳放松，预算200-300元","点一支香薰蜡烛或开一盏暖光灯，安静发呆10分钟","大奖：一次周末短途放松小旅行，预算300-500元"] },
-    "美食转盘": { cost: 5, items: ["买一份今天最想吃的水果","点一份真正想吃的外卖，不凑合","买一份没吃过的新零食","喝一杯想试很久的奶茶/咖啡/饮品","买一份特色甜品，认真吃完","去吃一次日料/韩餐/东南亚单人套餐","去吃一次火锅/烧烤/烤肉","探一家收藏过但一直没去的小店","买一种地方特色美食尝一尝","随机购买3种陌生食材，创作一道菜","做一顿有仪式感的早餐/夜宵","体验一次线上烹饪课或跟做菜谱","美食纪录片 + 配套小吃观影","请朋友一起吃一顿轻松饭","去一家评分不错的小馆子吃招牌菜","买一份高品质食材：牛排、三文鱼、芝士或时令水果","安排一次自助餐/小型放题","大奖：美食探索基金，预算300-500元"] },
-    "好奇心转盘": { cost: 5, items: ["打开世界好奇清单，随机探索一个条目15分钟","看一个陌生主题TED演讲或公开课","线上逛一次博物馆/美术馆/大学公开展","查清楚一个今天突然好奇的问题，并写下3句话","了解5个冷知识，挑一个讲给别人听","随机连接两个不相关概念，写出一个新点子","买一本纸质书或电子书，预算20-50元","体验一次线上大师课/知识课程单节","买一份科学实验/手作/模型小套装，预算100元以内","去一次天文馆、科技馆、博物馆或展览","请教一个人：他的专业、职业或生活经验","参加一次线下工作坊、分享会或沙龙","进行一次同城短途探索：一条街、一个园区或一个展","学习一个完全无关领域的小技能30分钟","看一部纪录片，并记录3个新发现","了解一个陌生人的职业或生活故事","研究一项前沿科技/新工具，并写300字总结","大奖：好奇心远征券，预算300-500元"] },
-    "游戏转盘": { cost: 5, items: ["玩一局最想玩的游戏，限时60分钟","尝试一款没玩过的独立游戏Demo","通关一个短流程游戏或一个章节","完成一个游戏里的支线任务/隐藏挑战","玩一次桌游或卡牌游戏体验包","约朋友线上开黑/联机1小时","组织或参加一次线下游戏局","去一次电竞馆/主机馆体验","一次VR游戏体验30分钟","租赁或体验一款主机游戏","买一个小额游戏DLC/皮肤/通行证","买一个游戏周边/设定集/手办小物","去一家游戏主题咖啡厅或电玩城","看一场电竞比赛/速通/游戏纪录片","写一段100字游戏体验记录：哪里好玩","用RPG Maker/Construct/AI工具做一个小游戏雏形","参加游戏展/动漫展/线下活动","大奖：游戏体验基金，预算300-500元"] }
+    "放松": { cost: 5, items: ["10分钟站桩/拉伸，立刻执行","看一集喜欢的剧/综艺，配一杯热茶","白天出门晒太阳15分钟，只要求出门","按摩仪/筋膜球/热敷放松15分钟","泡脚20分钟，顺便听音乐/播客","做一次10分钟呼吸训练或冥想","听一张完整专辑，不做其他任何事","一节瑜伽/普拉提/拉伸课","写一页感恩日记或记录3件今日小确幸","做一次10分钟自由涂鸦、填色或折纸","给自己做一杯手冲咖啡、泡茶或调一杯饮品","断舍离：整理一个抽屉/角落，扔掉至少3件东西","给一个好久没联系的朋友发条消息问候","学做一道简单的新菜式或甜点","不看手机看30分钟闲书（非工作学习类）","一次专业按摩、SPA、理疗或采耳放松，预算200-300元","点一支香薰蜡烛或开一盏暖光灯，安静发呆10分钟","大奖：一次周末短途放松小旅行，预算300-500元"] },
+    "美食": { cost: 5, items: ["买一份今天最想吃的水果","点一份真正想吃的外卖，不凑合","买一份没吃过的新零食","喝一杯想试很久的奶茶/咖啡/饮品","买一份特色甜品，认真吃完","去吃一次日料/韩餐/东南亚单人套餐","去吃一次火锅/烧烤/烤肉","探一家收藏过但一直没去的小店","买一种地方特色美食尝一尝","随机购买3种陌生食材，创作一道菜","做一顿有仪式感的早餐/夜宵","体验一次线上烹饪课或跟做菜谱","美食纪录片 + 配套小吃观影","请朋友一起吃一顿轻松饭","去一家评分不错的小馆子吃招牌菜","买一份高品质食材：牛排、三文鱼、芝士或时令水果","安排一次自助餐/小型放题","大奖：美食探索基金，预算300-500元"] },
+    "好奇心": { cost: 5, items: ["打开世界好奇清单，随机探索一个条目15分钟","看一个陌生主题TED演讲或公开课","线上逛一次博物馆/美术馆/大学公开展","查清楚一个今天突然好奇的问题，并写下3句话","了解5个冷知识，挑一个讲给别人听","随机连接两个不相关概念，写出一个新点子","买一本纸质书或电子书，预算20-50元","体验一次线上大师课/知识课程单节","买一份科学实验/手作/模型小套装，预算100元以内","去一次天文馆、科技馆、博物馆或展览","请教一个人：他的专业、职业或生活经验","参加一次线下工作坊、分享会或沙龙","进行一次同城短途探索：一条街、一个园区或一个展","学习一个完全无关领域的小技能30分钟","看一部纪录片，并记录3个新发现","了解一个陌生人的职业或生活故事","研究一项前沿科技/新工具，并写300字总结","大奖：好奇心远征券，预算300-500元"] },
+    "游戏": { cost: 5, items: ["玩一局最想玩的游戏，限时60分钟","尝试一款没玩过的独立游戏Demo","通关一个短流程游戏或一个章节","完成一个游戏里的支线任务/隐藏挑战","玩一次桌游或卡牌游戏体验包","约朋友线上开黑/联机1小时","组织或参加一次线下游戏局","去一次电竞馆/主机馆体验","一次VR游戏体验30分钟","租赁或体验一款主机游戏","买一个小额游戏DLC/皮肤/通行证","买一个游戏周边/设定集/手办小物","去一家游戏主题咖啡厅或电玩城","看一场电竞比赛/速通/游戏纪录片","写一段100字游戏体验记录：哪里好玩","用RPG Maker/Construct/AI工具做一个小游戏雏形","参加游戏展/动漫展/线下活动","大奖：游戏体验基金，预算300-500元"] }
   },
   levelRewards: [
     { lv: 1, need: 0, reward: "奖励一次随机转盘", claimed: true },
@@ -623,7 +623,8 @@ function loadData() {
   if (saved) { try { var p = JSON.parse(saved); savedRouletteContentVersion = p.rouletteContentVersion || ""; data = Object.assign(JSON.parse(JSON.stringify(DEFAULT_DATA)), p); } catch(e) {} }
   normalizeDailyLog();
   recalcMainMinutesTotal();recalcDailyMinutesTotal();
-  if(savedRouletteContentVersion!=="all-roulette-v1"){["放松转盘","美食转盘","好奇心转盘","游戏转盘"].forEach(function(type){data.roulettes[type]=JSON.parse(JSON.stringify(DEFAULT_DATA.roulettes[type]))});data.rouletteContentVersion="all-roulette-v1";saveData()}
+  if(savedRouletteContentVersion!=="all-roulette-v1"){["放松","美食","好奇心","游戏"].forEach(function(type){data.roulettes[type]=JSON.parse(JSON.stringify(DEFAULT_DATA.roulettes[type]))});data.rouletteContentVersion="all-roulette-v1";saveData()}
+  ["放松转盘","美食转盘","好奇心转盘","游戏转盘"].forEach(function(oldN){var nn=oldN.replace("转盘","");if(data.roulettes[oldN]&&!data.roulettes[nn]){data.roulettes[nn]=data.roulettes[oldN];delete data.roulettes[oldN]}});
   if(data.balanceResetVersion!=="52-fix-v2"){data.balance=52;data.balanceResetVersion="52-fix-v2";saveData()}
   if(!data.levelRewards.some(function(r){return r.lv===1})){data.levelRewards.unshift({lv:1,need:0,reward:"奖励一次随机转盘",claimed:true});saveData()}
 }
@@ -932,20 +933,28 @@ function addLevelReward(){
 function deleteLevelReward(idx){var r=data.levelRewards[idx];if(!r)return;if(!confirm("确定删除 Lv."+r.lv+" 奖励？"))return;data.levelRewards.splice(idx,1);saveData();renderLevelGrid();showToast("已删除 Lv."+r.lv)}
 
 // Roulette
-var currentRouletteType="放松转盘",isSpinning=false;
+var currentRouletteType="放松",isSpinning=false;
+function ensureCurrentRoulette(){
+  var keys=Object.keys(data.roulettes||{});
+  if(!keys.length){currentRouletteType="";return;}
+  if(!data.roulettes[currentRouletteType])currentRouletteType=keys[0];
+}
 function renderRouletteTabs(){
+  ensureCurrentRoulette();
   document.getElementById("rouletteTabs").innerHTML=Object.keys(data.roulettes).map(function(t){
     return'<div style="display:flex;align-items:center;gap:2px"><button class="r-tab '+(t===currentRouletteType?'active':'')+'" onclick="selectRoulette(\''+t+'\')">'+t+'</button><button class="btn btn-sm btn-outline" style="padding:1px 4px;font-size:0.55em;opacity:0.6" onclick="event.stopPropagation();renameRoulette(\''+t+'\')">✏</button></div>'
   }).join("");updateSpinRemaining();
 }
 function spinRandomCategoryAndSpin(){if(isSpinning)return;var types=Object.keys(data.roulettes);selectRoulette(types[Math.floor(Math.random()*types.length)]);showToast("随机到："+currentRouletteType)}
-function selectRoulette(type){currentRouletteType=type;document.getElementById("spinCost").textContent=data.roulettes[type].cost;document.getElementById("spinResult").textContent="🎯 点击下方按钮开始抽奖";renderRouletteTabs();renderRouletteItems();document.querySelectorAll(".roulette-item").forEach(function(el){el.classList.remove("highlight")});updateSpinRemaining()}
+function selectRoulette(type){if(!data.roulettes[type])return;currentRouletteType=type;document.getElementById("spinCost").textContent=data.roulettes[type].cost;document.getElementById("spinResult").textContent="🎯 点击下方按钮开始抽奖";renderRouletteTabs();renderRouletteItems();document.querySelectorAll(".roulette-item").forEach(function(el){el.classList.remove("highlight")});updateSpinRemaining()}
 function renameRoulette(oldName){var nn=prompt("重命名转盘：",oldName);if(!nn||nn.trim()===""||nn.trim()===oldName)return;nn=nn.trim();if(data.roulettes[nn]){showToast("名称已存在");return}data.roulettes[nn]=data.roulettes[oldName];delete data.roulettes[oldName];if(currentRouletteType===oldName)currentRouletteType=nn;saveData();renderRouletteTabs();renderRouletteItems();showToast("已重命名")}
 function renderRouletteItems(){
-  var items=data.roulettes[currentRouletteType].items,html='';
+  ensureCurrentRoulette();
+  var r=data.roulettes[currentRouletteType];if(!r)return;
+  var items=r.items,html='';
   for(var i=0;i<items.length;i++){html+='<div class="roulette-item" id="ritem-'+i+'"><span style="flex:1">'+(i+1)+'. '+items[i]+'</span><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editRouletteItem('+i+')">✏</button><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteRouletteItem('+i+')">🗑</button></div>'}
   html+='<div style="display:flex;gap:6px;margin-top:8px"><input type="text" id="newRouletteItem" placeholder="新增条目..." style="flex:1;font-size:0.8em"><button class="btn btn-sm" onclick="addRouletteItem()">+</button></div>';
-  document.getElementById("rouletteItems").innerHTML=html;document.getElementById("spinCost").textContent=data.roulettes[currentRouletteType].cost;updateSpinRemaining();
+  document.getElementById("rouletteItems").innerHTML=html;document.getElementById("spinCost").textContent=r.cost;updateSpinRemaining();
 }
 function editRouletteItem(idx){var items=data.roulettes[currentRouletteType].items;var nt=prompt("编辑条目：",items[idx]);if(nt!==null&&nt.trim()!==""){items[idx]=nt.trim();saveData();renderRouletteItems();showToast("已更新")}}
 function deleteRouletteItem(idx){var items=data.roulettes[currentRouletteType].items;if(!confirm('确定删除"'+items[idx]+'"？'))return;items.splice(idx,1);saveData();renderRouletteItems();showToast("已删除")}
@@ -969,7 +978,7 @@ function spinRoulette(){
     }
   },100);
 }
-function updateSpinRemaining(){var cost=data.roulettes[currentRouletteType].cost,bal=data.balance||0,el=document.getElementById("spinRemaining");if(el)el.textContent="余额可抽 "+Math.max(0,Math.floor(bal/cost))+" 次"}
+function updateSpinRemaining(){ensureCurrentRoulette();var r=data.roulettes[currentRouletteType];if(!r)return;var cost=r.cost,bal=data.balance||0,el=document.getElementById("spinRemaining");if(el)el.textContent="余额可抽 "+Math.max(0,Math.floor(bal/cost))+" 次"}
 function restoreFivePoints(){data.balance=(data.balance||0)+5;saveData();updateStats();updateSpinRemaining();showToast("💧 已恢复5点成长点")}
 function editBalance(){var v=prompt("修改成长点余额：",data.balance||0);if(v!==null){var n=parseInt(v);if(!isNaN(n)){data.balance=n;saveData();updateStats();updateSpinRemaining();showToast("余额已更新为 "+n)}}}
 
@@ -1207,7 +1216,7 @@ function exportData(){var out={mainQuests:(data.mainQuests||[]),questCatOrder:(d
 function importData(e){var file=e.target.files[0];if(!file)return;if(!confirm("导入会覆盖当前主线任务和待办，其他数据不受影响。确定继续吗？")){e.target.value="";return;}var reader=new FileReader();reader.onload=function(ev){try{var j=JSON.parse(ev.target.result);if(Array.isArray(j.mainQuests))data.mainQuests=j.mainQuests;if(Array.isArray(j.questCatOrder))data.questCatOrder=j.questCatOrder;if(Array.isArray(j.dailyTodos))data.dailyTodos=j.dailyTodos;saveData();renderDailyTodos();renderQuests();renderLevelGrid();updateStats();showToast("📤 已导入主线任务和待办")}catch(err){showToast("❌ 文件格式错误")}};reader.readAsText(file);e.target.value=""}
 function showSpinResultModal(type,result,cost){
   var overlay=document.createElement("div");overlay.className="spin-overlay";overlay.id="spinOverlay";
-  var typeIcons={"放松转盘":"🧘","美食转盘":"🍜","好奇心转盘":"🔍","游戏转盘":"🎮"};
+  var typeIcons={"放松":"🧘","美食":"🍜","好奇心":"🔍","游戏":"🎮"};
   var icon=typeIcons[type]||"🎰";
   overlay.innerHTML='<div class="spin-modal"><span class="spin-icon">'+icon+'</span><h2>恭喜获得！</h2><div class="spin-category">'+type+'</div><div class="spin-prize"><div class="spin-prize-text">'+result+'</div></div><div class="spin-cost-info">消耗 '+cost+' 成长点 · 余额剩余 '+Math.max(0,data.balance||0)+' 点</div><div class="spin-btns"><button class="btn" style="font-size:1em;padding:10px 24px" onclick="closeSpinModal();spinRoulette()">🔄 再来一次</button><button class="btn btn-outline" style="font-size:0.9em" onclick="closeSpinModal()">✕ 关闭</button></div></div>';
   document.body.appendChild(overlay);
