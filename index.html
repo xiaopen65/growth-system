@@ -165,7 +165,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="9">
+  <meta name="app-version" content="10">
 </head>
 <body>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -530,7 +530,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <h3 id="exportPopupTitle" style="margin:0;color:var(--muted)">📤 导出</h3>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-sm" onclick="copyExportText()">📋 复制</button>
+        <button class="btn btn-sm" id="copyExportBtn" onclick="copyExportText()">📋 复制</button>
         <button class="btn btn-sm btn-outline" onclick="closeExportPopup()">✕ 关闭</button>
       </div>
     </div>
@@ -1222,14 +1222,19 @@ function copyExportText(){
   var text=ta?ta.value:"";
   if(!text){showToast("没有可复制的内容");return}
   if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(function(){showToast("📋 已复制全部内容")}).catch(function(){fallbackCopyExport(text)});
+    navigator.clipboard.writeText(text).then(function(){markCopyBtn();showToast("📋 已复制全部内容")}).catch(function(){fallbackCopyExport(text)});
   }else{fallbackCopyExport(text)}
 }
+function markCopyBtn(){
+  var b=document.getElementById("copyExportBtn");if(!b)return;
+  b.textContent="✅ 已复制";
+}
+
 function fallbackCopyExport(text){
   var ta=document.getElementById("exportPopupText");
   if(!ta)return;
   ta.focus();ta.select();
-  try{document.execCommand("copy");showToast("📋 已复制全部内容")}catch(e){showToast("复制失败，请手动复制")}
+  try{document.execCommand("copy");markCopyBtn();showToast("📋 已复制全部内容")}catch(e){showToast("复制失败，请手动复制")}
 }
 
 function exportData(){var out={mainQuests:(data.mainQuests||[]),questCatOrder:(data.questCatOrder||[]),dailyTodos:(data.dailyTodos||[])};var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_mainline_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 已导出主线任务和待办")}
