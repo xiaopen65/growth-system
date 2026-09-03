@@ -92,8 +92,8 @@ textarea{resize:vertical;min-height:60px}
 .spin-modal .spin-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes popIn{0%{transform:scale(0.7);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
-.ai-hourglass{display:inline-block;animation:aiHourglass 1s ease-in-out infinite}
-@keyframes aiHourglass{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
+.ai-hourglass{display:inline-block;font-size:1.1em;animation:aiHourglass 1.1s ease-in-out infinite}
+@keyframes aiHourglass{0%,100%{transform:rotate(-18deg) scale(1)}50%{transform:rotate(18deg) scale(1.18)}}
 .todo-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f6f8;border-radius:8px;margin-bottom:4px;transition:all .2s}.todo-check{width:20px;height:20px;border-radius:6px;border:2px solid #4fc3f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7em;flex-shrink:0;transition:all .2s}.todo-check.todo-checked{background:#4fc3f7;color:#f5f6f8}.todo-text{flex:1;font-size:.9em}.todo-done .todo-text{text-decoration:line-through;color:#9ca3af}
 
 :root{--bg:#f5f6f8;--card:#ffffff;--card-2:#f5f6f8;--border:#e5e7eb;--text:#1f2937;--muted:#6b7280;--muted-2:#4b5563;--hover:#374151;--input-bg:#f5f6f8;--outline-border:#9ca3af;--accent:#f59e0b;--tab-active:#fef3c7}
@@ -115,6 +115,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--accent)}
 .day-entry{background:var(--card-2)}
 .day-entry .day-actions{color:var(--muted-2)}
 .quest-item{background:var(--card-2)}
+.todo-item{background:var(--card-2)}
 .challenge-card{background:var(--card);border-color:var(--border)}
 .challenge-card h3{color:var(--muted)!important}
 .challenge-bar{background:var(--card-2)}
@@ -165,9 +166,21 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="14">
+  <meta name="app-version" content="25">
 </head>
 <body>
+<div id="importPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:246;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:480px;width:100%;max-height:88vh;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <h3 style="margin:0;color:var(--muted)">📥 导入时间线</h3>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="doImportTimeline()">📥 导入</button>
+        <button class="btn btn-sm btn-outline" onclick="closeImportPopup()">✕ 关闭</button>
+      </div>
+    </div>
+    <textarea id="importPopupText" placeholder="粘贴「导出今天」或「导出全部」的内容，将追加到时间线（重复记录自动跳过）" style="flex:1;min-height:260px;white-space:pre;overflow:auto;font-family:monospace;font-size:0.85em;resize:none"></textarea>
+  </div>
+</div>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
 
 <div class="app"><div class="tabs">
@@ -249,12 +262,11 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   </div>
 </div>
 <div class="page" id="page-main">
-<div class="card" style="border:1px solid #f59e0b"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;color:#f59e0b">🎯 今日行动</h3><button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="generateTodayPlan()">✨ 一键生成</button></div><p style="color:#6b7280;font-size:0.8em;margin-bottom:8px">生成今天要做的任务并排好序，每项显示今天建议先做几个傻瓜时间，点「▶ 开跑」直接开始</p><div id="todayPlanList" style="font-size:0.85em"></div><div id="dailyChallengeCard" style="margin-top:10px;border-top:1px dashed #e5e7eb;padding-top:10px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-weight:bold;color:#f59e0b">⚔️ 今日限时任务</span><button class="btn btn-sm" id="dailyChallengeStartBtn">▶ 开跑 30 分钟</button></div><p id="dailyChallengeHint" style="color:#6b7280;font-size:0.8em;margin-top:6px">自动派一个任务，专注做满 30 分钟，完成后 +1 成长点</p></div></div>
+<div class="card" style="border:1px solid #f59e0b"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><h3 style="margin:0;color:#f59e0b">🎯 今日行动</h3><div style="display:flex;align-items:center;gap:8px"><button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openSuggestionModal()">💡 行动建议</button><button class="btn btn-sm btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="generateTodayPlan()">✨ 一键生成</button></div></div><div id="todayPlanList" style="font-size:0.85em"></div><div id="dailyChallengeCard" style="margin-top:10px;border-top:1px dashed #e5e7eb;padding-top:10px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-weight:bold;color:#f59e0b">⚔️ 今日限时任务</span><button class="btn btn-sm" id="dailyChallengeStartBtn">▶ 开跑 30 分钟</button></div></div></div>
 <div class="card">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
 <h3 style="margin:0">📝 今日备忘录</h3>
 <div style="display:flex;align-items:center;gap:8px">
-<button class="btn btn-sm btn-outline" onclick="openSuggestionModal()">💡 行动建议</button>
 <button class="btn btn-sm btn-outline" onclick="openTodoModal()">➕ 添加</button>
 </div>
 </div>
@@ -363,16 +375,43 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   </div>
 </div>
 <div id="suggestionOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:245;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
-  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <h3 style="margin:0;color:var(--muted)">💡 行动建议</h3>
       <button class="btn btn-sm btn-outline" onclick="closeSuggestionModal()">✕ 关闭</button>
     </div>
-    <div style="display:flex;align-items:flex-start;gap:12px">
-      <div id="suggestionHourglass" style="font-size:1.8em;line-height:1.2"><span class="ai-hourglass">⏳</span></div>
-      <div id="suggestionText" style="flex:1;white-space:pre-wrap;line-height:1.7;font-size:0.9em;min-height:60px"></div>
+
+    <div id="sugStep1">
+      <div style="font-size:0.85em;color:var(--muted);margin-bottom:8px">填写每一小时的「被动安排时间」（上班/上课/约人）；空白 = 可自主安排。默认已填好睡觉、吃饭，可自行修改。</div>
+      <div id="scheduleGrid" style="max-height:48vh;overflow-y:auto;border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:4px"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn btn-sm btn-outline" style="flex:1" onclick="saveActionSchedule()">💾 保存</button>
+        <button class="btn" style="flex:1" onclick="goSuggestionNext()">下一步</button>
+      </div>
     </div>
-    <button class="btn" style="width:100%;margin-top:12px;display:none" id="suggestionRetryBtn" onclick="runSuggestion()">🔄 重新分析</button>
+
+    <div id="sugStep2" style="display:none">
+      <div id="availMinutesBox" style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px;margin-bottom:10px;font-size:0.9em"></div>
+      <div class="form-row" style="margin-bottom:10px"><label>① 你今天如果只做一个主线，会是哪一件？</label><select id="sugMainQuest" style="width:100%;padding:8px;border:1px solid var(--border,#e5e7eb);border-radius:8px;background:var(--card);color:var(--text);font-size:0.9em"></select></div>
+      <div class="form-row"><label>② 你今天需要完成哪些待办（可多选）</label>
+        <div id="sugTodoDropdown" style="border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:8px;cursor:pointer;font-size:0.9em;display:flex;justify-content:space-between;align-items:center" onclick="toggleSugTodoPanel()"><span id="sugTodoSummary">选择待办...</span><span style="color:var(--muted)">▾</span></div>
+        <div id="sugTodoPanel" style="display:none;max-height:180px;overflow-y:auto;border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:8px;margin-top:4px"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+        <button class="btn btn-sm btn-outline" onclick="goSuggestionPrev()">← 上一步</button>
+        <button class="btn" style="flex:1" onclick="goSuggestionNext()">下一步进行分析</button>
+        <span id="sugAnalyzing" style="display:none;font-size:0.85em;color:#0284c7;white-space:nowrap"></span>
+      </div>
+    </div>
+
+    <div id="sugStep3" style="display:none">
+      <div id="suggestionText" style="background:#f5f6f8;border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:12px;max-height:48vh;overflow-y:auto;white-space:pre-wrap;line-height:1.7;font-size:0.9em"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-outline" onclick="goSuggestionPrev()">← 上一步</button>
+        <button class="btn btn-sm btn-outline" onclick="copySuggestionText()">📋 复制内容</button>
+        <button class="btn btn-sm" onclick="reRunSuggestion()">🔄 重新分析</button>
+      </div>
+    </div>
   </div>
 </div>
 <div class="page" id="page-rewards"><div class="card">
@@ -436,7 +475,6 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
   <div class="form-row"><label>API Key</label><input type="password" id="aiKey" placeholder="sk-..."></div>
   <div class="form-row"><label>模型</label><input type="text" id="aiModel" placeholder="gpt-4o-mini"></div>
   <div class="form-row"><label>今日分析提示词</label><textarea id="aiPrompt" rows="5" placeholder="请分析今日日常/主线时间投入，然后再一句话夸夸+一句话鼓励+给3个高质量问题，不要用markdown"></textarea></div>
-  <div class="form-row"><label>行动建议分析提示词</label><textarea id="aiSugPrompt" rows="5" placeholder="结合今日备忘录和主线任务给优先级行动建议+理由，不要用markdown"></textarea></div>
   <button class="btn btn-sm" onclick="saveAIConfig()" style="margin-top:6px">💾 保存</button>
 </div>
 <div id="aiStatus" style="font-size:0.85em;color:#6b7280;margin-top:6px"></div>
@@ -481,14 +519,14 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <button class="btn btn-sm btn-outline" onclick="closeTimeline()">← 返回</button>
       <h3 style="margin:0;color:#6b7280">📋 时间线</h3>
-      <button class="btn btn-sm btn-outline" id="dailyExportTodayBtn" onclick="exportDailyModeToday()" style="display:none">📤 导出今天</button>
     </div>
     <div class="card" id="timelineExportCard">
       <div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
-        <div style="font-size:0.8em;color:#6b7280;margin-bottom:8px">📤 导出时间线</div>
+        <div id="timelineExportTitle" style="font-size:0.8em;color:#6b7280;margin-bottom:8px">📤 导入导出时间线</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineToday()">导出今天</button>
           <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineAll()">导出全部</button>
+          <button class="btn btn-sm btn-outline" id="importTimelineBtn" style="font-size:0.75em;padding:4px 10px" onclick="importTimelineText()">📥 导入时间线</button>
         </div>
       </div>
     </div>
@@ -619,6 +657,7 @@ var DEFAULT_DATA = {
 
 var data = JSON.parse(JSON.stringify(DEFAULT_DATA));
 var previousLevel = -1;
+var timelineViewMode="main";
 
 function saveData() { localStorage.setItem("growth_system_data", JSON.stringify(data)); }
 function normalizeDailyLog(){data.dailyLog=(data.dailyLog||[]).map(function(item){if(!item.kind)item.kind="daily";if(item.kind==="main"&&typeof item.pointsDelta!=="number")item.pointsDelta=0;return item})}
@@ -675,12 +714,25 @@ function getLastEndMinutes(date){var items=getDailyEntriesForDate(date).filter(f
 function updateDailyDraftTimes(){var date=document.getElementById("dailyDate").value||getLocalDateString();var now=new Date();var today=getLocalDateString(now);var startEl=document.getElementById("dailyStartTime");var startManual=startEl&&startEl.dataset.manual==="1";var startM=startManual?parseTimeToMinutes(startEl.value):getLastEndMinutes(date);var endInput=document.getElementById("dailyEndTime");var manual=endInput&&endInput.dataset.manual==="1";var endM=manual?parseTimeToMinutes(endInput.value):parseTimeToMinutes(getLocalTimeString(now));if(date!==today&&!manual&&!startManual){endM=startM}if(endM<startM)endM=startM;if(startEl&&!startManual)startEl.value=formatMinutesToTime(startM);if(endInput&&!manual)endInput.value=formatMinutesToTime(endM);var duration=endM-startM;var durationEl=document.getElementById("dailyDuration");var nextHint=document.getElementById("dailyNextHint");if(durationEl)durationEl.textContent=formatDurationLabel(duration)+(duration>0?" 未记录":"");if(nextHint){var todayMainMin=0;(data.dailyLog||[]).forEach(function(d){if(d.date===today&&d.kind==="main")todayMainMin+=(d.clockCount||0)});var mainRemain=60-((data.mainMinutesTotal||0)%60);if(mainRemain===60)mainRemain=0;var h="<div>今日累计主线时间：<strong>"+todayMainMin+"</strong> 分钟</div>";if(mainRemain===0)h+="<div><strong style='color:#f59e0b'>主线已满 60 分钟，可加 1 枚成长点！</strong></div>";else h+="<div><span style='color:#ff9f2f'>再积累 <strong>"+mainRemain+"</strong> 分钟主线时间，可增加一枚成长点</span></div>";nextHint.innerHTML=h}}
 
 // Daily
+function getMergedDayEntries(date){
+  var out=[];
+  (data.dailyLog||[]).forEach(function(d){if(d.date===date)out.push(d);});
+  var dd=(dataDaily&&dataDaily.dailyLog)||[];
+  dd.forEach(function(d){if(d.date===date)out.push(d);});
+  out.sort(function(a,b){return parseTimeToMinutes(a.startTime||"00:00")-parseTimeToMinutes(b.startTime||"00:00");});
+  return out;
+}
+function getMergedLastEndMinutes(entries){
+  var mx=0;
+  entries.forEach(function(d){var m=parseTimeToMinutes(d.endTime||"");if(m>mx)mx=m;});
+  return mx;
+}
 function renderTodayTimeline(){
   var c=document.getElementById("todayTimeline");
   if(!c)return;
   var today=getLocalDateString();
   var date=document.getElementById("dailyDate").value||today;
-  var entries=(data.dailyLog||[]).filter(function(d){return d.date===date});
+  var entries=getMergedDayEntries(date);
   if(!entries.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">'+(date===today?"今天还没有时间记录":"这一天还没有时间记录")+'</p>';return}
   var html=entries.slice().map(function(d){
     var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
@@ -692,7 +744,7 @@ function renderTodayTimeline(){
     return row;
   }).join("");
   if(date===today){
-    var lastEndMins=getLastEndMinutes(today);
+    var lastEndMins=getMergedLastEndMinutes(entries);
     var nowMins=parseTimeToMinutes(getLocalTimeString(new Date()));
     if(nowMins>lastEndMins){
       var gapMins=nowMins-lastEndMins;
@@ -704,6 +756,7 @@ function renderTodayTimeline(){
   }
   c.innerHTML=html;
 }
+
 function renderDailyList() {
   renderTodayTimeline();
   var c=document.getElementById("dailyList");
@@ -821,7 +874,7 @@ function renderQuests() {
   data.mainQuests.forEach(function(q){var t=q.done?arc:ac;if(!t[q.category])t[q.category]=[];t[q.category].push(q)});
   var cats=syncQuestCatOrder().filter(function(c){return ac[c]});
   var ah=cats.map(function(cat){return'<div class="quest-category" data-cat="'+escapeHtml(cat)+'"><h4 style="display:flex;align-items:center;justify-content:space-between"><span style="display:flex;align-items:center;gap:6px"><span class="drag-handle" title="拖动分类排序">☰</span> <span>'+cat+' ('+ac[cat].length+')</span></span><span style="display:flex;align-items:center;gap:4px"><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em" onclick="editCategory(\''+cat+'\')">✏</button><button class="btn btn-sm btn-outline" style="padding:1px 5px;font-size:0.65em;color:#ff4e50" onclick="deleteCategory(\''+cat+'\')">&#xd7;</button></span></h4>'+ac[cat].map(renderQuestItem).join("")+'</div>'}).join("");
-  populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px">还没有主线内容，点右上角 ➕ 添加吧 🚀</p>');
+  populateFoolTimeSelect();container.innerHTML=(ah||'<p style="color:#666;text-align:center;padding:20px;font-size:0.8em">还没有主线内容，点右上角 ➕ 添加吧 🚀</p>');
 }
 function syncQuestCatOrder(){
   if(!data.questCatOrder)data.questCatOrder=[];
@@ -1159,14 +1212,14 @@ function renderDailyModeList(){
   var c=document.getElementById("dailyModeTimeline");
   if(!c)return;
   var today=getLocalDateString();
-  var entries=(dataDaily.dailyLog||[]).filter(function(item){return item.date===today});
+  var entries=getMergedDayEntries(today);
   if(!entries.length){c.innerHTML='<p style="color:#666;text-align:center;padding:20px">今天还没有时间记录</p>';return}
   var html=entries.map(function(d){
     var range=(d.startTime&&d.endTime)?d.startTime+"~"+d.endTime:"";
     var content=d.actions||"";
     return '<div style="display:flex;align-items:baseline;gap:6px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.85em;line-height:1.5"><span style="color:#6b7280;white-space:nowrap">'+escapeHtml(range)+'</span><span style="flex:1;color:#1f2937;white-space:pre-line">'+escapeHtml(content)+'</span></div>';
   }).join("");
-  var lastEndMins=getDailyLastEndMinutes(today);
+  var lastEndMins=getMergedLastEndMinutes(entries);
   var nowMins=parseTimeToMinutes(getLocalTimeString(new Date()));
   if(nowMins>lastEndMins){
     var gapMins=nowMins-lastEndMins;
@@ -1175,14 +1228,17 @@ function renderDailyModeList(){
   c.innerHTML=html;
 }
 
+
 // Init
 function exportTimelineToday(){
+  if(timelineViewMode==="daily"){exportDailyModeTodayPopup();return}
   var today=getLocalDateString();
   var text=buildTimelineExport(today,today);
   if(!text){showToast("今天没有可导出的记录");return}
   openExportPopup("📤 导出今天",text);
 }
 function exportTimelineAll(){
+  if(timelineViewMode==="daily"){exportDailyModeAllPopup();return}
   if(!data.dailyLog.length){showToast("没有可导出的记录");return}
   var dates=data.dailyLog.map(function(d){return d.date}).sort();
   var text=buildTimelineExport(dates[0],dates[dates.length-1]);
@@ -1190,7 +1246,10 @@ function exportTimelineAll(){
   openExportPopup("📤 导出全部",text);
 }
 function buildTimelineExport(from,to){
-  var entries=data.dailyLog.filter(function(d){return d.date>=from&&d.date<=to}).sort(function(a,b){return a.date>b.date?1:a.date<b.date?-1:0});
+  return buildTimelineExportEntries(data.dailyLog,from,to);
+}
+function buildTimelineExportEntries(entries,from,to){
+  entries=(entries||[]).filter(function(d){return d.date>=from&&d.date<=to}).sort(function(a,b){return a.date>b.date?1:a.date<b.date?-1:0});
   if(!entries.length){return ""}
   var text="时间线导出报告\n";
   text+="导出范围："+from+" 至 "+to+"\n";
@@ -1238,6 +1297,56 @@ function fallbackCopyExport(text){
   try{document.execCommand("copy");markCopyBtn();showToast("📋 已复制全部内容")}catch(e){showToast("复制失败，请手动复制")}
 }
 
+function importTimelineText(){var ov=document.getElementById("importPopupOverlay");if(!ov)return;var ta=document.getElementById("importPopupText");if(ta)ta.value="";ov.style.display="flex";}
+function closeImportPopup(){var ov=document.getElementById("importPopupOverlay");if(ov)ov.style.display="none"}
+function parseTimelineExportText(txt){
+  var out=[];var lines=String(txt||"").split(/\r?\n/);var curDate="";var i;
+  for(i=0;i<lines.length;i++){
+    var line=lines[i];
+    var dm=line.match(/📅\s*(\d{4}-\d{2}-\d{2})/);
+    if(dm){curDate=dm[1];continue}
+    var km=line.match(/^【(主线记录|日常记录)】/);
+    if(km&&curDate){
+      var kind=km[1]==="主线记录"?"main":"daily";
+      var start="",end="";
+      var rm=line.match(/(\d{1,2}:\d{2})~(\d{1,2}:\d{2})/);
+      if(rm){start=rm[1];end=rm[2]}
+      var clockCount=0;
+      var cm=line.match(/(?:(\d+)小时)?(\d+)分钟/);
+      if(cm){clockCount=(parseInt(cm[1]||"0",10)||0)*60+(parseInt(cm[2]||"0",10)||0)}
+      var j=i+1,actLines=[];
+      while(j<lines.length&&lines[j].trim()!==""&&/^\s{2}/.test(lines[j]||"")){actLines.push(lines[j].replace(/^\s{2}/,""));j++}
+      var actions=actLines.join("\n");
+      out.push({date:curDate,kind:kind,startTime:start,endTime:end,clockCount:clockCount,actions:actions});
+      i=j-1;
+    }
+  }
+  return out;
+}
+function doImportTimeline(){
+  var ta=document.getElementById("importPopupText");
+  var txt=ta?ta.value:"";
+  if(!txt.trim()){showToast("请粘贴时间线内容");return}
+  var parsed=parseTimelineExportText(txt);
+  if(!parsed.length){showToast("未识别到有效记录");return}
+  var oldMM=data.mainMinutesTotal||0,oldDM=data.dailyMinutesTotal||0;
+  var added=0,skipped=0;
+  parsed.forEach(function(p){
+    var dup=(data.dailyLog||[]).some(function(d){
+      return d.date===p.date&&(d.startTime||"")===p.startTime&&(d.endTime||"")===p.endTime&&(d.kind||"daily")===p.kind&&(d.actions||"")===p.actions;
+    });
+    if(dup){skipped++}
+    else{data.dailyLog.push({date:p.date,kind:p.kind,startTime:p.startTime,endTime:p.endTime,clockCount:p.clockCount,pointsDelta:0,actions:p.actions});added++}
+  });
+  if(added){
+    recalcMainMinutesTotal();recalcDailyMinutesTotal();
+    var dp=Math.max(0,Math.floor((data.mainMinutesTotal||0)/60)-Math.floor(oldMM/60))+Math.max(0,Math.floor((data.dailyMinutesTotal||0)/1200)-Math.floor(oldDM/1200));
+    if(dp>0)data.balance=(data.balance||0)+dp;
+    normalizeDailyLog();saveData();renderDailyList();renderDailyModeList();updateStats();
+  }
+  showToast("已导入 "+added+" 条，跳过重复 "+skipped+" 条");
+  closeImportPopup();
+}
 function exportData(){var out={mainQuests:(data.mainQuests||[]),questCatOrder:(data.questCatOrder||[]),dailyTodos:(data.dailyTodos||[])};var blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="growth_mainline_"+new Date().toISOString().split("T")[0]+".json";a.click();URL.revokeObjectURL(a.href);showToast("📥 已导出主线任务和待办")}
 function importData(e){var file=e.target.files[0];if(!file)return;if(!confirm("导入会覆盖当前主线任务和待办，其他数据不受影响。确定继续吗？")){e.target.value="";return;}var reader=new FileReader();reader.onload=function(ev){try{var j=JSON.parse(ev.target.result);if(Array.isArray(j.mainQuests))data.mainQuests=j.mainQuests;if(Array.isArray(j.questCatOrder))data.questCatOrder=j.questCatOrder;if(Array.isArray(j.dailyTodos))data.dailyTodos=j.dailyTodos;saveData();renderDailyTodos();renderQuests();renderLevelGrid();updateStats();showToast("📤 已导入主线任务和待办")}catch(err){showToast("❌ 文件格式错误")}};reader.readAsText(file);e.target.value=""}
 function showSpinResultModal(type,result,cost){
@@ -1497,7 +1606,7 @@ function renderGoals(){
       +'<span class="drag-handle" title="拖动排序">☰</span>'
       +'</div>';
   }).join("");
-  c.innerHTML=html||'<p style="color:#666;text-align:center;padding:16px">还没有近期目标，点右上角 ➕ 添加吧 🚀</p>';
+  c.innerHTML=html||'<p style="color:#666;text-align:center;padding:16px;font-size:0.8em">还没有近期目标，点右上角 ➕ 添加吧 🚀</p>';
 }
 function openGoalModal(){
   var ov=document.getElementById("goalOverlay");if(ov)ov.style.display="flex";
@@ -1807,23 +1916,29 @@ function abandonDailyChallenge(){
   showToast("已放弃，今日不再显示");
 }
 function openTimeline(){
+  timelineViewMode="main";
   var exportCard=document.getElementById("timelineExportCard");
   var analysisCard=document.getElementById("todayAnalysisCard");
-  var dailyExportBtn=document.getElementById("dailyExportTodayBtn");
+  var importBtn=document.getElementById("importTimelineBtn");
+  var title=document.getElementById("timelineExportTitle");
   if(exportCard)exportCard.style.display="";
   if(analysisCard)analysisCard.style.display="";
-  if(dailyExportBtn)dailyExportBtn.style.display="none";
+  if(importBtn)importBtn.style.display="";
+  if(title)title.textContent="📤 导入导出时间线";
   renderDailyList();
   var ov=document.getElementById("timelineOverlay");
   if(ov)ov.style.display="block";
 }
 function openTimelineDaily(){
+  timelineViewMode="daily";
   var exportCard=document.getElementById("timelineExportCard");
   var analysisCard=document.getElementById("todayAnalysisCard");
-  var dailyExportBtn=document.getElementById("dailyExportTodayBtn");
-  if(exportCard)exportCard.style.display="none";
+  var importBtn=document.getElementById("importTimelineBtn");
+  var title=document.getElementById("timelineExportTitle");
+  if(exportCard)exportCard.style.display="";
   if(analysisCard)analysisCard.style.display="none";
-  if(dailyExportBtn)dailyExportBtn.style.display="";
+  if(importBtn)importBtn.style.display="none";
+  if(title)title.textContent="📤 导出时间线";
   renderDailyModeTimelineAll();
   var ov=document.getElementById("timelineOverlay");
   if(ov)ov.style.display="block";
@@ -1894,28 +2009,20 @@ function deleteDailyModeEntry(src,idx){
     saveDailyData();renderDailyModeTimelineAll();renderTodayTimeline();renderDailyModeList();showToast("已删除")
   }
 }
-function exportDailyModeToday(){
+function exportDailyModeTodayPopup(){
   var today=getLocalDateString();
   var entries=getAllTimelineEntries().filter(function(d){return d.date===today});
-  if(!entries.length){showToast("今天还没有记录");return}
-  var text="时间线导出报告\n";
-  text+="导出范围："+today+" 至 "+today+"\n";
-  text+="导出时间："+new Date().toLocaleString()+"\n";
-  text+="=".repeat(50)+"\n\n";
-  entries.forEach(function(e){
-    var kind=(e.kind==="main"&&e.src==="main")?"【主线记录】":"【日常记录】";
-    var range=e.startTime&&e.endTime?e.startTime+"~"+e.endTime:"";
-    var dur=formatDurationLabel(e.clockCount||0);
-    text+=kind+" "+range+" ("+dur+")"+"\n";
-    if(e.actions)text+="  "+e.actions.replace(/\n/g,"\n  ")+"\n";
-    text+="\n";
-  });
-  var blob=new Blob([text],{type:"text/plain;charset=utf-8"});
-  var a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="timeline_"+today+".txt";
-  a.click();URL.revokeObjectURL(a.href);
-  showToast("📤 已导出 "+entries.length+" 条记录");
+  var text=buildTimelineExportEntries(entries,today,today);
+  if(!text){showToast("今天没有可导出的记录");return}
+  openExportPopup("📤 导出今天",text);
+}
+function exportDailyModeAllPopup(){
+  var merged=getAllTimelineEntries();
+  if(!merged.length){showToast("没有可导出的记录");return}
+  var dates=merged.map(function(d){return d.date}).sort();
+  var text=buildTimelineExportEntries(merged,dates[0],dates[dates.length-1]);
+  if(!text){showToast("没有可导出的记录");return}
+  openExportPopup("📤 导出全部",text);
 }
 // === TODAY ANALYSIS (今日分析) ===
 function toggleAIConfig(){
@@ -1925,12 +2032,11 @@ function toggleAIConfig(){
 }
 function loadAIConfig(){
   var c=data.aiConfig||{};
-  var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt"),sp=document.getElementById("aiSugPrompt");
+  var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt");
   if(u)u.value=c.url||"";
   if(k)k.value=c.key||"";
   if(m)m.value=c.model||"";
   if(pr)pr.value=c.prompt||"";
-  if(sp)sp.value=c.sugPrompt||"";
 }
 function exportAIConfig(){
   var cfg=data.aiConfig||{};
@@ -1948,11 +2054,11 @@ function importAIConfig(e){
     try{
       var j=JSON.parse(ev.target.result);
       var cfg=data.aiConfig||{};
-      var keys=["url","key","model","prompt","sugPrompt"];
+      var keys=["url","key","model","prompt"];
       keys.forEach(function(kk){if(typeof j[kk]==="string")cfg[kk]=j[kk];});
       data.aiConfig=cfg;saveData();
-      var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt"),sp=document.getElementById("aiSugPrompt");
-      if(u&&cfg.url)u.value=cfg.url;if(k&&cfg.key)k.value=cfg.key;if(m&&cfg.model)m.value=cfg.model;if(pr&&cfg.prompt)pr.value=cfg.prompt;if(sp&&cfg.sugPrompt)sp.value=cfg.sugPrompt;
+      var u=document.getElementById("aiUrl"),k=document.getElementById("aiKey"),m=document.getElementById("aiModel"),pr=document.getElementById("aiPrompt");
+      if(u&&cfg.url)u.value=cfg.url;if(k&&cfg.key)k.value=cfg.key;if(m&&cfg.model)m.value=cfg.model;if(pr&&cfg.prompt)pr.value=cfg.prompt;
       var st=document.getElementById("aiStatus");if(st)st.textContent="✅ 已导入 AI 配置";
       showToast("📥 AI配置已导入");
     }catch(err){showToast("❌ 配置文件格式错误")}
@@ -1966,8 +2072,7 @@ function saveAIConfig(){
       url:(document.getElementById("aiUrl").value||"").trim(),
       key:(document.getElementById("aiKey").value||"").trim(),
       model:(document.getElementById("aiModel").value||"").trim(),
-      prompt:(document.getElementById("aiPrompt").value||"").trim(),
-      sugPrompt:(document.getElementById("aiSugPrompt").value||"").trim()
+      prompt:(document.getElementById("aiPrompt").value||"").trim()
     };
     saveData();
     var statusEl=document.getElementById("aiStatus");
@@ -2036,48 +2141,178 @@ function callAI(prompt,userText){
     }
   });
 }
-function openSuggestionModal(){
-  var ov=document.getElementById("suggestionOverlay");
-  if(!ov)return;
-  ov.style.display="flex";
-  runSuggestion();
+var BUILTIN_SUGGEST_PROMPT='你是一位高效时间规划教练。下面会给你用户今天填好的「24小时被动时间表」「可自主安排时间」「选中的主线」「选中的待办」，以及系统生成的「今日行动推荐」。请据此给出今天可执行的行动建议。\n分析要求：\n1. 把「睡觉/吃饭」和「被动安排（上班/上课/约人）」视为固定占用，不再安排事情。\n2. 在剩下的可自主安排时间里，优先安排那条主线，作为今天最重要的产出。\n3. 其余待办按类型分配：需要专注产出/做作品的→放在精力最好的整块自主时间；琐事/学习/结果压力小的→放在被动安排之后或碎片时间。\n4. 不要把可自主安排时间全部排满：主线/产出的专注任务总共最多安排 2 小时（120 分钟）。\n5. 剩余未安排的空余时间，不用强行填满：可参考「今日行动推荐」中的未安排/次要任务，优先安排其中最值得做的一两件；其余建议留给用户休息、自我调整或自己关注的其他事情。\n6. 如果自主时间不够，请明确取舍，并给出“今天只做最重要的事”的方案。\n7. 用中文输出，简洁、可直接执行，不要用 markdown。格式：每个时段建议做什么 + 一句理由。';
+var suggestionState={step:1,schedule:[],availMins:0};
+var actionSelectedMainQuest="";
+var actionSelectedTodos=[];
+function defaultActionSchedule(){
+  var s=new Array(24);for(var h=0;h<24;h++)s[h]="";
+  [22,23,0,1,2,3,4,5,6,7].forEach(function(h){s[h]="睡觉";});
+  [12,13].forEach(function(h){s[h]="吃饭";});
+  [18].forEach(function(h){s[h]="吃饭";});
+  return s;
 }
-function closeSuggestionModal(){
-  var ov=document.getElementById("suggestionOverlay");
-  if(ov)ov.style.display="none";
-}
-function runSuggestion(){
-  var cfg=data.aiConfig;
-  var hourglass=document.getElementById("suggestionHourglass");
-  var textEl=document.getElementById("suggestionText");
-  var retryBtn=document.getElementById("suggestionRetryBtn");
-  if(!cfg||!cfg.url||!cfg.key){
-    if(textEl)textEl.textContent="请先到「设置」→「AI 配置」里填写 API 地址和 Key。";
-    if(hourglass)hourglass.style.display="none";
-    if(retryBtn)retryBtn.style.display="none";
-    return;
+function isOldDefaultSchedule(arr){
+  if(!Array.isArray(arr)||arr.length!==24)return false;
+  var sleep=[22,23,0,1,2,3,4,5,6,7];
+  for(var h=0;h<24;h++){var v=arr[h]||"";
+    if(sleep.indexOf(h)>=0){if(v!=="睡觉")return false;}
+    else if(h===12||h===13){if(v!=="吃饭")return false;}
+    else if(v!=="")return false;
   }
-  if(hourglass)hourglass.style.display="block";
-  if(textEl)textEl.textContent="正在结合主线任务和今日备忘录生成行动建议...";
-  if(retryBtn)retryBtn.style.display="none";
-  var todos=data.dailyTodos||[];
-  var text="今日备忘录：\n";
-  if(!todos.length){text+="（今日暂无待办事项）\n";}
-  else{todos.forEach(function(t,i){text+=(i+1)+". "+(t.done?"[已完成] ":"[未完成] ")+t.text+"\n";});}
-  text+="\n主线任务：\n";
-  var quests=(data.mainQuests||[]).filter(function(q){return !q.done});
-  if(!quests.length){text+="（暂无未完成主线任务）\n";}
-  else{quests.forEach(function(q,i){text+=(i+1)+". ["+q.category+"] "+q.title+"（"+q.points+"点）\n";});}
-  var prompt=(cfg.sugPrompt||"结合今日备忘录和主线任务给优先级行动建议+理由，不要用markdown");
-  callAI(prompt,text).then(function(report){
-    if(hourglass)hourglass.style.display="none";
-    if(textEl)textEl.textContent=report;
-  }).catch(function(e){
-    var msg=e&&e.message?e.message:String(e);
-    if(hourglass)hourglass.style.display="none";
-    if(textEl)textEl.textContent="❌ 分析失败："+msg;
-    if(retryBtn)retryBtn.style.display="block";
+  return true;
+}
+function ensureActionSchedule(){
+  if(!Array.isArray(data.actionSchedule)||data.actionSchedule.length!==24||isOldDefaultSchedule(data.actionSchedule)){data.actionSchedule=defaultActionSchedule();saveData();}
+}
+function formatTodoWhen(w){
+  if(!w)return "";
+  if(w.type==="time"&&w.time)return formatMinutesToTime(parseTimeToMinutes(w.time));
+  if(w.type==="range"&&w.start&&w.end)return formatMinutesToTime(parseTimeToMinutes(w.start))+"~"+formatMinutesToTime(parseTimeToMinutes(w.end));
+  return "";
+}
+function openSuggestionModal(){
+  var ov=document.getElementById("suggestionOverlay");if(!ov)return;
+  ensureActionSchedule();
+  suggestionState.schedule=data.actionSchedule.slice();
+  suggestionState.step=1;actionSelectedMainQuest="";actionSelectedTodos=[];
+  showSuggestionStep(1);
+  ov.style.display="flex";
+}
+function closeSuggestionModal(){var ov=document.getElementById("suggestionOverlay");if(ov)ov.style.display="none"}
+function showSuggestionStep(st){
+  suggestionState.step=st;
+  [1,2,3].forEach(function(n){var el=document.getElementById("sugStep"+n);if(el)el.style.display=(n===st)?"block":"none";});
+  var an=document.getElementById("sugAnalyzing");if(an){an.style.display="none";an.textContent="";}
+  if(st===1)renderScheduleGrid();
+  if(st===2){readScheduleInputs();updateAvailableMinutes();populateSuggestionQuestions();}
+}
+function renderScheduleGrid(){
+  var c=document.getElementById("scheduleGrid");if(!c)return;
+  var html="";
+  for(var h=0;h<24;h++){
+    html+='<div style="display:flex;align-items:center;gap:8px;padding:3px 6px;border-bottom:1px solid #f0f0f0"><span style="width:52px;font-size:0.8em;color:var(--muted);white-space:nowrap">'+pad2(h)+':00</span><input class="sched-input" data-hour="'+h+'" style="flex:1;min-width:0;font-size:0.85em" value="'+escapeHtml(suggestionState.schedule[h]||"")+'"></div>';
+  }
+  c.innerHTML=html;
+}
+function readScheduleInputs(){
+  var c=document.getElementById("scheduleGrid");if(!c)return;
+  var inputs=c.querySelectorAll(".sched-input");
+  Array.prototype.forEach.call(inputs,function(inp){var h=parseInt(inp.getAttribute("data-hour"),10);suggestionState.schedule[h]=inp.value.trim();});
+}
+function saveActionSchedule(){
+  readScheduleInputs();
+  data.actionSchedule=suggestionState.schedule.slice();saveData();
+  showToast("✅ 时间表已保存");
+}
+function updateAvailableMinutes(){
+  var blank=0,am=0,pm=0,ev=0;
+  suggestionState.schedule.forEach(function(v,h){
+    if(!v||!v.trim()){blank++;
+      if(h>=6&&h<12)am+=60;
+      else if(h>=12&&h<18)pm+=60;
+      else if(h>=18&&h<24)ev+=60;
+    }
   });
+  suggestionState.availMins=blank*60;
+  var box=document.getElementById("availMinutesBox");
+  if(box)box.innerHTML="<strong>今天可自主安排的时间："+suggestionState.availMins+" 分钟</strong><div style='font-size:0.85em;color:#0284c7;margin-top:6px;line-height:1.5'>上午(06-12) "+am+" 分钟<br>下午(12-18) "+pm+" 分钟<br>晚上(18-24) "+ev+" 分钟</div>";
+}
+function populateSuggestionQuestions(){
+  var sel=document.getElementById("sugMainQuest");
+  if(sel){
+    sel.innerHTML="";
+    var quests=(data.mainQuests||[]).slice();
+    if(!quests.length){sel.innerHTML='<option value="">（暂无主线任务）</option>';}
+    else{
+      quests.forEach(function(q,i){var opt=document.createElement("option");opt.value=q.id||("q"+i);opt.textContent=(q.category?("["+q.category+"] "):"")+q.title;sel.appendChild(opt);});
+      if(actionSelectedMainQuest)sel.value=actionSelectedMainQuest;
+    }
+  }
+  var panel=document.getElementById("sugTodoPanel");
+  if(panel){
+    panel.innerHTML="";
+    var todos=data.dailyTodos||[];
+    if(!todos.length){panel.innerHTML='<div style="font-size:0.85em;color:var(--muted);padding:6px">（今日暂无待办）</div>';}
+    else{
+      todos.forEach(function(t,idx){var lab=document.createElement("label");lab.style.cssText="display:flex;align-items:flex-start;justify-content:flex-start;gap:7px;padding:6px 2px;margin-bottom:0;font-size:0.88em;cursor:pointer;color:var(--text);text-align:left";var cb=document.createElement("input");cb.type="checkbox";cb.value=idx;cb.style.cssText="flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;accent-color:#0284c7";if(actionSelectedTodos.indexOf(idx)>=0)cb.checked=true;cb.addEventListener("change",function(){syncSugTodoSummary();});var span=document.createElement("span");span.style.cssText="flex:1 1 auto;line-height:1.4;word-break:break-word";span.textContent=(t.text||"")+(formatTodoWhen(t.when)?("（"+formatTodoWhen(t.when)+"）"):"");lab.appendChild(cb);lab.appendChild(span);panel.appendChild(lab);});
+    }
+    var dd=document.getElementById("sugTodoDropdown");if(dd)dd.style.display=(todos.length?"flex":"none");
+  }
+  syncSugTodoSummary();
+  var p2=document.getElementById("sugTodoPanel");if(p2)p2.style.display="none";
+}
+function toggleSugTodoPanel(){var p=document.getElementById("sugTodoPanel");if(p)p.style.display=(p.style.display==="none"?"block":"none")}
+function syncSugTodoSummary(){
+  var panel=document.getElementById("sugTodoPanel");var summary=document.getElementById("sugTodoSummary");
+  actionSelectedTodos=[];
+  if(panel){var cbs=panel.querySelectorAll("input[type=checkbox]");Array.prototype.forEach.call(cbs,function(cb){if(cb.checked)actionSelectedTodos.push(parseInt(cb.value,10));});}
+  if(summary)summary.textContent=actionSelectedTodos.length?("已选 "+actionSelectedTodos.length+" 项"):"选择待办...";
+}
+function buildSuggestionUserText(){
+  readScheduleInputs();
+  var sel=document.getElementById("sugMainQuest");if(sel&&sel.value)actionSelectedMainQuest=sel.value;
+  var lines=["【24小时被动时间表】（未填 = 可自主安排）"];
+  for(var h=0;h<24;h++){var v=suggestionState.schedule[h]||"";if(v.trim()){var end=(h===23)?"24:00":pad2(h+1)+":00";lines.push(pad2(h)+":00-"+end+" "+v);}}
+  lines.push("");
+  lines.push("【可自主安排时间】今天可自主安排："+suggestionState.availMins+" 分钟");
+  var mainTxt="";if(sel&&sel.value&&sel.selectedIndex>=0){mainTxt=sel.options[sel.selectedIndex].textContent;}
+  lines.push("");
+  lines.push("【今天最重要的主线】"+(mainTxt||"（未选择）"));
+  lines.push("");
+  var todos=data.dailyTodos||[];
+  lines.push("【今天需要完成的待办】");
+  if(!todos.length){lines.push("（今日暂无待办）");}
+  else if(!actionSelectedTodos.length){lines.push("（未选择）");}
+  else{actionSelectedTodos.sort(function(a,b){return a-b;});actionSelectedTodos.forEach(function(idx){var t=todos[idx];if(t)lines.push("- "+t.text+(formatTodoWhen(t.when)?("（"+formatTodoWhen(t.when)+"）"):""));});}
+  var tpToday=getLocalDateString();
+  if(data.todayPlan&&data.todayPlan.date===tpToday&&data.todayPlan.items&&data.todayPlan.items.length){
+    lines.push("");
+    lines.push("【今日行动推荐】（一键生成的初步排序，供你分配剩余时间参考）");
+    data.todayPlan.items.forEach(function(it,idx){lines.push("- "+(idx+1)+". "+it.title+"（"+(it.type==="quest"?"主线":"待办")+"，🎮×"+it.sessions+"）");});
+    if(data.todayPlan.extraCount>0){lines.push("（另有 "+data.todayPlan.extraCount+" 项未列出任务可补充安排在碎片时间）");}
+  }
+  return lines.join("\n");
+}
+function goSuggestionNext(){
+  if(suggestionState.step===1){showSuggestionStep(2);return;}
+  if(suggestionState.step===2){startActionAnalysis();return;}
+}
+function goSuggestionPrev(){
+  if(suggestionState.step===2){showSuggestionStep(1);return;}
+  if(suggestionState.step===3){showSuggestionStep(2);return;}
+}
+function startActionAnalysis(){
+  var cfg=data.aiConfig;var an=document.getElementById("sugAnalyzing");
+  if(!cfg||!cfg.url||!cfg.key){if(an){an.style.display="inline";an.textContent="⚠️ 请先到「设置」→「AI 配置」填好 API 地址和 Key";}return;}
+  syncSugTodoSummary();
+  var textEl=document.getElementById("suggestionText");
+  if(an){an.style.display="inline";an.innerHTML='<span class="ai-hourglass">⏳</span> 正在分析（预计1-2分钟）...';}
+  var text=buildSuggestionUserText();
+  callAI(BUILTIN_SUGGEST_PROMPT,text).then(function(report){
+    if(an){an.style.display="none";an.textContent="";}
+    if(textEl)textEl.textContent=report;
+    showSuggestionStep(3);
+  }).catch(function(e){
+    if(an){an.style.display="none";an.textContent="";}
+    var msg=e&&e.message?e.message:String(e);
+    if(textEl)textEl.textContent="❌ 分析失败："+msg;
+    showSuggestionStep(3);
+  });
+}
+function reRunSuggestion(){startActionAnalysis();}
+function copySuggestionText(){
+  var textEl=document.getElementById("suggestionText");var text=textEl?textEl.textContent:"";
+  if(!text){showToast("没有可复制的内容");return}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){showToast("📋 已复制行动建议")}).catch(function(){fallbackCopySuggestion(text);});}
+  else{fallbackCopySuggestion(text)}
+}
+function fallbackCopySuggestion(text){
+  var textEl=document.getElementById("suggestionText");if(!textEl)return;
+  textEl.focus();
+  var range=document.createRange();range.selectNodeContents(textEl);
+  var sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+  try{document.execCommand("copy");showToast("📋 已复制行动建议")}catch(e){showToast("复制失败，请手动复制")}
 }
 function showAnalysisReport(text){
   var ov=document.getElementById("analysisReportOverlay");
