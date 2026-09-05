@@ -545,7 +545,17 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 <button class="btn btn-sm btn-outline" style="margin-top:6px" onclick="restoreFivePoints()">💧 恢复5点成长点</button>
 </div>
 <div class="roulette-items" id="rouletteItems"></div>
-</div></div>
+</div>
+<div class="card" style="margin-top:12px">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+<h3 style="margin:0">📤 导入导出转盘</h3>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline" onclick="exportRoulettesPopup()">📋 导出全部</button>
+<button class="btn btn-sm btn-outline" onclick="openRouletteImport()">📥 导入</button>
+</div>
+</div>
+</div>
 </div>
 <div id="toastContainer"></div>
 
@@ -608,6 +618,20 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
       </div>
     </div>
     <textarea id="exportPopupText" readonly style="flex:1;min-height:240px;white-space:pre;overflow:auto;font-family:monospace;font-size:0.85em;resize:none"></textarea>
+  </div>
+</div>
+<div id="rouletteImportOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:247;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:480px;width:100%;max-height:88vh;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <h3 style="margin:0;color:var(--muted)">📥 导入转盘</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeRouletteImport()">✕ 关闭</button>
+    </div>
+    <div style="font-size:0.85em;color:var(--muted);margin-bottom:6px">粘贴「导出全部」的内容，导入将按内容全面更新转盘（未在内容中的转盘会被移除）</div>
+    <textarea id="rouletteImportText" placeholder="粘贴导出的转盘内容，每行一条…" style="flex:1;min-height:220px;white-space:pre;overflow:auto;font-family:monospace;font-size:0.85em;resize:none;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px"></textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-sm" onclick="doRouletteImport()">📥 导入</button>
+      <button class="btn btn-sm btn-outline" onclick="closeRouletteImport()">取消</button>
+    </div>
   </div>
 </div>
 <script>
@@ -1348,6 +1372,62 @@ function fallbackCopyExport(text){
   try{document.execCommand("copy");markCopyBtn();showToast("📋 已复制全部内容")}catch(e){showToast("复制失败，请手动复制")}
 }
 
+function exportRoulettesPopup(){
+  openExportPopup("🎰 导出转盘", buildRouletteExportText());
+}
+function buildRouletteExportText(){
+  var names=Object.keys(data.roulettes||{});
+  var parts=[];
+  names.forEach(function(nm,idx){
+    var r=data.roulettes[nm];if(!r)return;
+    if(idx>0)parts.push("");
+    parts.push("【"+nm+"】"+((typeof r.cost==="number")?r.cost:0)+"点");
+    (r.items||[]).forEach(function(it){parts.push(it)});
+  });
+  return parts.join("\r\n");
+}
+function openRouletteImport(){var ov=document.getElementById("rouletteImportOverlay");if(!ov)return;var ta=document.getElementById("rouletteImportText");if(ta)ta.value="";ov.style.display="flex";}
+function closeRouletteImport(){var ov=document.getElementById("rouletteImportOverlay");if(ov)ov.style.display="none"}
+function doRouletteImport(){
+  var ta=document.getElementById("rouletteImportText");
+  var lines=String(ta&&ta.value||"").replace(/\r\n?/g,"\n").split("\n");
+  var parsed={},order=[],cur="",plain=0;
+  for(var i=0;i<lines.length;i++){
+    var line=(lines[i]||"").trim();
+    if(!line)continue;
+    var hm=line.match(/^【(.+)】\s*(\d+)?\s*点?$/);
+    if(hm&&hm[1].trim()){
+      var nm=hm[1].trim();
+      if(!parsed[nm]){parsed[nm]={cost:hm[2]?parseInt(hm[2],10):5,items:[]};order.push(nm);}
+      cur=nm;
+      continue;
+    }
+    var item=line.replace(/^\d{1,3}[.、]\s*/,"").trim();
+    if(!item)continue;
+    if(cur&&parsed[cur]){parsed[cur].items.push(item);}
+    else if(!cur){plain++;}
+  }
+  if(!data.roulettes)data.roulettes={};
+  if(!order.length){
+    if(!plain){closeRouletteImport();showToast("没有可导入的内容");return}
+    if(!confirm("导入将把「"+currentRouletteType+"」的条目更新为粘贴的内容（其他转盘不变）。确定继续吗？"))return;
+    ensureCurrentRoulette();
+    var t=currentRouletteType||Object.keys(data.roulettes)[0]||"";
+    if(!t)t="转盘";
+    if(!data.roulettes[t])data.roulettes[t]={cost:5,items:[]};
+    var list=[];
+    for(var j=0;j<lines.length;j++){var it=(lines[j]||"").trim().replace(/^\d{1,3}[.、]\s*/,"").trim();if(it)list.push(it);}
+    data.roulettes[t].items=list;
+    saveData();ensureCurrentRoulette();renderRouletteTabs();renderRouletteItems();closeRouletteImport();
+    showToast("已将转盘「"+t+"」更新为 "+list.length+" 条");
+    return;
+  }
+  if(!confirm("导入将按粘贴内容全面更新转盘（不在内容中的转盘会被移除）。确定继续吗？"))return;
+  data.roulettes=parsed;
+  saveData();ensureCurrentRoulette();renderRouletteTabs();renderRouletteItems();closeRouletteImport();
+  var total=0;order.forEach(function(nm){total+=parsed[nm].items.length});
+  showToast("已更新 "+order.length+" 个转盘，共 "+total+" 条内容");
+}
 function importTimelineText(){var ov=document.getElementById("importPopupOverlay");if(!ov)return;var ta=document.getElementById("importPopupText");if(ta)ta.value="";ov.style.display="flex";}
 function closeImportPopup(){var ov=document.getElementById("importPopupOverlay");if(ov)ov.style.display="none"}
 function parseTimelineExportText(txt){
