@@ -1946,6 +1946,55 @@ function startFoolTimeWith(title){
   renderFoolTimeUI();
   showToast("⏰ 开始行动，10分钟倒计时");
 }
+function removePlanItem(idx){
+  var today=getLocalDateString();
+  var p=(data.todayPlan&&data.todayPlan.date===today)?data.todayPlan:null;
+  if(!p||!p.items[idx])return;
+  p.items.splice(idx,1);
+  var total=(data.mainQuests||[]).filter(function(q){return !q.done}).length+(data.dailyTodos||[]).filter(function(t){return !t.done}).length;
+  p.extraCount=Math.max(0,total-p.items.length);
+  saveData();renderTodayPlan();
+  showToast("✅ 已完成今日行动");
+}
+function togglePlanItemPicker(idx){
+  var d=document.getElementById("planPicker-"+idx);
+  if(!d)return;
+  if(d.style.display==="none"||!d.style.display){renderPlanItemPicker(idx);d.style.display="block";}
+  else{d.style.display="none";}
+}
+function renderPlanItemPicker(idx){
+  var d=document.getElementById("planPicker-"+idx);if(!d)return;
+  var today=getLocalDateString();
+  var p=(data.todayPlan&&data.todayPlan.date===today)?data.todayPlan:null;
+  var cur=(p&&p.items[idx])?p.items[idx]:null;
+  var quests=(data.mainQuests||[]).filter(function(q){return !q.done});
+  var todos=(data.dailyTodos||[]).filter(function(t){return !t.done});
+  var html='<div style="font-size:0.8em;color:#6b7280;margin-bottom:4px">选择要替换为：</div>';
+  if(!quests.length&&!todos.length){html+='<div style="color:#6b7280;font-size:0.85em">暂无可选任务</div>';}
+  quests.forEach(function(q){
+    var s=Math.min(4,Math.max(1,q.points||0));
+    var active=(cur&&cur.type==="quest"&&cur.id===q.id);
+    html+='<div style="display:flex;align-items:center;gap:6px;padding:4px;border-radius:6px;cursor:pointer;background:'+(active?'#fff7ed':'transparent')+'" data-type="quest" data-id="'+escapeHtml(q.id)+'" onclick="replacePlanItem('+idx+', this)"><span style="flex:1">'+escapeHtml(q.title)+'</span><span style="color:#f59e0b;font-size:0.8em">主线 🎮×'+s+'</span></div>';
+  });
+  todos.forEach(function(t){
+    var active=(cur&&cur.type==="todo"&&cur.id===t.id);
+    html+='<div style="display:flex;align-items:center;gap:6px;padding:4px;border-radius:6px;cursor:pointer;background:'+(active?'#fff7ed':'transparent')+'" data-type="todo" data-id="'+escapeHtml(t.id)+'" onclick="replacePlanItem('+idx+', this)"><span style="flex:1">'+escapeHtml(t.text)+'</span><span style="color:#6b7280;font-size:0.8em">待办</span></div>';
+  });
+  d.innerHTML=html;
+}
+function replacePlanItem(idx,el){
+  var today=getLocalDateString();
+  var p=(data.todayPlan&&data.todayPlan.date===today)?data.todayPlan:null;
+  if(!p||!p.items[idx])return;
+  var type=el.getAttribute("data-type"),id=el.getAttribute("data-id");
+  var questMap={},todoMap={};
+  (data.mainQuests||[]).forEach(function(q){questMap[q.id]=q});
+  (data.dailyTodos||[]).forEach(function(t){todoMap[t.id]=t});
+  if(type==="quest"){var q=questMap[id];if(q)p.items[idx]={type:"quest",id:q.id,title:q.title,sessions:Math.min(4,Math.max(1,q.points||0))};}
+  else{var t=todoMap[id];if(t)p.items[idx]={type:"todo",id:t.id,title:t.text||"",sessions:1};}
+  saveData();renderTodayPlan();
+  showToast("✅ 已更新今日行动");
+}
 function generateTodayPlan(random){
   var today=getLocalDateString();
   var quests=(data.mainQuests||[]).filter(function(q){return !q.done}).slice();
@@ -1977,7 +2026,7 @@ function renderTodayPlan(){
   var today=getLocalDateString();
   var p=(data.todayPlan&&data.todayPlan.date===today)?data.todayPlan:null;
   if(!p||!p.items.length){
-    c.innerHTML='<p style="color:#6b7280;text-align:center;padding:12px">还没有今日行动，点「✨ 一键生成」自动排好</p>';
+    c.innerHTML='';
     return;
   }
   var html="";
@@ -1985,12 +2034,13 @@ function renderTodayPlan(){
     var tag=it.type==="quest"?"主线":"待办";
     var tagColor=it.type==="quest"?"#f59e0b":"#6b7280";
     html+='<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0">';
-    html+='<span style="color:#f59e0b;font-weight:bold">'+(i+1)+'</span>';
-    html+='<span style="flex:1;line-height:1.4">'+escapeHtml(it.title)+'</span>';
+    html+='<button class="btn btn-sm btn-outline" style="width:26px;height:26px;min-width:26px;padding:0;border-radius:50%;font-size:0.85em;line-height:1;flex-shrink:0;color:#4b5563;border-color:#cbd5e1" title="完成，不计成长点" onclick="removePlanItem('+i+')">✓</button>';
+    html+='<span style="flex:1;line-height:1.4;cursor:pointer" onclick="togglePlanItemPicker('+i+')" title="点击选择替换">'+escapeHtml(it.title)+' <span style="font-size:0.7em;color:#f59e0b">▾</span></span>';
     html+='<span style="color:'+tagColor+';white-space:nowrap;font-size:0.8em">'+tag+'</span>';
     html+='<span style="color:#6b7280;white-space:nowrap;font-size:0.8em">🎮×'+it.sessions+'</span>';
     html+='<button class="btn btn-sm" style="padding:5px 10px" onclick="startPlanItem('+i+')">▶ 开跑</button>';
     html+='</div>';
+    html+='<div id="planPicker-'+i+'" style="display:none;margin:0 0 8px 34px;border:1px dashed #f0a500;border-radius:8px;padding:8px;max-height:200px;overflow:auto"></div>';
   });
   if(p.extraCount>0){html+='<p style="color:#6b7280;font-size:0.8em;margin-top:6px">其余 '+p.extraCount+' 件未列入，可在今日备忘录或主线任务里查看</p>';}
   html+='<button class="btn btn-sm btn-outline" style="width:100%;margin-top:8px" onclick="generateTodayPlan(true)">🔄 重新生成</button>';
