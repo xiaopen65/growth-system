@@ -1902,7 +1902,7 @@ function renderGoals(){
       +'<span class="goal-time">'+escapeHtml(g.due||'')+'</span>'
       +'<span class="goal-text">'+escapeHtml(g.text)+'</span>'
       +'<button class="btn btn-xs btn-outline" title="编辑" onclick="editGoal('+idx+')">&#x270F;</button>'
-      +'<button class="btn btn-xs btn-outline" title="删除" style="color:#ff4e50" onclick="deleteGoal('+idx+')">&#xd7;</button>'
+      +'<button class="btn btn-xs btn-outline" title="删除" onclick="deleteGoal('+idx+')">&#xd7;</button>'
       +'<span class="drag-handle" title="拖动排序">☰</span>'
       +'</div>';
   }).join("");
