@@ -1979,6 +1979,7 @@ function startFoolTime(){
 }
 function startFoolTimeWith(title){
   if(!title){showToast("请先选择任务");return;}
+  playSfx("tap");
   data.foolTime={questId:"",questTitle:title,startTime:Date.now(),endTime:Date.now()+10*60*1000,duration:10*60*1000,active:true};
   saveData();
   openFoolTimeModal();
@@ -2188,6 +2189,7 @@ function pickChallengeTask(){
 function startDailyChallenge(){
   var task=pickChallengeTask();
   if(!task){showToast("今天没有可挑战的任务，先去主线添加吧");return;}
+  playSfx("tap");
   var dur=30*60*1000;
   data.dailyChallenge={date:getLocalDateString(),questTitle:task.title,startTime:Date.now(),endTime:Date.now()+dur,duration:dur,active:true,status:"active"};
   saveData();renderDailyChallenge();openDailyChallengeModal();
