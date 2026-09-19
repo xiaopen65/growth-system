@@ -192,7 +192,7 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="28">
+  <meta name="app-version" content="29">
 </head>
 <body>
 <div id="importPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:246;align-items:center;justify-content:center;padding:16px">
@@ -833,6 +833,15 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
       <button class="btn btn-sm" onclick="doRouletteImport()">📥 导入</button>
       <button class="btn btn-sm btn-outline" onclick="closeRouletteImport()">取消</button>
+    </div>
+  </div>
+</div>
+<div id="appConfirmOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:330;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:18px;max-width:360px;width:100%;margin:24px 0;box-shadow:0 10px 30px rgba(0,0,0,0.25)">
+    <div id="appConfirmText" style="font-size:0.95em;line-height:1.7;white-space:pre-wrap;margin-bottom:16px"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-sm btn-outline" style="flex:1" onclick="appConfirmClose()">取消</button>
+      <button class="btn btn-sm" style="flex:1" onclick="appConfirmOk()">确定</button>
     </div>
   </div>
 </div>
@@ -1891,28 +1900,49 @@ function doRouletteImport(){
   if(!data.roulettes)data.roulettes={};
   if(!order.length){
     if(!plain){closeRouletteImport();showToast("没有可导入的内容");return}
-    if(!confirm("导入将把「"+currentRouletteType+"」的条目更新为粘贴的内容（其他转盘不变）。确定继续吗？"))return;
     ensureCurrentRoulette();
     var t=currentRouletteType||Object.keys(data.roulettes)[0]||"";
     if(!t)t="转盘";
-    if(!data.roulettes[t])data.roulettes[t]={cost:5,items:[]};
     var list=[];
-    for(var j=0;j<lines.length;j++){var it=(lines[j]||"").trim().replace(/^\d{1,3}[.、]\s*/,"").trim();if(it)list.push(it);}
-    data.roulettes[t].items=list;
-    saveData();ensureCurrentRoulette();renderRouletteTabs();renderRouletteItems();closeRouletteImport();
-    showToast("已将转盘「"+t+"」更新为 "+list.length+" 条");
+    for(var k=0;k<lines.length;k++){var it=(lines[k]||"").trim().replace(/^\d{1,3}[.、]\s*/,"").trim();if(it)list.push(it);}
+    if(!list.length){closeRouletteImport();showToast("没有可导入的内容");return}
+    askConfirm("导入将把「"+t+"」的条目更新为粘贴的内容（其他转盘不变）。确定继续吗？",function(){
+      if(!data.roulettes[t])data.roulettes[t]={cost:5,items:[]};
+      data.roulettes[t].items=list;
+      saveData();ensureCurrentRoulette();renderRouletteTabs();renderRouletteItems();closeRouletteImport();
+      showToast("已将转盘「"+t+"」更新为 "+list.length+" 条");
+    });
     return;
   }
-  if(!confirm("导入将按粘贴内容全面更新转盘（不在内容中的转盘会被移除）。确定继续吗？"))return;
-  data.roulettes=parsed;
-  saveData();ensureCurrentRoulette();renderRouletteTabs();renderRouletteItems();closeRouletteImport();
-  var total=0;order.forEach(function(nm){total+=parsed[nm].items.length});
-  showToast("已更新 "+order.length+" 个转盘，共 "+total+" 条内容");
+  askConfirm("导入将按粘贴内容全面更新转盘（不在内容中的转盘会被移除）。确定继续吗？",function(){
+    data.roulettes=parsed;
+    saveData();ensureCurrentRoulette();renderRouletteTabs();renderRouletteItems();closeRouletteImport();
+    var total=0;order.forEach(function(nm){total+=parsed[nm].items.length});
+    showToast("已更新 "+order.length+" 个转盘，共 "+total+" 条内容");
+  });
 }
 function importTimelineText(){
   playSfx("tab");var ov=document.getElementById("importPopupOverlay");if(!ov)return;var ta=document.getElementById("importPopupText");if(ta)ta.value="";ov.style.display="flex";}
 function closeImportPopup(){var ov=document.getElementById("importPopupOverlay");if(ov)ov.style.display="none"}
 var plainImportCtx=null;
+var appConfirmCb=null;
+function askConfirm(msg,cb){
+  var ov=document.getElementById("appConfirmOverlay");
+  if(!ov){if(window.confirm(msg)){try{if(cb)cb()}catch(e){}}return}
+  appConfirmCb=cb||null;
+  var tx=document.getElementById("appConfirmText");if(tx)tx.textContent=msg;
+  try{if(document.activeElement&&document.activeElement.blur)document.activeElement.blur()}catch(e){}
+  ov.style.display="flex";ov.scrollTop=0;
+}
+function appConfirmClose(){
+  var ov=document.getElementById("appConfirmOverlay");if(ov)ov.style.display="none";
+  appConfirmCb=null;
+}
+function appConfirmOk(){
+  var cb=appConfirmCb;
+  appConfirmClose();
+  if(cb){try{cb()}catch(e){}}
+}
 function openPlainImport(title,hint,onImport){
   plainImportCtx={onImport:onImport||null};
   var t=document.getElementById("plainImportTitle");if(t)t.textContent=title;
@@ -2031,20 +2061,21 @@ function importAllDataFile(e){
   var reader=new FileReader();
   reader.onload=function(ev){
     var j;
-    try{j=JSON.parse(ev.target.result)}catch(err){showToast("\u274c \u6587\u4ef6\u4e0d\u662f\u6709\u6548\u7684\u5907\u4efd\u6587\u4ef6");return}
-    if(!j||typeof j!=="object"||(!j.timeline&&!j.mainline&&!j.roulettes&&!j.aiConfig&&!j.points)){showToast("\u274c \u6587\u4ef6\u91cc\u6ca1\u6709\u8bc6\u522b\u5230\u53ef\u5bfc\u5165\u7684\u6570\u636e");return}
+    try{j=JSON.parse(ev.target.result)}catch(err){showToast("❌ 文件不是有效的备份文件");return}
+    if(!j||typeof j!=="object"||(!j.timeline&&!j.mainline&&!j.roulettes&&!j.aiConfig&&!j.points)){showToast("❌ 文件里没有识别到可导入的数据");return}
     var parts=[];
-    if(j.timeline)parts.push("\u65f6\u95f4\u7ebf\u8bb0\u5f55");
-    if(j.mainline)parts.push("\u4e3b\u7ebf\u4efb\u52a1/\u4eca\u65e5\u5907\u5fd8\u5f55");
-    if(j.roulettes)parts.push("\u8f6c\u76d8");
-    if(j.aiConfig)parts.push("AI \u914d\u7f6e");
-    if(j.points)parts.push("\u6210\u957f\u70b9/\u7b49\u7ea7");
-    if(!confirm("\u26a0\ufe0f \u4e00\u952e\u5bfc\u5165\u4f1a\u7528\u6587\u4ef6\u5185\u5bb9\u8986\u76d6\u73b0\u6709\u7684\uff1a\n\n"+parts.join("\u3001")+"\n\n\u6587\u4ef6\u91cc\u6ca1\u6709\u7684\u677f\u5757\u4e0d\u53d7\u5f71\u54cd\u3002\u786e\u5b9a\u7ee7\u7eed\u5417\uff1f"))return;
-    applyFullBackup(j);
-    playSfx("save");
-    showToast("📥 \u5df2\u5bfc\u5165\uff1a"+parts.join("\u3001"));
+    if(j.timeline)parts.push("时间线记录");
+    if(j.mainline)parts.push("主线任务/今日备忘录");
+    if(j.roulettes)parts.push("转盘");
+    if(j.aiConfig)parts.push("AI 配置");
+    if(j.points)parts.push("成长点/等级");
+    askConfirm("⚠️ 一键导入会用文件内容覆盖现有的：\n\n"+parts.join("、")+"\n\n文件里没有的板块不受影响。确定继续吗？",function(){
+      applyFullBackup(j);
+      playSfx("save");
+      showToast("📥 已导入："+parts.join("、"));
+    });
   };
-  reader.onerror=function(){showToast("\u274c \u8bfb\u53d6\u6587\u4ef6\u5931\u8d25")};
+  reader.onerror=function(){showToast("❌ 读取文件失败")};
   reader.readAsText(file);
 }
 function applyFullBackup(j){
@@ -2083,14 +2114,15 @@ function openMainlineImport(){
 }
 function doMainlineImport(txt){
   var j;
-  try{j=JSON.parse(txt)}catch(e){showToast("\u274c \u5185\u5bb9\u683c\u5f0f\u9519\u8bef\uff0c\u8bf7\u7c98\u8d34\u300c\u5bfc\u51fa\u4e3b\u7ebf\u300d\u7684\u5b8c\u6574\u5185\u5bb9");return false}
-  if(!j||typeof j!=="object"||(!Array.isArray(j.mainQuests)&&!Array.isArray(j.dailyTodos))){showToast("\u274c \u5185\u5bb9\u91cc\u6ca1\u6709\u53ef\u5bfc\u5165\u7684\u4e3b\u7ebf\u6570\u636e");return false}
-  if(!confirm("\u5bfc\u5165\u4f1a\u8986\u76d6\u5f53\u524d\u4e3b\u7ebf\u4efb\u52a1\u548c\u5907\u5fd8\u5f55\uff0c\u5176\u4ed6\u6570\u636e\u4e0d\u53d7\u5f71\u54cd\u3002\u786e\u5b9a\u7ee7\u7eed\u5417\uff1f"))return false;
-  if(Array.isArray(j.mainQuests))data.mainQuests=j.mainQuests;
-  if(Array.isArray(j.questCatOrder))data.questCatOrder=j.questCatOrder;
-  if(Array.isArray(j.dailyTodos))data.dailyTodos=j.dailyTodos;
-  saveData();renderDailyTodos();renderQuests();renderLevelGrid();updateStats();
-  closePlainImport();playSfx("save");showToast("📤 \u5df2\u5bfc\u5165\u4e3b\u7ebf\u4efb\u52a1\u548c\u5907\u5fd8\u5f55");
+  try{j=JSON.parse(txt)}catch(e){showToast("❌ 内容格式错误，请粘贴「导出主线」的完整内容");return false}
+  if(!j||typeof j!=="object"||(!Array.isArray(j.mainQuests)&&!Array.isArray(j.dailyTodos))){showToast("❌ 内容里没有可导入的主线数据");return false}
+  askConfirm("导入会覆盖当前主线任务和备忘录，其他数据不受影响。确定继续吗？",function(){
+    if(Array.isArray(j.mainQuests))data.mainQuests=j.mainQuests;
+    if(Array.isArray(j.questCatOrder))data.questCatOrder=j.questCatOrder;
+    if(Array.isArray(j.dailyTodos))data.dailyTodos=j.dailyTodos;
+    saveData();renderDailyTodos();renderQuests();renderLevelGrid();updateStats();
+    closePlainImport();playSfx("save");showToast("📤 已导入主线任务和备忘录");
+  });
 }
 function showSpinResultModal(type,result,cost){
   var overlay=document.createElement("div");overlay.className="spin-overlay";overlay.id="spinOverlay";
@@ -3050,14 +3082,15 @@ function openAIConfigImport(){
 }
 function doAIConfigImport(txt){
   var j;
-  try{j=JSON.parse(txt)}catch(e){showToast("\u274c \u5185\u5bb9\u683c\u5f0f\u9519\u8bef\uff0c\u8bf7\u7c98\u8d34\u300c\u5bfc\u51faAI\u914d\u7f6e\u300d\u7684\u5b8c\u6574\u5185\u5bb9");return false}
-  if(!j||typeof j!=="object"){showToast("\u274c \u5185\u5bb9\u91cc\u6ca1\u6709\u53ef\u5bfc\u5165\u7684\u914d\u7f6e");return false}
-  if(!confirm("\u5bfc\u5165\u4f1a\u8986\u76d6\u5f53\u524d AI \u914d\u7f6e\uff08API \u5730\u5740/Key/\u6a21\u578b/\u63d0\u793a\u8bcd\uff09\uff0c\u786e\u5b9a\u7ee7\u7eed\u5417\uff1f"))return false;
-  var cfg=data.aiConfig||{};
-  ["url","key","model","prompt"].forEach(function(kk){if(typeof j[kk]==="string")cfg[kk]=j[kk];});
-  data.aiConfig=cfg;saveData();loadAIConfig();
-  var st=document.getElementById("aiStatus");if(st)st.textContent="\u2705 \u5df2\u5bfc\u5165 AI \u914d\u7f6e";
-  closePlainImport();playSfx("save");showToast("📥 AI\u914d\u7f6e\u5df2\u5bfc\u5165");
+  try{j=JSON.parse(txt)}catch(e){showToast("❌ 内容格式错误，请粘贴「导出AI配置」的完整内容");return false}
+  if(!j||typeof j!=="object"){showToast("❌ 内容里没有可导入的配置");return false}
+  askConfirm("导入会覆盖当前 AI 配置（API 地址 / Key / 模型 / 提示词），确定继续吗？",function(){
+    var cfg=data.aiConfig||{};
+    ["url","key","model","prompt"].forEach(function(kk){if(typeof j[kk]==="string")cfg[kk]=j[kk];});
+    data.aiConfig=cfg;saveData();loadAIConfig();
+    var st=document.getElementById("aiStatus");if(st)st.textContent="✅ 已导入 AI 配置";
+    closePlainImport();playSfx("save");showToast("📥 AI配置已导入");
+  });
 }
 function saveAIConfig(){
   try{
