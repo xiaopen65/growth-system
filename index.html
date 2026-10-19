@@ -195,19 +195,36 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f5f6f8">
-  <meta name="app-version" content="31">
+  <meta name="app-version" content="32">
 </head>
 <body>
 <div id="importPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:246;align-items:center;justify-content:center;padding:16px">
   <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:480px;width:100%;max-height:88vh;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <h3 style="margin:0;color:var(--muted)">📥 导入时间线</h3>
+      <h3 style="margin:0;color:var(--muted)">📥 导入</h3>
       <div style="display:flex;gap:8px">
         <button class="btn btn-sm" onclick="doImportTimeline()">📥 导入</button>
         <button class="btn btn-sm btn-outline" onclick="closeImportPopup()">✕ 关闭</button>
       </div>
     </div>
-    <textarea id="importPopupText" placeholder="粘贴「导出今天」或「导出全部」的内容，将追加到时间线（重复记录自动跳过）" style="flex:1;min-height:260px;white-space:pre;overflow:auto;font-family:monospace;font-size:0.85em;resize:none"></textarea>
+    <textarea id="importPopupText" placeholder="粘贴「导出今天」「导出范围」或「导出全部」的内容，将追加到时间线（重复记录自动跳过）" style="flex:1;min-height:260px;white-space:pre;overflow:auto;font-family:monospace;font-size:0.85em;resize:none"></textarea>
+  </div>
+</div>
+<div id="timelineRangeOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:247;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:var(--card);color:var(--text);border-radius:16px;padding:16px;max-width:420px;width:100%;margin-top:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="margin:0;color:var(--muted)">📤 导出日期范围</h3>
+      <button class="btn btn-sm btn-outline" onclick="closeTimelineRangeExport()">✕ 关闭</button>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:0.85em;color:var(--muted);margin-bottom:4px">开始日期</div>
+      <input type="date" id="timelineRangeFrom" style="width:100%;padding:8px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:1em">
+    </div>
+    <div>
+      <div style="font-size:0.85em;color:var(--muted);margin-bottom:4px">结束日期</div>
+      <input type="date" id="timelineRangeTo" style="width:100%;padding:8px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:1em">
+    </div>
+    <button class="btn" style="width:100%;margin-top:14px" onclick="doTimelineRangeExport()">📤 导出</button>
   </div>
 </div>
 <script>try{document.body.setAttribute("data-theme",localStorage.getItem("growth_theme")||"default")}catch(e){}</script>
@@ -785,11 +802,11 @@ body[data-theme="dark"] [style*="border:1px solid #e5e7eb"]{border-color:var(--b
     </div>
     <div class="card" id="timelineExportCard">
       <div style="margin-bottom:10px;padding:10px;background:#f5f6f8;border-radius:8px;border:1px solid #e5e7eb">
-        <div id="timelineExportTitle" style="font-size:0.8em;color:#6b7280;margin-bottom:8px">📤 导入导出时间线</div>
+        <div id="timelineExportTitle" style="font-size:0.8em;color:#6b7280;margin-bottom:8px">📤 导出时间线</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineToday()">导出今天</button>
+          <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="openTimelineRangeExport()">导出范围</button>
           <button class="btn btn-sm btn-outline" style="font-size:0.75em;padding:4px 10px" onclick="exportTimelineAll()">导出全部</button>
-          <button class="btn btn-sm btn-outline" id="importTimelineBtn" style="font-size:0.75em;padding:4px 10px" onclick="importTimelineText()">📥 导入时间线</button>
         </div>
       </div>
     </div>
@@ -1814,6 +1831,37 @@ function exportTimelineAll(){
   var text=buildTimelineExport(dates[0],dates[dates.length-1]);
   if(!text){showToast("没有可导出的记录");return}
   openExportPopup("📤 导出全部",text);
+}
+function openTimelineRangeExport(){
+  playSfx("tab");
+  var merged=getAllTimelineEntries();
+  var dates=merged.map(function(d){return d.date}).filter(Boolean);
+  dates=dates.concat(Object.keys(data.goodThings||{}));
+  dates=dates.filter(Boolean).sort();
+  var today=getLocalDateString();
+  var fromEl=document.getElementById("timelineRangeFrom");
+  var toEl=document.getElementById("timelineRangeTo");
+  if(fromEl)fromEl.value=dates.length?dates[0]:today;
+  if(toEl)toEl.value=today;
+  var ov=document.getElementById("timelineRangeOverlay");
+  if(ov){ov.style.display="flex";ov.scrollTop=0}
+}
+function closeTimelineRangeExport(){
+  var ov=document.getElementById("timelineRangeOverlay");
+  if(ov)ov.style.display="none";
+}
+function doTimelineRangeExport(){
+  var fromEl=document.getElementById("timelineRangeFrom");
+  var toEl=document.getElementById("timelineRangeTo");
+  var from=fromEl?fromEl.value:"";
+  var to=toEl?toEl.value:"";
+  if(!from||!to){showToast("请选择开始和结束日期");return}
+  if(from>to){showToast("开始日期不能晚于结束日期");return}
+  var text=buildTimelineExportEntries(getAllTimelineEntries(),from,to);
+  if(!text){showToast("该日期范围内没有记录");return}
+  closeTimelineRangeExport();
+  playSfx("tab");
+  openExportPopup("📤 导出 "+from+" 至 "+to,text);
 }
 function buildTimelineExport(from,to){
   return buildTimelineExportEntries(data.dailyLog,from,to);
@@ -2971,7 +3019,7 @@ function openTimeline(){
   if(exportCard)exportCard.style.display="";
   if(analysisCard)analysisCard.style.display="";
   if(importBtn)importBtn.style.display="";
-  if(title)title.textContent="📤 导入导出时间线";
+  if(title)title.textContent="📤 导出时间线";
   renderDailyList();
   var ov=document.getElementById("timelineOverlay");
   if(ov)ov.style.display="block";
